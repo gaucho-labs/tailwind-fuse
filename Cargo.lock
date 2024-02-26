@@ -32,26 +32,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "tw-class"
+name = "tailwind_utils"
 version = "0.1.0"
+dependencies = [
+ "tw-classnames",
+ "tw-utils",
+ "tw-variant-macro",
+]
+
+[[package]]
+name = "tw-classnames"
+version = "0.1.0"
+
+[[package]]
+name = "tw-utils"
+version = "0.1.0"
+
+[[package]]
+name = "tw-variant-macro"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "tw-classnames",
+ "tw-utils",
+]
 
 [[package]]
 name = "unicode-ident"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
-
-[[package]]
-name = "utils"
-version = "0.1.0"
-
-[[package]]
-name = "variant"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
- "tw-class",
- "utils",
-]

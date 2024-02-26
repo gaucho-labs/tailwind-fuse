@@ -1,5 +1,5 @@
-use utils::ToTailwindClass;
-use variant::{TailwindClass, TailwindVariant};
+use tw_utils::ToTailwindClass;
+use tw_variant_macro::{TailwindClass, TailwindVariant};
 
 #[derive(TailwindClass)]
 struct Btn {

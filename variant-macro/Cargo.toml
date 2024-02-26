@@ -1,5 +1,5 @@
 [package]
-name = "variant"
+name = "tw-variant-macro"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,5 +10,6 @@ proc-macro = true
 syn = { version = "1.0", features = ["full"] }
 quote = "1.0"
 proc-macro2 = "1.0"
-tw-class = { path = "../base" }
-utils = { path = "../utils" }
+
+tw-classnames = { path = "../classnames" }
+tw-utils = { path = "../utils" }

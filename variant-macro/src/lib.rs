@@ -140,14 +140,14 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl utils::ToTailwindClass for #builder_name{
+            impl tw_utils::ToTailwindClass for #builder_name{
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_class::MaybeToTailwindClass;
-                    tw_class::tw!(#(#optional_builder_fields),*, class.as_ref())
+                    use tw_classnames::MaybeToTailwindClass;
+                    tw_classnames::tw!(#(#optional_builder_fields),*, class.as_ref())
                 }
             }
         }
@@ -162,14 +162,14 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl utils::ToTailwindClass for #struct_name {
+            impl tw_utils::ToTailwindClass for #struct_name {
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_class::MaybeToTailwindClass;
-                    tw_class::tw!(#(#field_class_calls),*, class.as_ref())
+                    use tw_classnames::MaybeToTailwindClass;
+                    tw_classnames::tw!(#(#field_class_calls),*, class.as_ref())
                 }
             }
         }

@@ -1,0 +1,18 @@
+[package]
+name = "tailwind_utils"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nico Burniske", "Gaucho Labs"]
+description = "Tailwind utilities for Rust"
+keywords = ["tailwind", "variants", "leptos"]
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/gaucho-labs/tailwind-utils"
+
+[dependencies]
+tw-classnames = { path = "../classnames" }
+tw-variant-macro = { path = "../variant-macro", optional = true }
+tw-utils = { path = "../utils", optional = true }
+
+[features]
+variant = ["tw-variant-macro", "tw-utils"]
