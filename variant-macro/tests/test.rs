@@ -1,5 +1,11 @@
 use variant::{TailwindClass, TailwindVariant};
 
+#[derive(TailwindClass)]
+struct Btn {
+    size: BtnSize,
+    color: BtnColor,
+}
+
 #[derive(TailwindVariant)]
 enum BtnSize {
     #[default]
@@ -9,8 +15,6 @@ enum BtnSize {
     Sm,
     #[class("h-10 rounded-md px-8")]
     Lg,
-    #[class("h-9 w-9")]
-    Icon,
 }
 
 #[derive(TailwindVariant)]
@@ -20,36 +24,49 @@ enum BtnColor {
     Default,
     #[class("bg-red-500 text-white")]
     Red,
-    #[class("bg-green-500 text-white")]
-    Green,
-}
-
-#[derive(TailwindClass)]
-struct Btn {
-    size: BtnSize,
-    color: BtnColor,
 }
 
 #[test]
-fn test_default_btn_size() {
-    let size = BtnSize::default();
-    assert_eq!(size.to_class(), "h-9 px-4 py-2");
+fn test_btn_size() {
+    assert_eq!(BtnSize::default().to_class(), "h-9 px-4 py-2");
+    assert_eq!(BtnSize::Sm.to_class(), "h-8 rounded-md px-3 text-xs");
+    assert_eq!(BtnSize::Lg.to_class(), "h-10 rounded-md px-8");
 }
 
 #[test]
-fn test_class() {
-    let btn = Btn {
-        size: BtnSize::Sm,
-        color: BtnColor::Red,
+fn test_btn() {
+    let button = Btn {
+        size: Default::default(),
+        color: Default::default(),
     };
+    assert_eq!(button.to_class(), "h-9 px-4 py-2 bg-blue-500 text-white")
+}
 
+#[test]
+fn test_class_builder() {
     assert_eq!(
-        btn.to_class(),
+        Btn::variant()
+            .size(BtnSize::Sm)
+            .color(BtnColor::Red)
+            .to_class(),
         "h-8 rounded-md px-3 text-xs bg-red-500 text-white"
     );
 
     assert_eq!(
-        btn.with_class("flex"),
+        Btn::variant()
+            .size(BtnSize::Sm)
+            .color(BtnColor::Red)
+            .with_class("flex"),
         "h-8 rounded-md px-3 text-xs bg-red-500 text-white flex"
+    );
+
+    assert_eq!(
+        Btn::variant().to_class(),
+        "h-9 px-4 py-2 bg-blue-500 text-white"
+    );
+
+    assert_eq!(
+        Btn::variant().with_class("flex"),
+        "h-9 px-4 py-2 bg-blue-500 text-white flex"
     );
 }

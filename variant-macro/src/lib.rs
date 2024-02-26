@@ -1,14 +1,17 @@
 extern crate proc_macro;
 
 use proc_macro::TokenStream;
-use quote::quote;
-use syn::{parse_macro_input, Attribute, Data, DeriveInput, Lit, Meta, NestedMeta};
+use quote::{format_ident, quote};
+use syn::{
+    parse_macro_input, Attribute, Data, DeriveInput, Field, FieldsNamed, Lit, Meta, NestedMeta,
+};
 
 #[proc_macro_derive(TailwindVariant, attributes(class, default))]
 pub fn tailwind_variant(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
 
-    let name = &ast.ident; // The name of the enum
+    // The name of the enum
+    let name = &ast.ident;
 
     let variants = if let Data::Enum(data) = &ast.data {
         &data.variants
@@ -67,9 +70,18 @@ pub fn tailwind_variant(input: TokenStream) -> TokenStream {
         }
     };
 
-    // Combine everything into the final generated code
+    let display_impl = quote! {
+        impl std::fmt::Display for #name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{}", self.to_class())
+            }
+        }
+    };
+
     let gen = quote! {
         #default_impl
+
+        #display_impl
 
         #to_class_impl
     };
@@ -88,36 +100,69 @@ fn extract_class_value(attr: &Attribute) -> String {
 
 #[proc_macro_derive(TailwindClass)]
 pub fn tailwind_class(input: TokenStream) -> TokenStream {
-    // Parse the input tokens into a syntax tree
     let input = parse_macro_input!(input as DeriveInput);
+    let struct_name = input.ident;
+    let builder_name = format_ident!("{}Builder", struct_name);
 
-    // Extract the name of the struct
-    let name = &input.ident;
-
-    // Ensure we are dealing with a struct
-    let fields = match &input.data {
-        Data::Struct(data) => &data.fields,
+    let fields = match input.data {
+        Data::Struct(data) => match data.fields {
+            syn::Fields::Named(FieldsNamed { named, .. }) => named,
+            _ => panic!("TailwindClass can only be applied to structs with named fields"),
+        },
         _ => panic!("TailwindClass can only be applied to structs"),
     };
 
-    // Generate code for each field's class string
-    let field_class_calls = fields
+    let field_names = fields
         .iter()
-        .map(|field| {
+        .map(|Field { ident, .. }| ident.as_ref().unwrap());
+
+    let builder_fields = fields.iter().map(|field| {
+        let Field { ident, ty, .. } = field;
+        quote! { #ident: Option<#ty> }
+    });
+
+    let builder_set_methods = fields.iter().map(|field| {
+        let Field { ident, ty, .. } = field;
+        quote! {
+            pub fn #ident(mut self, value: #ty) -> Self {
+                self.#ident = Some(value);
+                self
+            }
+        }
+    });
+
+    let builder_methods = {
+        let optional_builder_fields = fields.iter().map(|field| {
+            let field_name = &field.ident;
+            quote! {
+                self.#field_name.as_ref().unwrap_or(&Default::default()).to_class()
+            }
+        });
+
+        quote! {
+            pub fn to_class(&self) -> String {
+                self.with_class("")
+            }
+            pub fn with_class(&self, class: &str) -> String {
+                use tw_class::IntoTailwindClass;
+                tw_class::tw!(#(#optional_builder_fields),*, class)
+            }
+        }
+    };
+
+    let tailwind_class_impl_fn = {
+        let field_class_calls = fields.iter().map(|field| {
             let field_name = &field.ident;
             quote! {
                 self.#field_name.to_class()
             }
-        })
-        .collect::<Vec<_>>();
+        });
 
-    // Generate the implementation of the `to_class` method using the `tw!` macro
-    let gen = quote! {
-        impl #name {
+        quote! {
             pub fn to_class(&self) -> String {
-                use tw_class::IntoTailwindClass;
-                tw_class::tw!(#(#field_class_calls),*)
+                self.with_class("")
             }
+
             pub fn with_class(&self, class: &str) -> String {
                 use tw_class::IntoTailwindClass;
                 tw_class::tw!(#(#field_class_calls),*, class)
@@ -125,6 +170,27 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         }
     };
 
-    // Return the generated code
+    let gen = quote! {
+        impl #struct_name {
+            pub fn variant() -> #builder_name {
+                #builder_name {
+                    #(#field_names: None,)*
+                }
+            }
+
+            #tailwind_class_impl_fn
+        }
+
+        pub struct #builder_name {
+            #(#builder_fields,)*
+        }
+
+        impl #builder_name {
+            #(#builder_set_methods)*
+
+            #builder_methods
+        }
+    };
+
     TokenStream::from(gen)
 }
