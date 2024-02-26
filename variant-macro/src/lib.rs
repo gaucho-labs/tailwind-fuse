@@ -146,8 +146,8 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_classnames::MaybeToTailwindClass;
-                    tw_classnames::tw!(#(#optional_builder_fields),*, class.as_ref())
+                    use tw_merge::MaybeToTailwindClass;
+                    tw_merge::tw!(#(#optional_builder_fields),*, class.as_ref())
                 }
             }
         }
@@ -168,8 +168,8 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_classnames::MaybeToTailwindClass;
-                    tw_classnames::tw!(#(#field_class_calls),*, class.as_ref())
+                    use tw_merge::MaybeToTailwindClass;
+                    tw_merge::tw!(#(#field_class_calls),*, class.as_ref())
                 }
             }
         }

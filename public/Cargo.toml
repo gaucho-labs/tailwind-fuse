@@ -10,7 +10,7 @@ readme = "../README.md"
 repository = "https://github.com/gaucho-labs/tailwind-utils"
 
 [dependencies]
-tw-classnames = { path = "../classnames" }
+tw-merge = { path = "../merge" }
 tw-variant-macro = { path = "../variant-macro", optional = true }
 tw-utils = { path = "../utils", optional = true }
 
