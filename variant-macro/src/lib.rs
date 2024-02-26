@@ -131,7 +131,7 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         }
     });
 
-    let builder_methods = {
+    let builder_to_tailwind = {
         let optional_builder_fields = fields.iter().map(|field| {
             let field_name = &field.ident;
             quote! {
@@ -140,17 +140,20 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            pub fn to_class(&self) -> String {
-                self.with_class("")
-            }
-            pub fn with_class(&self, class: &str) -> String {
-                use tw_class::IntoTailwindClass;
-                tw_class::tw!(#(#optional_builder_fields),*, class)
+            impl utils::ToTailwindClass for #builder_name{
+                fn to_class(&self) -> String {
+                    self.with_class("")
+                }
+
+                fn with_class(&self, class: impl AsRef<str>) -> String {
+                    use tw_class::MaybeToTailwindClass;
+                    tw_class::tw!(#(#optional_builder_fields),*, class.as_ref())
+                }
             }
         }
     };
 
-    let tailwind_class_impl_fn = {
+    let struct_to_tailwind = {
         let field_class_calls = fields.iter().map(|field| {
             let field_name = &field.ident;
             quote! {
@@ -159,13 +162,15 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            pub fn to_class(&self) -> String {
-                self.with_class("")
-            }
+            impl utils::ToTailwindClass for #struct_name {
+                fn to_class(&self) -> String {
+                    self.with_class("")
+                }
 
-            pub fn with_class(&self, class: &str) -> String {
-                use tw_class::IntoTailwindClass;
-                tw_class::tw!(#(#field_class_calls),*, class)
+                fn with_class(&self, class: impl AsRef<str>) -> String {
+                    use tw_class::MaybeToTailwindClass;
+                    tw_class::tw!(#(#field_class_calls),*, class.as_ref())
+                }
             }
         }
     };
@@ -177,8 +182,6 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
                     #(#field_names: None,)*
                 }
             }
-
-            #tailwind_class_impl_fn
         }
 
         pub struct #builder_name {
@@ -188,8 +191,10 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         impl #builder_name {
             #(#builder_set_methods)*
 
-            #builder_methods
         }
+        #builder_to_tailwind
+
+        #struct_to_tailwind
     };
 
     TokenStream::from(gen)

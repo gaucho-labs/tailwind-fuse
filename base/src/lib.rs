@@ -18,29 +18,29 @@ macro_rules! tw {
     }};
 }
 
-pub trait IntoTailwindClass<'a> {
+pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;
 }
 
-impl<'a> IntoTailwindClass<'a> for String {
+impl<'a> MaybeToTailwindClass<'a> for String {
     fn to_tailwind_class(&'a self) -> Option<&'a str> {
         Some(self.as_str())
     }
 }
 
-impl<'a> IntoTailwindClass<'a> for str {
+impl<'a> MaybeToTailwindClass<'a> for str {
     fn to_tailwind_class(&'a self) -> Option<&'a str> {
         Some(self)
     }
 }
 
-impl<'a> IntoTailwindClass<'a> for Option<String> {
+impl<'a> MaybeToTailwindClass<'a> for Option<String> {
     fn to_tailwind_class(&'a self) -> Option<&'a str> {
         self.as_deref()
     }
 }
 
-impl<'a> IntoTailwindClass<'a> for Option<&'a str> {
+impl<'a> MaybeToTailwindClass<'a> for Option<&'a str> {
     fn to_tailwind_class(&'a self) -> Option<&'a str> {
         *self
     }

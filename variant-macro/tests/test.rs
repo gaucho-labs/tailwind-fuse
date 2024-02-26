@@ -1,3 +1,4 @@
+use utils::ToTailwindClass;
 use variant::{TailwindClass, TailwindVariant};
 
 #[derive(TailwindClass)]
