@@ -1,6 +1,7 @@
 #[macro_export]
 macro_rules! tw_join {
     ($($item:expr),+ $(,)?) => {{
+        use $crate::MaybeToTailwindClass;
         let mut result = String::new();
         $(
             // Long lived expressions.
@@ -20,16 +21,12 @@ macro_rules! tw_join {
 
 #[test]
 fn test_tw() {
-    use crate::*;
-
     assert_eq!(tw_join!("hello"), "hello");
     assert_eq!(tw_join!("one", "two"), "one two")
 }
 
 #[test]
 fn test_option() {
-    use crate::*;
-
     let is_hovered = false;
     let is_hovered_class = Some("ring").filter(|_| is_hovered);
 

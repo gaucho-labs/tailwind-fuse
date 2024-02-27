@@ -98,7 +98,7 @@ fn extract_class_value(attr: &Attribute) -> String {
     panic!("Expected string literal for `class` attribute")
 }
 
-#[proc_macro_derive(TailwindClass)]
+#[proc_macro_derive(TailwindClass, attributes(default, class))]
 pub fn tailwind_class(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let struct_name = input.ident;
@@ -111,6 +111,22 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
         },
         _ => panic!("TailwindClass can only be applied to structs"),
     };
+
+    let base_class = input
+        .attrs
+        .iter()
+        .find(|attr| attr.path.is_ident("class"))
+        .map(|attr| {
+            if let Ok(syn::Meta::NameValue(meta)) = attr.parse_meta() {
+                if meta.path.is_ident("class") {
+                    if let syn::Lit::Str(lit) = meta.lit {
+                        return lit.value();
+                    }
+                }
+            }
+            panic!("Expected string literal for `class` attribute")
+        })
+        .unwrap_or_default();
 
     let field_names = fields
         .iter()
@@ -147,7 +163,7 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
                     use tw_merge::MaybeToTailwindClass;
-                    tw_merge::tw_merge!(#(#optional_builder_fields),*, class.as_ref())
+                    tw_merge::tw_join!(#base_class, #(#optional_builder_fields),*, class.as_ref())
                 }
             }
         }
@@ -169,7 +185,7 @@ pub fn tailwind_class(input: TokenStream) -> TokenStream {
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
                     use tw_merge::MaybeToTailwindClass;
-                    tw_merge::tw_merge!(#(#field_class_calls),*, class.as_ref())
+                    tw_merge::tw_join!(#base_class, #(#field_class_calls),*, class.as_ref())
                 }
             }
         }

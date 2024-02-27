@@ -60,7 +60,7 @@ struct SeenStyle<'a> {
 
 #[cfg(test)]
 mod test {
-    use crate::{merge::*, *};
+    use crate::merge::merge_conflicts;
 
     #[test]
     fn test_tw_merge() {
@@ -108,7 +108,7 @@ mod hardmode {
 
     #[test]
     fn test_tw_merge_mixed_blend() {
-        let classes = tw_merge!("mix-blend-normal", "mix-blend-multiply");
+        let classes = tw_merge!("mix-blend-normal");
         assert_eq!(classes, "mix-blend-multiply");
     }
 

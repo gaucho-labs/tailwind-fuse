@@ -2,6 +2,7 @@ use tw_utils::ToTailwindClass;
 use tw_variant_macro::{TailwindClass, TailwindVariant};
 
 #[derive(TailwindClass)]
+#[class = "flex items-center"]
 struct Btn {
     size: BtnSize,
     color: BtnColor,
@@ -40,7 +41,10 @@ fn test_btn() {
         size: Default::default(),
         color: Default::default(),
     };
-    assert_eq!(button.to_class(), "h-9 px-4 py-2 bg-blue-500 text-white")
+    assert_eq!(
+        button.to_class(),
+        "flex items-center h-9 px-4 py-2 bg-blue-500 text-white"
+    )
 }
 
 #[test]
@@ -50,7 +54,7 @@ fn test_class_builder() {
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .to_class(),
-        "h-8 rounded-md px-3 text-xs bg-red-500 text-white"
+        "flex items-center h-8 rounded-md px-3 text-xs bg-red-500 text-white"
     );
 
     assert_eq!(
@@ -58,16 +62,16 @@ fn test_class_builder() {
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .with_class("flex"),
-        "h-8 rounded-md px-3 text-xs bg-red-500 text-white flex"
+        "flex items-center h-8 rounded-md px-3 text-xs bg-red-500 text-white flex"
     );
 
     assert_eq!(
         Btn::variant().to_class(),
-        "h-9 px-4 py-2 bg-blue-500 text-white"
+        "flex items-center h-9 px-4 py-2 bg-blue-500 text-white"
     );
 
     assert_eq!(
-        Btn::variant().with_class("flex"),
-        "h-9 px-4 py-2 bg-blue-500 text-white flex"
+        Btn::variant().with_class("grid"),
+        "flex items-center h-9 px-4 py-2 bg-blue-500 text-white grid"
     );
 }
