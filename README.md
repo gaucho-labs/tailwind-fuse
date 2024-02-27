@@ -27,9 +27,17 @@ cargo add tailwind-utilities
 ### Tailwind Merge
 
 ```rust
+use tailwind_utils::*;
+
 let class_a = "flex items-center";
 let class_b = "justify-center";
-let merged_class = tailwind_utils::tw!(class_a, class_b);
+// "flex items-center justify-center"
+let joined_class = tailwind_utils::tw_join!(class_a, class_b);
+
+let class_a = "py-2 px-4";
+let class_b = "p-4"
+// "p-4"
+let merged_class = tailwind_utils::tw_merge!(class_a, class_b);
 ```
 
 ### Tailwind Variants
@@ -37,6 +45,8 @@ let merged_class = tailwind_utils::tw!(class_a, class_b);
 Each `TailwindVariant` must have a default variant, denoted by the `#[default]` attribute.
 
 ```rust
+use tailwind_utils::*;
+
 // Your Component Type
 #[derive(TailwindClass)]
 struct Btn {
