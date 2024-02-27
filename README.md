@@ -1,6 +1,6 @@
-# Tailwind Utilities (for Rust)
+# Tailwind Utils (for Rust)
 
-Two main utilities are included in this crate:
+Two main utils are included in this crate:
 
 1. Tailwind Merge: A utility to merge tailwind classes into a single class.
     > Inspired by [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
@@ -14,12 +14,12 @@ Variants is feature gated and requires the `variants` feature to be enabled.
 
 #### With variants
 ```bash
-cargo add tailwind-utilities --features variants
+cargo add tailwind-utils --features variants
 ```
 
 #### Without variants
 ```bash
-cargo add tailwind-utilities
+cargo add tailwind-utils
 ```
 
 ## Usage
