@@ -1,3 +1,3 @@
 [workspace]
-members = ["merge", "utils", "variant-macro", "public"]
+members = ["merge", "utils", "variant-macro", "public", "model"]
 resolver = "2"
