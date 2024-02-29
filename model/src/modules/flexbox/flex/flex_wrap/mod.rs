@@ -40,7 +40,15 @@ impl TailwindFlexWrap {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["inherit", "initial", "nowrap", "revert", "unset", "wrap", "wrap-reverse"]);
+        let set = BTreeSet::from_iter(vec![
+            "inherit",
+            "initial",
+            "nowrap",
+            "revert",
+            "unset",
+            "wrap",
+            "wrap-reverse",
+        ]);
         set.contains(mode)
     }
 }

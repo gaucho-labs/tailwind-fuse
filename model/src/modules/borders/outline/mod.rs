@@ -5,11 +5,16 @@ pub(crate) mod outline_offset;
 pub(crate) mod outline_style;
 pub(crate) mod outline_width;
 
-pub(crate) fn outline_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+pub(crate) fn outline_adaptor(
+    pattern: &[&str],
+    arbitrary: &TailwindArbitrary,
+) -> Result<Box<dyn TailwindInstance>> {
     let out = match pattern {
         // https://tailwindcss.com/docs/outline-style
         [] if arbitrary.is_none() => TailwindOutlineStyle::from("solid").boxed(),
-        [s @ ("dashed" | "dotted" | "double" | "hidden" | "solid")] => TailwindOutlineStyle::from(*s).boxed(),
+        [s @ ("dashed" | "dotted" | "double" | "hidden" | "solid")] => {
+            TailwindOutlineStyle::from(*s).boxed()
+        }
         ["none"] => TailwindOutlineStyle::from("<NONE>").boxed(),
         ["style", rest @ ..] => TailwindOutlineStyle::parse(rest, arbitrary)?.boxed(),
         // https://tailwindcss.com/docs/outline-offset
@@ -17,11 +22,14 @@ pub(crate) fn outline_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -
         // https://tailwindcss.com/docs/outline-width
         ["width", rest @ ..] => TailwindOutlineWidth::parse(rest, arbitrary)?.boxed(),
         // https://tailwindcss.com/docs/outline-color
-        ["black" | "white" | "inherit" | "current" | "transparent" | "revert"] =>
-            TailwindOutlineColor::parse(pattern, arbitrary)?.boxed(),
+        ["black" | "white" | "inherit" | "current" | "transparent" | "revert"] => {
+            TailwindOutlineColor::parse(pattern, arbitrary)?.boxed()
+        }
         ["color", rest @ ..] => TailwindOutlineColor::parse(rest, arbitrary)?.boxed(),
         // Flexible parsing pattern
-        [] if arbitrary.as_str().starts_with(|c: char| c.is_numeric()) => TailwindOutlineWidth::from(arbitrary).boxed(),
+        [] if arbitrary.as_str().starts_with(|c: char| c.is_numeric()) => {
+            TailwindOutlineWidth::from(arbitrary).boxed()
+        }
         [n] => resolve1(n)?,
         _ => TailwindOutlineColor::parse(pattern, arbitrary)?.boxed(),
     };

@@ -25,8 +25,8 @@ impl TailwindBorderStyle {
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/border-style#syntax
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec![
-            "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "ridge", "inset", "outset", "inherit",
-            "initial", "revert", "unset",
+            "none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "ridge",
+            "inset", "outset", "inherit", "initial", "revert", "unset",
         ]);
         set.contains(mode)
     }

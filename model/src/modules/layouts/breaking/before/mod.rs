@@ -17,7 +17,9 @@ impl Display for TailwindBreakBefore {
 impl TailwindBreakBefore {
     /// <https://tailwindcss.com/docs/break-before>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("break-before", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("break-before", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
 
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

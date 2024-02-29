@@ -17,7 +17,9 @@ impl Display for TailwindWillChange {
 impl TailwindWillChange {
     /// <https://tailwindcss.com/docs/will-change>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("will-change", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("will-change", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [will-change](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -32,8 +32,16 @@ impl TailwindDecorationLine {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set =
-            BTreeSet::from_iter(vec!["blink", "inherit", "initial", "line-through", "none", "overline", "underline", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "blink",
+            "inherit",
+            "initial",
+            "line-through",
+            "none",
+            "overline",
+            "underline",
+            "unset",
+        ]);
         set.contains(mode)
     }
 }

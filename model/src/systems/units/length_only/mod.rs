@@ -74,7 +74,7 @@ impl UnitValue {
                 _ => {
                     let msg = format!("Unknown {} instructions: {}", id, pattern.join("-"));
                     return Err(TailwindError::syntax_error(msg));
-                },
+                }
             };
             Ok(kind)
         }
@@ -90,11 +90,17 @@ impl UnitValue {
             let kind = match pattern {
                 [] => Self::parse_arbitrary(arbitrary)?,
                 [s] if check_valid(s) => Self::Keyword(s.to_string()),
-                [n] => Self::parse_number(n, Negative::from(true), is_length, is_integer, allow_fraction)?,
+                [n] => Self::parse_number(
+                    n,
+                    Negative::from(true),
+                    is_length,
+                    is_integer,
+                    allow_fraction,
+                )?,
                 _ => {
                     let msg = format!("Unknown {} instructions: {}", id, pattern.join("-"));
                     return Err(TailwindError::syntax_error(msg));
-                },
+                }
             };
             Ok(kind)
         }
@@ -102,7 +108,13 @@ impl UnitValue {
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
         Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
-    pub fn parse_number(n: &str, negative: Negative, is_length: bool, is_integer: bool, can_be_fraction: bool) -> Result<Self> {
+    pub fn parse_number(
+        n: &str,
+        negative: Negative,
+        is_length: bool,
+        is_integer: bool,
+        can_be_fraction: bool,
+    ) -> Result<Self> {
         let a = TailwindArbitrary::from(n);
         match is_length {
             true => Self::maybe_length(&a, can_be_fraction),
@@ -110,7 +122,11 @@ impl UnitValue {
         }
         .or_else(|_| Self::maybe_number(&a, negative, is_integer))
     }
-    fn maybe_number(arbitrary: &TailwindArbitrary, negative: Negative, is_integer: bool) -> Result<Self> {
+    fn maybe_number(
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+        is_integer: bool,
+    ) -> Result<Self> {
         let mut n = match is_integer {
             true => arbitrary.as_integer()? as f32,
             false => arbitrary.as_float()?,
@@ -118,7 +134,10 @@ impl UnitValue {
         if negative.0 {
             n = -n
         };
-        Ok(Self::Number { n, is_negative: negative.0 })
+        Ok(Self::Number {
+            n,
+            is_negative: negative.0,
+        })
     }
     fn maybe_length(arbitrary: &TailwindArbitrary, allow_fraction: bool) -> Result<Self> {
         let n = match allow_fraction {

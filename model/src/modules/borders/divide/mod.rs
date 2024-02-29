@@ -18,7 +18,9 @@ impl TailwindDivide {
             ["x", rest @ ..] => TailwindDivideWidth::parse(rest, arbitrary, true)?.boxed(),
             ["y", rest @ ..] => TailwindDivideWidth::parse(rest, arbitrary, false)?.boxed(),
             // https://tailwindcss.com/docs/divide-style
-            [s @ ("solid" | "dashed" | "dotted" | "double" | "none")] => TailwindDivideStyle::from(*s).boxed(),
+            [s @ ("solid" | "dashed" | "dotted" | "double" | "none")] => {
+                TailwindDivideStyle::from(*s).boxed()
+            }
             ["style", rest @ ..] => TailwindDivideStyle::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/divide-color
             _ => return syntax_error!("Unknown divide instructions: {}", str.join("-")),

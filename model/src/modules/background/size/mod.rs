@@ -28,7 +28,9 @@ impl TailwindBackgroundSize {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/background-size#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["auto", "contain", "cover", "inherit", "initial", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "auto", "contain", "cover", "inherit", "initial", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }

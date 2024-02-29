@@ -33,7 +33,9 @@ impl TailwindVisibility {
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/visibility#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["collapse", "hidden", "inherit", "initial", "revert", "unset", "visible"]);
+        let set = BTreeSet::from_iter(vec![
+            "collapse", "hidden", "inherit", "initial", "revert", "unset", "visible",
+        ]);
         set.contains(mode)
     }
 }

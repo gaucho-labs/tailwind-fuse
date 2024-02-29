@@ -17,7 +17,9 @@ impl Display for TailwindBreakInside {
 impl TailwindBreakInside {
     /// <https://tailwindcss.com/docs/break-inside>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("break-inside", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("break-inside", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
 
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

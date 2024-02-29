@@ -24,7 +24,9 @@ impl Display for TailwindFontStyle {
 impl TailwindFontStyle {
     /// <https://tailwindcss.com/docs/font-style>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("font-style", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("font-style", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [font-style](https://developer.mozilla.org/en-US/docs/Web/CSS/font-style)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
@@ -32,7 +34,9 @@ impl TailwindFontStyle {
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/font-style#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["inherit", "initial", "italic", "normal", "oblique", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "inherit", "initial", "italic", "normal", "oblique", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }

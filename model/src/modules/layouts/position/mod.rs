@@ -25,6 +25,10 @@ impl TailwindPosition {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/position#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        ["static", "relative", "absolute", "fixed", "sticky", "inherit", "initial", "revert", "unset"].contains(&mode)
+        [
+            "static", "relative", "absolute", "fixed", "sticky", "inherit", "initial", "revert",
+            "unset",
+        ]
+        .contains(&mode)
     }
 }

@@ -17,7 +17,9 @@ impl Display for TailwindJustifyItems {
 impl TailwindJustifyItems {
     /// <https://tailwindcss.com/docs/justify-items>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("justify-items", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("justify-items", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [justify-items](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

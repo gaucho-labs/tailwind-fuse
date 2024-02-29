@@ -12,7 +12,10 @@ pub struct EffectSystem {
 
 impl EffectSystem {
     pub fn get_box_shadow(&self, name: &str) -> String {
-        self.box_shadows.get(name).unwrap_or(&self.box_shadow_default).clone()
+        self.box_shadows
+            .get(name)
+            .unwrap_or(&self.box_shadow_default)
+            .clone()
     }
     pub fn insert_box_shadow<K, V>(&mut self, key: K, value: V)
     where
@@ -28,7 +31,10 @@ impl EffectSystem {
         self.box_shadow_default = value.into();
     }
     pub fn get_drop_shadow(&self, name: &str) -> String {
-        self.box_shadows.get(name).unwrap_or(&self.drop_shadow_default).clone()
+        self.box_shadows
+            .get(name)
+            .unwrap_or(&self.drop_shadow_default)
+            .clone()
     }
     pub fn insert_drop_shadow<K, V>(&mut self, key: K, value: V)
     where

@@ -1,7 +1,9 @@
 pub use self::{
     aspect_ratio::TailwindAspect,
     boxing::{box_decoration::TailwindBoxDecoration, box_sizing::TailwindBoxSizing},
-    breaking::{after::TailwindBreakAfter, before::TailwindBreakBefore, inside::TailwindBreakInside},
+    breaking::{
+        after::TailwindBreakAfter, before::TailwindBreakBefore, inside::TailwindBreakInside,
+    },
     clear::TailwindClear,
     columns::TailwindColumns,
     container::TailwindContainer,
@@ -17,8 +19,8 @@ pub use self::{
     z_index::TailwindZIndex,
 };
 use crate::{
-    syntax_error, AnchorPoint, AxisXY, LengthUnit, Negative, Result, StandardValue, TailwindArbitrary, TailwindInstance,
-    UnitValue,
+    syntax_error, AnchorPoint, AxisXY, LengthUnit, Negative, Result, StandardValue,
+    TailwindArbitrary, TailwindInstance, UnitValue,
 };
 use std::{
     collections::BTreeSet,

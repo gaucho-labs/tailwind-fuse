@@ -30,7 +30,9 @@ impl TailwindSnapAlign {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-align#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["center", "inherit", "initial", "none", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "center", "inherit", "initial", "none", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }

@@ -17,7 +17,9 @@ impl Display for TailwindDisplay {
 impl TailwindDisplay {
     /// <https://tailwindcss.com/docs/display>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("display", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("display", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -32,7 +32,9 @@ impl TailwindGridFlow {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["column", "dense", "inherit", "initial", "revert", "row", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "column", "dense", "inherit", "initial", "revert", "row", "unset",
+        ]);
         set.contains(mode)
     }
 }

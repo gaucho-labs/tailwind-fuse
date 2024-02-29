@@ -22,6 +22,17 @@ impl TailwindObjectFit {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        ["contain", "cover", "fill", "inherit", "initial", "none", "revert", "scale-down", "unset"].contains(&mode)
+        [
+            "contain",
+            "cover",
+            "fill",
+            "inherit",
+            "initial",
+            "none",
+            "revert",
+            "scale-down",
+            "unset",
+        ]
+        .contains(&mode)
     }
 }

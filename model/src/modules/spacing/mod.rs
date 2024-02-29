@@ -8,7 +8,8 @@ use crate::{syntax_error, Result, SpacingAxis, TailwindArbitrary, TailwindInstan
 use self::size::SpacingSize;
 pub use self::{
     margin::TailwindMargin, margin_scroll::TailwindScrollMargin, padding::TailwindPadding,
-    padding_scroll::TailwindScrollPadding, space::TailwindSpace, space_reverse::TailwindSpaceReverse,
+    padding_scroll::TailwindScrollPadding, space::TailwindSpace,
+    space_reverse::TailwindSpaceReverse,
 };
 use crate::Negative;
 mod margin;

@@ -36,9 +36,19 @@ impl Display for TailwindColor {
 #[allow(non_upper_case_globals)]
 impl TailwindColor {
     /// `black`
-    pub const Black: Self = Self::RGB(Srgb { red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0 });
+    pub const Black: Self = Self::RGB(Srgb {
+        red: 0.0,
+        green: 0.0,
+        blue: 0.0,
+        alpha: 1.0,
+    });
     /// `white`
-    pub const White: Self = Self::RGB(Srgb { red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0 });
+    pub const White: Self = Self::RGB(Srgb {
+        red: 1.0,
+        green: 1.0,
+        blue: 1.0,
+        alpha: 1.0,
+    });
     /// https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let out = match pattern {

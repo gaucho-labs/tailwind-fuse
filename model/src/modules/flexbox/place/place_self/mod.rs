@@ -17,7 +17,9 @@ impl Display for TailwindPlaceSelf {
 impl TailwindPlaceSelf {
     /// <https://tailwindcss.com/docs/place-self>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("place-self", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("place-self", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [place-self](https://developer.mozilla.org/en-US/docs/Web/CSS/place-self)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

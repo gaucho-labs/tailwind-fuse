@@ -1,7 +1,11 @@
 pub use self::{
-    origin::TailwindOrigin, rotate::TailwindRotate, scale::TailwindScale, skew::TailwindSkew, translate::TailwindTranslate,
+    origin::TailwindOrigin, rotate::TailwindRotate, scale::TailwindScale, skew::TailwindSkew,
+    translate::TailwindTranslate,
 };
-use crate::{AnchorPoint, AxisXY, Negative, NumericValue, Result, TailwindArbitrary, TailwindInstance, UnitValue};
+use crate::{
+    AnchorPoint, AxisXY, Negative, NumericValue, Result, TailwindArbitrary, TailwindInstance,
+    UnitValue,
+};
 use std::fmt::{Debug, Display, Formatter};
 
 mod origin;

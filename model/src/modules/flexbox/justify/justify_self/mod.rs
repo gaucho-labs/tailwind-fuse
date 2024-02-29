@@ -17,7 +17,9 @@ impl Display for TailwindJustifySelf {
 impl TailwindJustifySelf {
     /// <https://tailwindcss.com/docs/justify-self>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("justify-self", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("justify-self", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [justify-self](https://developer.mozilla.org/en-US/docs/Web/CSS/justify-self)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

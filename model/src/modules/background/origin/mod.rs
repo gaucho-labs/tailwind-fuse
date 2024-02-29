@@ -38,8 +38,15 @@ impl TailwindBackgroundOrigin {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set =
-            BTreeSet::from_iter(vec!["border-box", "content-box", "inherit", "initial", "padding-box", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "border-box",
+            "content-box",
+            "inherit",
+            "initial",
+            "padding-box",
+            "revert",
+            "unset",
+        ]);
         set.contains(mode)
     }
 }

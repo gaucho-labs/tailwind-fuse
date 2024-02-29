@@ -25,7 +25,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#334155").unwrap());
         colors.insert(800, Srgb::from_str("#1E293B").unwrap());
         colors.insert(900, Srgb::from_str("#0F172A").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## GRAY
     /// <span style="color:#F9FAFB">50</span>,
@@ -50,7 +53,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#374151").unwrap());
         colors.insert(800, Srgb::from_str("#1F2937").unwrap());
         colors.insert(900, Srgb::from_str("#111827").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## ZINC
     /// <span style="color:#FAFAFA">50</span>,
@@ -75,7 +81,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#3F3F46").unwrap());
         colors.insert(800, Srgb::from_str("#27272A").unwrap());
         colors.insert(900, Srgb::from_str("#18181B").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## NEUTRAL
     /// <span style="color:#FAFAFA">50</span>,
@@ -100,7 +109,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#404040").unwrap());
         colors.insert(800, Srgb::from_str("#262626").unwrap());
         colors.insert(900, Srgb::from_str("#171717").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## STONE
     /// <span style="color:#FAFAF9">50</span>,
@@ -125,7 +137,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#44403C").unwrap());
         colors.insert(800, Srgb::from_str("#292524").unwrap());
         colors.insert(900, Srgb::from_str("#1C1917").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## RED
     /// <span style="color:#FEF2F2">50</span>,
@@ -150,7 +165,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#B91C1C").unwrap());
         colors.insert(800, Srgb::from_str("#991B1B").unwrap());
         colors.insert(900, Srgb::from_str("#7F1D1D").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## ORANGE
     /// <span style="color:#FFF7ED">50</span>,
@@ -175,7 +193,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#C2410C").unwrap());
         colors.insert(800, Srgb::from_str("#9A3412").unwrap());
         colors.insert(900, Srgb::from_str("#7C2D12").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## AMBER
     /// <span style="color:#FFFBEB">50</span>,
@@ -200,7 +221,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#B45309").unwrap());
         colors.insert(800, Srgb::from_str("#92400E").unwrap());
         colors.insert(900, Srgb::from_str("#78350F").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## YELLOW
     /// <span style="color:#FEFCE8">50</span>,
@@ -225,7 +249,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#A16207").unwrap());
         colors.insert(800, Srgb::from_str("#854D0E").unwrap());
         colors.insert(900, Srgb::from_str("#713F12").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## LIME
     /// <span style="color:#F7FEE7">50</span>,
@@ -250,7 +277,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#4D7C0F").unwrap());
         colors.insert(800, Srgb::from_str("#3F6212").unwrap());
         colors.insert(900, Srgb::from_str("#365314").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## GREEN
     /// <span style="color:#F0FDF4">50</span>,
@@ -275,7 +305,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#15803D").unwrap());
         colors.insert(800, Srgb::from_str("#166534").unwrap());
         colors.insert(900, Srgb::from_str("#14532D").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## EMERALD
     /// <span style="color:#ECFDF5">50</span>,
@@ -300,7 +333,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#047857").unwrap());
         colors.insert(800, Srgb::from_str("#065F46").unwrap());
         colors.insert(900, Srgb::from_str("#064E3B").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## TEAL
     /// <span style="color:#F0FDFA">50</span>,
@@ -325,7 +361,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#0F766E").unwrap());
         colors.insert(800, Srgb::from_str("#115E59").unwrap());
         colors.insert(900, Srgb::from_str("#134E4A").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## CYAN
     /// <span style="color:#ECFEFF">50</span>,
@@ -350,7 +389,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#0E7490").unwrap());
         colors.insert(800, Srgb::from_str("#155E75").unwrap());
         colors.insert(900, Srgb::from_str("#164E63").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## SKY
     /// <span style="color:#F0F9FF">50</span>,
@@ -375,7 +417,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#0369A1").unwrap());
         colors.insert(800, Srgb::from_str("#075985").unwrap());
         colors.insert(900, Srgb::from_str("#0C4A6E").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## BLUE
     /// <span style="color:#EFF6FF">50</span>,
@@ -400,7 +445,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#1D4ED8").unwrap());
         colors.insert(800, Srgb::from_str("#1E40AF").unwrap());
         colors.insert(900, Srgb::from_str("#1E3A8A").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## INDIGO
     /// <span style="color:#EEF2FF">50</span>,
@@ -425,7 +473,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#4338CA").unwrap());
         colors.insert(800, Srgb::from_str("#3730A3").unwrap());
         colors.insert(900, Srgb::from_str("#312E81").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## VIOLET
     /// <span style="color:#F5F3FF">50</span>,
@@ -450,7 +501,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#6D28D9").unwrap());
         colors.insert(800, Srgb::from_str("#5B21B6").unwrap());
         colors.insert(900, Srgb::from_str("#4C1D95").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## PURPLE
     /// <span style="color:#FAF5FF">50</span>,
@@ -475,7 +529,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#7E22CE").unwrap());
         colors.insert(800, Srgb::from_str("#6B21A8").unwrap());
         colors.insert(900, Srgb::from_str("#581C87").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## FUCHSIA
     /// <span style="color:#FDF4FF">50</span>,
@@ -500,7 +557,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#A21CAF").unwrap());
         colors.insert(800, Srgb::from_str("#86198F").unwrap());
         colors.insert(900, Srgb::from_str("#701A75").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## PINK
     /// <span style="color:#FDF2F8">50</span>,
@@ -525,7 +585,10 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#BE185D").unwrap());
         colors.insert(800, Srgb::from_str("#9D174D").unwrap());
         colors.insert(900, Srgb::from_str("#831843").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
     /// ## ROSE
     /// <span style="color:#FFF1F2">50</span>,
@@ -550,6 +613,9 @@ impl Palette {
         colors.insert(700, Srgb::from_str("#BE123C").unwrap());
         colors.insert(800, Srgb::from_str("#9F1239").unwrap());
         colors.insert(900, Srgb::from_str("#881337").unwrap());
-        Self { gradient: true, key_points: colors }
+        Self {
+            gradient: true,
+            key_points: colors,
+        }
     }
 }

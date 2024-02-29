@@ -22,7 +22,9 @@ impl TailwindSnapType {
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["block", "both", "inherit", "initial", "inline", "none", "unset", "x", "y"]);
+        let set = BTreeSet::from_iter(vec![
+            "block", "both", "inherit", "initial", "inline", "none", "unset", "x", "y",
+        ]);
         set.contains(mode)
     }
 }

@@ -17,7 +17,9 @@ impl Display for TailwindEase {
 impl TailwindEase {
     /// https://tailwindcss.com/docs/transition-timing-function
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("ease", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("ease", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// https://tailwindcss.com/docs/transition-timing-function#arbitrary-values
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

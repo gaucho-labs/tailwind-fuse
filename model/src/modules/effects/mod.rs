@@ -1,8 +1,11 @@
 pub use self::{
-    box_shadow::TailwindShadow, mix_blend::TailwindBlend, mix_blend_bg::TailwindBackgroundBlend, opacity::TailwindOpacity,
-    shadow_color::TailwindShadowColor,
+    box_shadow::TailwindShadow, mix_blend::TailwindBlend, mix_blend_bg::TailwindBackgroundBlend,
+    opacity::TailwindOpacity, shadow_color::TailwindShadowColor,
 };
-use crate::{Backdrop, NumericValue, Result, StandardValue, TailwindArbitrary, TailwindColor, TailwindInstance};
+use crate::{
+    Backdrop, NumericValue, Result, StandardValue, TailwindArbitrary, TailwindColor,
+    TailwindInstance,
+};
 use std::{
     collections::BTreeSet,
     fmt::{Display, Formatter},

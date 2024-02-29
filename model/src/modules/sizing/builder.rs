@@ -18,7 +18,9 @@ impl SizingUnit {
         }
     }
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Self::maybe_fraction(arbitrary).or_else(|_| Self::maybe_no_unit(arbitrary)).or_else(|_| Self::maybe_length(arbitrary))
+        Self::maybe_fraction(arbitrary)
+            .or_else(|_| Self::maybe_no_unit(arbitrary))
+            .or_else(|_| Self::maybe_length(arbitrary))
     }
     #[inline]
     fn maybe_length(arbitrary: &TailwindArbitrary) -> Result<Self> {
@@ -39,26 +41,44 @@ impl SizingUnit {
 impl TailwindSizing {
     #[inline]
     pub fn parse_width(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::Width, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::Width,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
     #[inline]
     pub fn parse_width_max(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::MaxWidth, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::MaxWidth,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
     #[inline]
     pub fn parse_width_min(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::MinWidth, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::MinWidth,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
     #[inline]
     pub fn parse_height(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::Height, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::Height,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
     #[inline]
     pub fn parse_height_max(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::MaxHeight, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::MaxHeight,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
     #[inline]
     pub fn parse_height_min(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: TailwindSizingKind::MinHeight, size: SizingUnit::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: TailwindSizingKind::MinHeight,
+            size: SizingUnit::parse(pattern, arbitrary)?,
+        })
     }
 }

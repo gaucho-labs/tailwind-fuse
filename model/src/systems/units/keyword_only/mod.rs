@@ -22,7 +22,11 @@ impl StandardValue {
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
         Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
-    pub fn parse_keyword(pattern: &[&str], id: &str, checker: &'static impl Fn(&str) -> bool) -> Result<Self> {
+    pub fn parse_keyword(
+        pattern: &[&str],
+        id: &str,
+        checker: &'static impl Fn(&str) -> bool,
+    ) -> Result<Self> {
         let keyword = pattern.join("-");
         if cfg!(compile_time) && !checker(&keyword) {
             return syntax_error!("{} does not a valid value of {}", keyword, id);

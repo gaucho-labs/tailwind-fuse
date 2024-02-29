@@ -17,7 +17,9 @@ impl Display for TailwindBreakAfter {
 impl TailwindBreakAfter {
     /// <https://tailwindcss.com/docs/break-after>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("break-after", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("break-after", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
 
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

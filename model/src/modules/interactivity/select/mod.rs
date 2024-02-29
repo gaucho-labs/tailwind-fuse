@@ -22,7 +22,9 @@ impl TailwindSelect {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/user-select#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["all", "auto", "contain", "inherit", "initial", "none", "revert", "text", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "all", "auto", "contain", "inherit", "initial", "none", "revert", "text", "unset",
+        ]);
         set.contains(mode)
     }
 }
