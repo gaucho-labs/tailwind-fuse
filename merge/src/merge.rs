@@ -33,6 +33,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
         let instance = parse.get_instance();
         match instance {
             Err(error) => {
+                #[cfg(debug_assertions)]
                 println!("No Instance found: {parse:?} {error:?}");
             }
             Ok(instance) => {
@@ -135,6 +136,9 @@ mod hardmode {
 
         let classes = tw_merge!("stroke-2", "stroke-[3px]");
         assert_eq!(classes, "stroke-[3px]");
+
+        let classes = tw_merge!("stroke-black", "stroke-red-500", "stroke-blue-100");
+        assert_eq!(classes, "stroke-blue-100");
     }
 
     #[test]
@@ -147,5 +151,22 @@ mod hardmode {
     fn test_tw_merge_grayscale() {
         let classes = tw_merge!("grayscale-0", "grayscale-[50%]");
         assert_eq!(classes, "grayscale-[50%]");
+    }
+
+    #[test]
+    fn test_padding_narrowing() {
+        let classes = tw_merge!("p-10", "px-5");
+        assert_eq!(classes, "p-10 px-5");
+        let classes = tw_merge!("px-5", "py-5", "p-10",);
+        assert_eq!(classes, "p-10");
+    }
+
+    #[test]
+    fn test_gap_narrowing() {
+        let classes = tw_merge!("gap-10", "gap-x-5");
+        assert_eq!(classes, "gap-10 gap-x-5");
+
+        let classes = tw_merge!("gap-x-5", "gap-y-5", "gap-10");
+        assert_eq!(classes, "gap-10");
     }
 }

@@ -20,17 +20,11 @@ impl Display for TailwindGap {
 
 impl TailwindInstance for TailwindGap {
     fn collision_id(&self) -> String {
-        let id = match self.axis {
-            AxisXY::N => "gap",
-            AxisXY::X => "gap-x",
-            AxisXY::Y => "gap-y",
-        };
-
-        id.into()
+        self.axis.collision_id("gap")
     }
 
     fn get_collisions(&self) -> Vec<String> {
-        todo!()
+        self.axis.collisions("gap")
     }
 }
 
