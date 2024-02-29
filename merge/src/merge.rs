@@ -4,7 +4,7 @@ use tailwind_ast::{parse_tailwind, ASTVariant, AstStyle};
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
         let joined = $crate::tw_join!($($item),+);
-        if let Some(result) = $crate::merge::merge_conflicts(joined.as_str()) {
+        if let Some(result) = $crate::merge::tw_merge(joined.as_str()) {
             result
         } else {
             joined
@@ -12,7 +12,7 @@ macro_rules! tw_merge {
     }};
 }
 
-pub fn merge_conflicts(class: &str) -> Option<String> {
+pub fn tw_merge(class: &str) -> Option<String> {
     let styles: Vec<AstStyle> = {
         let styles = parse_tailwind(class);
         if let Ok(styles) = styles {
@@ -60,7 +60,7 @@ struct SeenStyle<'a> {
 
 #[cfg(test)]
 mod test {
-    use crate::merge::merge_conflicts;
+    use crate::merge::tw_merge;
 
     #[test]
     fn test_tw_merge() {
@@ -71,22 +71,22 @@ mod test {
     #[test]
     fn test_conflict() {
         let class = "bg-red-500 bg-blue-500 text-green-500";
-        let result = merge_conflicts(class).unwrap();
+        let result = tw_merge(class).unwrap();
         assert_eq!(result, "bg-blue-500 text-green-500");
 
         let class = "bg-red-500 bg-blue-500 text-green-500 bg-amber-500";
-        let result = merge_conflicts(class).unwrap();
+        let result = tw_merge(class).unwrap();
         assert_eq!(result, "text-green-500 bg-amber-500");
     }
 
     #[test]
     fn test_conflict_with_modifiers() {
         let class = "bg-red-500 bg-blue-500 hover:bg-green-500 text-green-500";
-        let result = merge_conflicts(class).unwrap();
+        let result = tw_merge(class).unwrap();
         assert_eq!(result, "bg-blue-500 hover:bg-green-500 text-green-500");
 
         let class = "bg-red-500 bg-blue-500 hover:bg-green-500 text-green-500 hover:text-red-500";
-        let result = merge_conflicts(class).unwrap();
+        let result = tw_merge(class).unwrap();
         assert_eq!(
             result,
             "bg-blue-500 hover:bg-green-500 text-green-500 hover:text-red-500"
@@ -96,7 +96,7 @@ mod test {
     #[test]
     fn test_conflict_with_arbitrary() {
         let class = "bg-red-500 bg-[#11111]";
-        let result = merge_conflicts(class).unwrap();
+        let result = tw_merge(class).unwrap();
 
         assert_eq!(result, "bg-[#11111]")
     }
