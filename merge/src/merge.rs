@@ -26,7 +26,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
     };
 
     let mut valid_styles: Vec<AstStyle> = vec![];
-    let mut seen_styles: BTreeSet<String> = BTreeSet::new();
+    let mut collision_styles: BTreeSet<String> = BTreeSet::new();
 
     for style in styles.into_iter().rev() {
         let parse = TailwindInstruction::from(style.clone());
@@ -35,10 +35,11 @@ pub fn tw_merge(class: &str) -> Option<String> {
             Err(error) => {
                 #[cfg(debug_assertions)]
                 println!("No Instance found: {parse:?} {error:?}");
+                valid_styles.push(style);
             }
             Ok(instance) => {
                 let collision_id = instance.collision_id();
-                if seen_styles.contains(&collision_id) {
+                if collision_styles.contains(&collision_id) {
                     continue;
                 }
 
@@ -51,7 +52,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
                 collisions.into_iter().for_each(|collision| {
                     let collision = format!("{all_variants}{collision}");
-                    seen_styles.insert(collision);
+                    collision_styles.insert(collision);
                 });
 
                 valid_styles.push(style);
@@ -169,4 +170,32 @@ mod hardmode {
         let classes = tw_merge!("gap-x-5", "gap-y-5", "gap-10");
         assert_eq!(classes, "gap-10");
     }
+}
+
+#[test]
+fn test_merge_with_non_tailwind() {
+    let class_names: String = vec![
+        "header",
+        "nav-bar",
+        "feature",
+        // tailwind class
+        "flex-row",
+        "section",
+        "container-fluid",
+        "row",
+        "column",
+        // tailwind class
+        "flex-col",
+    ]
+    .into_iter()
+    .map(String::from)
+    .collect::<Vec<_>>()
+    .join(" ");
+
+    let result = tw_merge(&class_names).unwrap();
+
+    // flex row should be removed in favor of flex-col.
+    let expected = class_names.replace(" flex-row", "");
+
+    assert_eq!(result, expected);
 }
