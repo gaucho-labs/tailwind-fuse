@@ -26,7 +26,6 @@ pub fn tw_merge(class: &str) -> Option<String> {
     };
 
     let mut valid_styles: Vec<AstStyle> = vec![];
-    // TODO: ACCOUNT FOR MODIFIERS.
     let mut seen_styles: BTreeSet<String> = BTreeSet::new();
 
     for style in styles.into_iter().rev() {
@@ -41,8 +40,16 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 if seen_styles.contains(&collision_id) {
                     continue;
                 }
+
                 let collisions = instance.get_collisions();
+                let all_variants = style
+                    .variants
+                    .iter()
+                    .flat_map(|v| v.names.iter().cloned())
+                    .collect::<String>();
+
                 collisions.into_iter().for_each(|collision| {
+                    let collision = format!("{all_variants}{collision}");
                     seen_styles.insert(collision);
                 });
 
@@ -53,8 +60,6 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
     let mut result = valid_styles
         .into_iter()
-        // TODO: do we need reverse?
-        // .rev()
         .map(|s| s.to_string())
         .collect::<Vec<_>>();
 
@@ -113,7 +118,7 @@ mod hardmode {
 
     #[test]
     fn test_tw_merge_mixed_blend() {
-        let classes = tw_merge!("mix-blend-normal");
+        let classes = tw_merge!("mix-blend-normal", "mix-blend-multiply");
         assert_eq!(classes, "mix-blend-multiply");
     }
 
