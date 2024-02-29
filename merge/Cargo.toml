@@ -9,3 +9,4 @@ edition = "2021"
 tailwind-model = { path = "../model" }
 css-color = "0.2.8"
 tailwind-ast = "=0.4.1"
+lru = "0.12.3"
