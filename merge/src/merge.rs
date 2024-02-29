@@ -1,4 +1,7 @@
-use tailwind_ast::{parse_tailwind, ASTVariant, AstStyle};
+use std::collections::BTreeSet;
+
+use tailwind_ast::AstStyle;
+use tailwind_model::TailwindInstruction;
 
 #[macro_export]
 macro_rules! tw_merge {
@@ -14,7 +17,7 @@ macro_rules! tw_merge {
 
 pub fn tw_merge(class: &str) -> Option<String> {
     let styles: Vec<AstStyle> = {
-        let styles = parse_tailwind(class);
+        let styles = tailwind_ast::parse_tailwind(class);
         if let Ok(styles) = styles {
             styles
         } else {
@@ -22,40 +25,42 @@ pub fn tw_merge(class: &str) -> Option<String> {
         }
     };
 
-    let mut seen_styles: Vec<SeenStyle> = vec![];
+    let mut valid_styles: Vec<AstStyle> = vec![];
+    // TODO: ACCOUNT FOR MODIFIERS.
+    let mut seen_styles: BTreeSet<String> = BTreeSet::new();
 
-    let mut result = styles
-        .into_iter()
-        .rev()
-        .filter_map(|style| {
-            println!("HERE {:?}", style);
-            let first_element = *style.elements.first()?;
-            let variants = style.variants.clone();
-            let seen_style = SeenStyle {
-                element: first_element,
-                variants,
-            };
-
-            if seen_styles.contains(&seen_style) {
-                None
-            } else {
-                seen_styles.push(seen_style);
-                Some(style)
+    for style in styles.into_iter().rev() {
+        let parse = TailwindInstruction::from(style.clone());
+        let instance = parse.get_instance();
+        match instance {
+            Err(error) => {
+                println!("No Instance found: {parse:?} {error:?}");
             }
-        })
+            Ok(instance) => {
+                let collision_id = instance.collision_id();
+                if seen_styles.contains(&collision_id) {
+                    continue;
+                }
+                let collisions = instance.get_collisions();
+                collisions.into_iter().for_each(|collision| {
+                    seen_styles.insert(collision);
+                });
+
+                valid_styles.push(style);
+            }
+        }
+    }
+
+    let mut result = valid_styles
+        .into_iter()
+        // TODO: do we need reverse?
+        // .rev()
         .map(|s| s.to_string())
         .collect::<Vec<_>>();
 
     result.reverse();
 
     Some(result.join(" "))
-}
-
-#[derive(Debug, Clone, PartialEq)]
-struct SeenStyle<'a> {
-    element: &'a str,
-    // TODO: remove this clone?
-    variants: Vec<ASTVariant<'a>>,
 }
 
 #[cfg(test)]
@@ -95,10 +100,10 @@ mod test {
 
     #[test]
     fn test_conflict_with_arbitrary() {
-        let class = "bg-red-500 bg-[#11111]";
+        let class = "bg-red-500 bg-[#000000]";
         let result = tw_merge(class).unwrap();
 
-        assert_eq!(result, "bg-[#11111]")
+        assert_eq!(result, "bg-[#000000]")
     }
 }
 
@@ -123,8 +128,8 @@ mod hardmode {
         let classes = tw_merge!("stroke-black", "stroke-1");
         assert_eq!(classes, "stroke-black stroke-1");
 
-        let classes = tw_merge!("stroke-2", "stroke-[3]");
-        assert_eq!(classes, "stroke-[3]");
+        let classes = tw_merge!("stroke-2", "stroke-[3px]");
+        assert_eq!(classes, "stroke-[3px]");
     }
 
     #[test]

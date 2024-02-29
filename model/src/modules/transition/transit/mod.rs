@@ -40,14 +40,25 @@ impl Display for TailwindTransition {
 }
 
 impl TailwindInstance for TailwindTransition {
+    fn collision_id(&self) -> String {
+        "transition-property".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindTransition {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Transition::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: Transition::parse(pattern, arbitrary)?,
+        })
     }
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Transition::parse_arbitrary(arbitrary)? })
+        Ok(Self {
+            kind: Transition::parse_arbitrary(arbitrary)?,
+        })
     }
 }
 

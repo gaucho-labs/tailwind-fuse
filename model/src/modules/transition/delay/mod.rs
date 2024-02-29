@@ -13,6 +13,13 @@ impl Display for TailwindDelay {
 }
 
 impl TailwindInstance for TailwindDelay {
+    fn collision_id(&self) -> String {
+        "transition-delay".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindDelay {

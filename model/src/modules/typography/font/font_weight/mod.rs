@@ -17,6 +17,13 @@ impl Display for TailwindFontWeight {
 }
 
 impl TailwindInstance for TailwindFontWeight {
+    fn collision_id(&self) -> String {
+        "font-weight".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindFontWeight {

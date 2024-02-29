@@ -14,11 +14,23 @@ impl Display for TailwindInset {
     }
 }
 
+// TODO: HOW DOES INSET INTERACT WITH TOP/BOTTOM/LEFT/RIGHT?
 impl TailwindInstance for TailwindInset {
+    fn collision_id(&self) -> String {
+        self.axis.collision_id("inset")
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        self.axis.collisions("inset")
+    }
 }
 
 impl TailwindInset {
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let (axis, rest) = AxisXY::split_xyn(pattern);
         let kind = get_kind_px_full_auto_fact("inset", rest, arbitrary, negative)?;
         Ok(Self { axis, kind })

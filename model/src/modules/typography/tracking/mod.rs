@@ -12,7 +12,15 @@ impl Display for TailwindTracking {
     }
 }
 
-impl TailwindInstance for TailwindTracking {}
+impl TailwindInstance for TailwindTracking {
+    fn collision_id(&self) -> String {
+        "text-tracking".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindTracking {
     /// <https://tailwindcss.com/docs/letter-spacing>

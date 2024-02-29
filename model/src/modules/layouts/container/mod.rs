@@ -18,4 +18,12 @@ impl TailwindInstance for TailwindContainer {
     fn inlineable(&self) -> bool {
         false
     }
+
+    fn collision_id(&self) -> String {
+        "container".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }

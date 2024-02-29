@@ -5,10 +5,19 @@ macro_rules! keyword_instance {
             T: Into<String>,
         {
             fn from(input: T) -> Self {
-                Self { kind: StandardValue::from(input.into()) }
+                Self {
+                    kind: StandardValue::from(input.into()),
+                }
             }
         }
-        impl TailwindInstance for $t {}
+        impl TailwindInstance for $t {
+            fn collision_id(&self) -> String {
+                $a.to_string()
+            }
+            fn get_collisions(&self) -> Vec<String> {
+                vec![self.collision_id()]
+            }
+        }
     };
 }
 
@@ -19,17 +28,23 @@ macro_rules! color_instance {
             T: Into<TailwindColor>,
         {
             fn from(color: T) -> Self {
-                Self { color: color.into() }
+                Self {
+                    color: color.into(),
+                }
             }
         }
         impl $t {
             ///
             pub fn parse(input: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-                Ok(Self { color: TailwindColor::parse(input, arbitrary)? })
+                Ok(Self {
+                    color: TailwindColor::parse(input, arbitrary)?,
+                })
             }
             ///
             pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-                Ok(Self { color: TailwindColor::parse_arbitrary(arbitrary)? })
+                Ok(Self {
+                    color: TailwindColor::parse_arbitrary(arbitrary)?,
+                })
             }
         }
     };

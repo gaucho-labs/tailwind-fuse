@@ -14,7 +14,19 @@ impl Display for TailwindBrightness {
     }
 }
 
-impl TailwindInstance for TailwindBrightness {}
+impl TailwindInstance for TailwindBrightness {
+    fn collision_id(&self) -> String {
+        if self.backdrop.0 {
+            "backdrop-brightness".into()
+        } else {
+            "brightness".into()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindBrightness {
     pub fn parse(rest: &[&str], arbitrary: &TailwindArbitrary, backdrop: bool) -> Result<Self> {
@@ -22,6 +34,9 @@ impl TailwindBrightness {
             [] if arbitrary.is_none() => 100u32.into(),
             _ => NumericValue::positive_parser("brightness", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { percent, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            percent,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

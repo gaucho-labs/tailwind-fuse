@@ -11,12 +11,17 @@ pub struct TailwindDecoration {
 }
 
 impl TailwindDecoration {
-    pub fn adapt(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    pub fn adapt(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/text-decoration
             ["line", rest @ ..] => TailwindDecorationLine::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-style
-            [s @ ("solid" | "double" | "dotted" | "dashed" | "wavy")] => TailwindDecorationStyle::from(*s).boxed(),
+            [s @ ("solid" | "double" | "dotted" | "dashed" | "wavy")] => {
+                TailwindDecorationStyle::from(*s).boxed()
+            }
             ["style", rest @ ..] => TailwindDecorationStyle::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-thickness
             ["auto"] => TailwindDecorationThickness::from("auto").boxed(),
@@ -26,9 +31,12 @@ impl TailwindDecoration {
             ["color", rest @ ..] => {
                 let color = TailwindColor::parse(rest, arbitrary)?;
                 TailwindDecorationColor::from(color).boxed()
-            },
+            }
             // https://tailwindcss.com/docs/text-decoration-thickness
-            [] => TailwindDecoration { arbitrary: TailwindArbitrary::new(arbitrary)? }.boxed(),
+            [] => TailwindDecoration {
+                arbitrary: TailwindArbitrary::new(arbitrary)?,
+            }
+            .boxed(),
             [n] => resolve1(n)?,
             _ => TailwindDecorationColor::parse(pattern, arbitrary)?.boxed(),
         };
@@ -43,6 +51,13 @@ impl Display for TailwindDecoration {
 }
 
 impl TailwindInstance for TailwindDecoration {
+    fn collision_id(&self) -> String {
+        "decoration".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {

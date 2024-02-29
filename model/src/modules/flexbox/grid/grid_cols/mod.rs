@@ -12,10 +12,20 @@ impl Display for TailwindGridColumns {
     }
 }
 
-impl TailwindInstance for TailwindGridColumns {}
+impl TailwindInstance for TailwindGridColumns {
+    fn collision_id(&self) -> String {
+        "grid-columns".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindGridColumns {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: GridTemplate::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: GridTemplate::parse(pattern, arbitrary)?,
+        })
     }
 }

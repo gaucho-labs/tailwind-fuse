@@ -27,12 +27,21 @@ impl Display for TailwindStrokeWidth {
 }
 
 impl TailwindInstance for TailwindStrokeWidth {
+    fn collision_id(&self) -> String {
+        "stroke-width".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindStrokeWidth {
     /// https://tailwindcss.com/docs/stroke-width
     pub fn try_new(width: &str) -> Result<Self> {
-        Ok(Self { kind: StrokeWidth::parse(width)? })
+        Ok(Self {
+            kind: StrokeWidth::parse(width)?,
+        })
     }
 }
 

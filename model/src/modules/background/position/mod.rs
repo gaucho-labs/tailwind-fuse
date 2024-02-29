@@ -12,10 +12,20 @@ impl Display for TailwindBackgroundPosition {
     }
 }
 
-impl TailwindInstance for TailwindBackgroundPosition {}
+impl TailwindInstance for TailwindBackgroundPosition {
+    fn collision_id(&self) -> String {
+        "origin-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindBackgroundPosition {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: AnchorPoint::parse(pattern, arbitrary, true)? })
+        Ok(Self {
+            kind: AnchorPoint::parse(pattern, arbitrary, true)?,
+        })
     }
 }

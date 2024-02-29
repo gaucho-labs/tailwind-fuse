@@ -13,12 +13,24 @@ impl Display for TailwindLeft {
     }
 }
 
+// TODO CONFIRM
 impl TailwindInstance for TailwindLeft {
+    fn collision_id(&self) -> String {
+        "left".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindLeft {
     /// <https://tailwindcss.com/docs/top-right-bottom-left>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let kind = get_kind_px_full_auto_fact("left", pattern, arbitrary, negative)?;
         Ok(Self { kind })
     }

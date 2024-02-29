@@ -18,14 +18,37 @@ impl Display for TailwindGap {
     }
 }
 
-impl TailwindInstance for TailwindGap {}
+impl TailwindInstance for TailwindGap {
+    fn collision_id(&self) -> String {
+        let id = match self.axis {
+            AxisXY::N => "gap",
+            AxisXY::X => "gap-x",
+            AxisXY::Y => "gap-y",
+        };
+
+        id.into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        todo!()
+    }
+}
 
 impl TailwindGap {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         match pattern {
-            ["x", rest @ ..] => Ok(Self { size: parse_size(rest, arbitrary)?, axis: AxisXY::X }),
-            ["y", rest @ ..] => Ok(Self { size: parse_size(rest, arbitrary)?, axis: AxisXY::Y }),
-            _ => Ok(Self { size: parse_size(pattern, arbitrary)?, axis: AxisXY::N }),
+            ["x", rest @ ..] => Ok(Self {
+                size: parse_size(rest, arbitrary)?,
+                axis: AxisXY::X,
+            }),
+            ["y", rest @ ..] => Ok(Self {
+                size: parse_size(rest, arbitrary)?,
+                axis: AxisXY::Y,
+            }),
+            _ => Ok(Self {
+                size: parse_size(pattern, arbitrary)?,
+                axis: AxisXY::N,
+            }),
         }
     }
 }
@@ -37,7 +60,7 @@ fn parse_size(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<LengthU
         [n] => {
             let a = TailwindArbitrary::from(*n);
             LengthUnit::rem(a.as_float()? / 4.0)
-        },
+        }
         _ => return syntax_error!("Unknown gap instructions"),
     };
     Ok(size)

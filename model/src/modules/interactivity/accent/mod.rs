@@ -14,4 +14,12 @@ impl Display for TailwindAccentColor {
     }
 }
 
-impl TailwindInstance for TailwindAccentColor {}
+impl TailwindInstance for TailwindAccentColor {
+    fn collision_id(&self) -> String {
+        "accent-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

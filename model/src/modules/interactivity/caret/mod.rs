@@ -14,4 +14,12 @@ impl Display for TailwindCaretColor {
     }
 }
 
-impl TailwindInstance for TailwindCaretColor {}
+impl TailwindInstance for TailwindCaretColor {
+    fn collision_id(&self) -> String {
+        "caret-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

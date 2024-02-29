@@ -42,4 +42,19 @@ impl Display for TailwindSizing {
     }
 }
 
-impl TailwindInstance for TailwindSizing {}
+impl TailwindInstance for TailwindSizing {
+    fn collision_id(&self) -> String {
+        match self.kind {
+            TailwindSizingKind::Width => "width".to_string(),
+            TailwindSizingKind::MinWidth => "min-width".to_string(),
+            TailwindSizingKind::MaxWidth => "max-width".to_string(),
+            TailwindSizingKind::Height => "height".to_string(),
+            TailwindSizingKind::MinHeight => "min-height".to_string(),
+            TailwindSizingKind::MaxHeight => "max-height".to_string(),
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

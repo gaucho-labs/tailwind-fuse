@@ -18,12 +18,23 @@ impl Display for TailwindScale {
 }
 
 impl TailwindInstance for TailwindScale {
+    fn collision_id(&self) -> String {
+        self.axis.collision_id("scale")
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        self.axis.collisions("scale")
+    }
 }
 
 // noinspection DuplicatedCode
 impl TailwindScale {
     // https://tailwindcss.com/docs/scale
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let (axis, rest) = AxisXY::split_xyn(pattern);
         let kind = NumericValue::negative_parser("scale", |_| false)(rest, arbitrary, negative)?;
         Ok(TailwindScale { kind, axis })

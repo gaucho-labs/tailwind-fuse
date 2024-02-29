@@ -15,4 +15,11 @@ impl Display for TailwindStrokeColor {
 }
 
 impl TailwindInstance for TailwindStrokeColor {
+    fn collision_id(&self) -> String {
+        "stroke-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }

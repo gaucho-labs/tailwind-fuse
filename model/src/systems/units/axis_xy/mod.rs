@@ -17,7 +17,12 @@ impl AxisXY {
             _ => unreachable!(),
         }
     }
-    pub(crate) fn write_xy<A, B>(&self, f: &mut Formatter<'_>, before: B, after: A) -> std::fmt::Result
+    pub(crate) fn write_xy<A, B>(
+        &self,
+        f: &mut Formatter<'_>,
+        before: B,
+        after: A,
+    ) -> std::fmt::Result
     where
         A: Display,
         B: Display,
@@ -35,7 +40,12 @@ impl AxisXY {
             _ => (AxisXY::N, pattern),
         }
     }
-    pub(crate) fn write_xyn<A, B>(&self, f: &mut Formatter<'_>, before: B, after: A) -> std::fmt::Result
+    pub(crate) fn write_xyn<A, B>(
+        &self,
+        f: &mut Formatter<'_>,
+        before: B,
+        after: A,
+    ) -> std::fmt::Result
     where
         A: Display,
         B: Display,
@@ -55,5 +65,22 @@ impl AxisXY {
             AxisXY::Y => format!("{}-y", before),
             AxisXY::N => format!("{}", before),
         }
+    }
+
+    pub fn collision_id(&self, id: &'static str) -> String {
+        self.format_xyn(id)
+    }
+
+    // TODO: COMPILE TIME CONCAT..
+    pub fn collisions(&self, id: &'static str) -> Vec<String> {
+        let collisions = match self {
+            AxisXY::N => vec![AxisXY::N, AxisXY::X, AxisXY::Y],
+            _ => vec![*self],
+        };
+
+        collisions
+            .iter()
+            .map(|axis| axis.collision_id(id))
+            .collect()
     }
 }

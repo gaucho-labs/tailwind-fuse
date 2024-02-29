@@ -14,4 +14,12 @@ impl Display for TailwindShadowColor {
     }
 }
 
-impl TailwindInstance for TailwindShadowColor {}
+impl TailwindInstance for TailwindShadowColor {
+    fn collision_id(&self) -> String {
+        "shadow-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

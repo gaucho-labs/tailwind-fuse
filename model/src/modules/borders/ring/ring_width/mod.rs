@@ -14,7 +14,15 @@ impl Display for TailwindRingWidth {
     }
 }
 
-impl TailwindInstance for TailwindRingWidth {}
+impl TailwindInstance for TailwindRingWidth {
+    fn collision_id(&self) -> String {
+        "ring-width".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 impl TailwindRingWidth {
     /// <https://tailwindcss.com/docs/ring-width>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

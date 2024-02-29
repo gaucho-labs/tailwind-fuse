@@ -17,7 +17,9 @@ where
     T: Into<String>,
 {
     fn from(kind: T) -> Self {
-        Self { kind: VerticalAlign::Standard(kind.into()) }
+        Self {
+            kind: VerticalAlign::Standard(kind.into()),
+        }
     }
 }
 
@@ -30,25 +32,39 @@ impl Display for TailwindAlign {
     }
 }
 
+// TODO: CHECK THIS
 impl TailwindInstance for TailwindAlign {
+    fn collision_id(&self) -> String {
+        "vertical-align".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindAlign {
     /// https://tailwindcss.com/docs/text-align
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         match pattern {
-            [s] if Self::check_valid(s) => Ok(Self { kind: VerticalAlign::Standard(s.to_string()) }),
+            [s] if Self::check_valid(s) => Ok(Self {
+                kind: VerticalAlign::Standard(s.to_string()),
+            }),
             [s] => {
                 let n = TailwindArbitrary::from(*s).as_length_or_fraction()?;
-                Ok(Self { kind: VerticalAlign::Length(n) })
-            },
+                Ok(Self {
+                    kind: VerticalAlign::Length(n),
+                })
+            }
             [] => Self::parse_arbitrary(arbitrary),
             _ => syntax_error!("Unknown align instructions: {}", pattern.join("-")),
         }
     }
     /// https://tailwindcss.com/docs/text-align
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: VerticalAlign::Length(arbitrary.as_length_or_fraction()?) })
+        Ok(Self {
+            kind: VerticalAlign::Length(arbitrary.as_length_or_fraction()?),
+        })
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align#syntax
     pub fn check_valid(mode: &str) -> bool {

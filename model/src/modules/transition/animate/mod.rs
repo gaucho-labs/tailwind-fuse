@@ -16,14 +16,26 @@ impl Display for TailwindAnimate {
     }
 }
 
+// TODO: Can animations be stacked??
 impl TailwindInstance for TailwindAnimate {
+    fn collision_id(&self) -> String {
+        "animation".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindAnimate {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Animation::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: Animation::parse(pattern, arbitrary)?,
+        })
     }
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Animation::parse_arbitrary(arbitrary)? })
+        Ok(Self {
+            kind: Animation::parse_arbitrary(arbitrary)?,
+        })
     }
 }

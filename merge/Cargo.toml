@@ -6,5 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+tailwind-model = { path = "../model" }
 css-color = "0.2.8"
 tailwind-ast = "=0.4.1"

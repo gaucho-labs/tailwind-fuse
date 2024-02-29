@@ -15,6 +15,13 @@ impl Display for TailwindIndent {
 }
 
 impl TailwindInstance for TailwindIndent {
+    fn collision_id(&self) -> String {
+        "indent".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindIndent {
@@ -22,7 +29,9 @@ impl TailwindIndent {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let kind = match pattern {
             ["px"] => UnitValue::px(1.0),
-            _ => UnitValue::positive_parser("id", Self::check_valid, true, false, false)(pattern, arbitrary)?,
+            _ => UnitValue::positive_parser("id", Self::check_valid, true, false, false)(
+                pattern, arbitrary,
+            )?,
         };
         Ok(Self { kind })
     }

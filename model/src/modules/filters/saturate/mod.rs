@@ -14,7 +14,15 @@ impl Display for TailwindSaturate {
     }
 }
 
-impl TailwindInstance for TailwindSaturate {}
+impl TailwindInstance for TailwindSaturate {
+    fn collision_id(&self) -> String {
+        "saturate".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        todo!()
+    }
+}
 
 impl TailwindSaturate {
     /// <https://tailwindcss.com/docs/saturate>
@@ -23,6 +31,9 @@ impl TailwindSaturate {
             [] if arbitrary.is_none() => 100u32.into(),
             _ => NumericValue::positive_parser("saturate", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { percent, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            percent,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

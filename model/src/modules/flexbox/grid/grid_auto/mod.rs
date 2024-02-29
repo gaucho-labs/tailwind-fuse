@@ -40,7 +40,16 @@ impl Display for TailwindGridAuto {
     }
 }
 
-impl TailwindInstance for TailwindGridAuto {}
+// TODO: FIX HIGH PRIORITY
+impl TailwindInstance for TailwindGridAuto {
+    fn collision_id(&self) -> String {
+        todo!()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        todo!()
+    }
+}
 
 impl GridAutoKind {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

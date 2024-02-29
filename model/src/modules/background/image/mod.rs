@@ -12,10 +12,20 @@ impl Display for TailwindBackgroundImage {
     }
 }
 
-impl TailwindInstance for TailwindBackgroundImage {}
+impl TailwindInstance for TailwindBackgroundImage {
+    fn collision_id(&self) -> String {
+        todo!()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        todo!()
+    }
+}
 
 impl TailwindBackgroundImage {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: AnchorPoint::parse(pattern, arbitrary, false)? })
+        Ok(Self {
+            kind: AnchorPoint::parse(pattern, arbitrary, false)?,
+        })
     }
 }

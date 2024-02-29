@@ -15,4 +15,11 @@ impl Display for TailwindFillColor {
 }
 
 impl TailwindInstance for TailwindFillColor {
+    fn collision_id(&self) -> String {
+        "fill-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }

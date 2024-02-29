@@ -36,6 +36,31 @@ impl Display for TailwindTo {
         write!(f, "to-{}", self.color)
     }
 }
-impl TailwindInstance for TailwindFrom {}
-impl TailwindInstance for TailwindVia {}
-impl TailwindInstance for TailwindTo {}
+impl TailwindInstance for TailwindFrom {
+    fn collision_id(&self) -> String {
+        "from-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
+impl TailwindInstance for TailwindVia {
+    fn collision_id(&self) -> String {
+        "via-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
+
+impl TailwindInstance for TailwindTo {
+    fn collision_id(&self) -> String {
+        "to-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

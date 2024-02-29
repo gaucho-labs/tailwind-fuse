@@ -22,4 +22,15 @@ impl Display for TailwindSpaceReverse {
 }
 
 impl TailwindInstance for TailwindSpaceReverse {
+    fn collision_id(&self) -> String {
+        if self.axis {
+            "space-x-reverse".to_string()
+        } else {
+            "space-y-reverse".to_string()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }

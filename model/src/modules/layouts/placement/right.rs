@@ -14,11 +14,22 @@ impl Display for TailwindRight {
 }
 
 impl TailwindInstance for TailwindRight {
+    fn collision_id(&self) -> String {
+        "right".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindRight {
     /// <https://tailwindcss.com/docs/top-right-bottom-left>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let kind = get_kind_px_full_auto_fact("right", pattern, arbitrary, negative)?;
         Ok(Self { kind })
     }

@@ -13,4 +13,12 @@ impl Display for TailwindBackgroundColor {
     }
 }
 
-impl TailwindInstance for TailwindBackgroundColor {}
+impl TailwindInstance for TailwindBackgroundColor {
+    fn collision_id(&self) -> String {
+        "bg-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

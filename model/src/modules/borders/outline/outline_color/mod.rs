@@ -14,4 +14,12 @@ impl Display for TailwindOutlineColor {
     }
 }
 
-impl TailwindInstance for TailwindOutlineColor {}
+impl TailwindInstance for TailwindOutlineColor {
+    fn collision_id(&self) -> String {
+        "outline-color".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

@@ -14,4 +14,12 @@ impl Display for TailwindDivideColor {
     }
 }
 
-impl TailwindInstance for TailwindDivideColor {}
+impl TailwindInstance for TailwindDivideColor {
+    fn collision_id(&self) -> String {
+        "ring-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

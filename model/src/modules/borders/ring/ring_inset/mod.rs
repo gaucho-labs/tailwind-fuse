@@ -10,4 +10,12 @@ impl Display for TailwindRingInset {
     }
 }
 
-impl TailwindInstance for TailwindRingInset {}
+impl TailwindInstance for TailwindRingInset {
+    fn collision_id(&self) -> String {
+        "ring-inset".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

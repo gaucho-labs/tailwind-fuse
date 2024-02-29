@@ -22,34 +22,52 @@ impl Display for TailwindZIndex {
                     true => write!(f, "z-{}", n),
                     false => write!(f, "-z-{}", n),
                 }
-            },
+            }
             ZIndex::Standard(s) => write!(f, "z-{}", s),
             ZIndex::Arbitrary(s) => s.write_class(f, "z-"),
         }
     }
 }
 
-impl TailwindInstance for TailwindZIndex {}
+impl TailwindInstance for TailwindZIndex {
+    fn collision_id(&self) -> String {
+        "z-".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindZIndex {
     /// <https://tailwindcss.com/docs/z-index>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         match pattern {
             [] => Self::parse_arbitrary(arbitrary),
-            [s] if Self::check_valid(s) => Ok(Self { kind: ZIndex::Standard(s.to_string()) }),
+            [s] if Self::check_valid(s) => Ok(Self {
+                kind: ZIndex::Standard(s.to_string()),
+            }),
             [n] => {
                 let mut i: i32 = TailwindArbitrary::from(*n).as_integer()?;
                 if negative.0 {
                     i = -i;
                 }
-                Ok(Self { kind: ZIndex::Unit(i) })
-            },
+                Ok(Self {
+                    kind: ZIndex::Unit(i),
+                })
+            }
             _ => syntax_error!("Unknown z-index instructions"),
         }
     }
     /// dispatch to [z-index](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: ZIndex::Arbitrary(arbitrary.to_owned()) })
+        Ok(Self {
+            kind: ZIndex::Arbitrary(arbitrary.to_owned()),
+        })
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/z-index#syntax>
     pub fn check_valid(mode: &str) -> bool {

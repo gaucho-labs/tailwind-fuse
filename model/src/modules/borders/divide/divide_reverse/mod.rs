@@ -21,4 +21,13 @@ impl Display for TailwindDivideReverse {
     }
 }
 
-impl TailwindInstance for TailwindDivideReverse {}
+impl TailwindInstance for TailwindDivideReverse {
+    // TODO: CONFIRM
+    fn collision_id(&self) -> String {
+        self.to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

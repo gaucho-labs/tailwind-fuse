@@ -15,4 +15,11 @@ impl Display for TailwindTextColor {
 }
 
 impl TailwindInstance for TailwindTextColor {
+    fn collision_id(&self) -> String {
+        "text-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }

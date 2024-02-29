@@ -15,10 +15,22 @@ impl Display for TailwindFlex {
     }
 }
 
-impl TailwindInstance for TailwindFlex {}
+// TODO: CONFIRM, this is prolly ok?
+impl TailwindInstance for TailwindFlex {
+    fn collision_id(&self) -> String {
+        "base-flex".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindFlex {
-    pub fn adapt(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    pub fn adapt(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/display#flex
             // This won't happen
@@ -50,7 +62,9 @@ impl TailwindFlex {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["auto", "inherit", "initial", "initial", "none", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "auto", "inherit", "initial", "initial", "none", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }
