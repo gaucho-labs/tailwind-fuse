@@ -5,7 +5,11 @@ mod traits;
 /// Used to represent those attributes that only have integers
 #[derive(Debug, Clone)]
 pub enum NumericValue {
-    Number { n: f32, negative: bool, can_be_negative: bool },
+    Number {
+        n: f32,
+        negative: bool,
+        can_be_negative: bool,
+    },
     Keyword(String),
     Arbitrary(TailwindArbitrary),
 }
@@ -20,7 +24,9 @@ impl NumericValue {
     }
     pub fn write_negative(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Number { n, can_be_negative, .. } if can_be_negative && n < 0.0 => write!(f, "-"),
+            Self::Number {
+                n, can_be_negative, ..
+            } if can_be_negative && n < 0.0 => write!(f, "-"),
             _ => write!(f, ""),
         }
     }
@@ -40,7 +46,10 @@ impl NumericValue {
                 _ if checker(&joined) => Ok(Self::Keyword(joined)),
                 [] => Self::parse_arbitrary(arbitrary),
                 [n] => Self::parse_number(n, negative),
-                _ => Err(TailwindError::syntax_error(format!("Unknown {} pattern", id))),
+                _ => Err(TailwindError::syntax_error(format!(
+                    "Unknown {} pattern",
+                    id
+                ))),
             }
         }
     }
@@ -55,9 +64,16 @@ impl NumericValue {
                 [] => Self::parse_arbitrary(arbitrary),
                 [n] => {
                     let i = TailwindArbitrary::from(*n).as_integer()?;
-                    Ok(Self::Number { n: i as f32, negative: false, can_be_negative: true })
-                },
-                _ => Err(TailwindError::syntax_error(format!("Unknown {} pattern", id))),
+                    Ok(Self::Number {
+                        n: i as f32,
+                        negative: false,
+                        can_be_negative: true,
+                    })
+                }
+                _ => Err(TailwindError::syntax_error(format!(
+                    "Unknown {} pattern",
+                    id
+                ))),
             }
         }
     }
@@ -69,6 +85,10 @@ impl NumericValue {
         if negative.0 {
             n = -n
         }
-        Ok(Self::Number { n, negative: negative.0, can_be_negative: false })
+        Ok(Self::Number {
+            n,
+            negative: negative.0,
+            can_be_negative: false,
+        })
     }
 }

@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindListStyle {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindListStyle => "list-style-type");
+crate::macros::keyword_instance!(TailwindListStyle => "list-style-type");
 
 impl Display for TailwindListStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -17,7 +16,9 @@ impl Display for TailwindListStyle {
 impl TailwindListStyle {
     /// https://tailwindcss.com/docs/list-style-type
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("list-style", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("list-style", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [list-style-type](https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

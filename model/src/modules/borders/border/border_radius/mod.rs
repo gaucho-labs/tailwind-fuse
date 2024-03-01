@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Copy, Clone, Debug)]
 pub struct TailwindRounded {
     kind: RoundedKind,
@@ -42,7 +41,37 @@ impl Display for TailwindRounded {
     }
 }
 
-impl TailwindInstance for TailwindRounded {}
+impl TailwindInstance for TailwindRounded {
+    fn collision_id(&self) -> String {
+        self.kind.to_string()
+    }
+
+    // TODO: CONFIRM
+    fn get_collisions(&self) -> Vec<String> {
+        let collisions = match self.kind {
+            RoundedKind::Rounded => vec![
+                RoundedKind::RoundedT,
+                RoundedKind::RoundedR,
+                RoundedKind::RoundedB,
+                RoundedKind::RoundedL,
+                RoundedKind::RoundedTL,
+                RoundedKind::RoundedTR,
+                RoundedKind::RoundedBL,
+                RoundedKind::RoundedBR,
+            ],
+            RoundedKind::RoundedT => vec![RoundedKind::RoundedT],
+            RoundedKind::RoundedR => vec![RoundedKind::RoundedR],
+            RoundedKind::RoundedB => vec![RoundedKind::RoundedB],
+            RoundedKind::RoundedL => vec![RoundedKind::RoundedL],
+            RoundedKind::RoundedTL => vec![RoundedKind::RoundedTL],
+            RoundedKind::RoundedTR => vec![RoundedKind::RoundedTR],
+            RoundedKind::RoundedBL => vec![RoundedKind::RoundedBL],
+            RoundedKind::RoundedBR => vec![RoundedKind::RoundedBR],
+        };
+
+        collisions.into_iter().map(|x| x.to_string()).collect()
+    }
+}
 
 impl TailwindRounded {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
@@ -58,12 +87,29 @@ impl TailwindRounded {
             _ => Self::parse_inner(pattern, RoundedKind::Rounded, arbitrary),
         }
     }
-    fn parse_inner(pattern: &[&str], kind: RoundedKind, arbitrary: &TailwindArbitrary) -> Result<Self> {
+    fn parse_inner(
+        pattern: &[&str],
+        kind: RoundedKind,
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Self> {
         if arbitrary.is_some() {
-            return Ok(Self { kind, size: arbitrary.as_length_or_fraction()? });
+            return Ok(Self {
+                kind,
+                size: arbitrary.as_length_or_fraction()?,
+            });
         }
-        let rem = |n| Ok(Self { kind, size: LengthUnit::rem(n) });
-        let px = |n| Ok(Self { kind, size: LengthUnit::px(n) });
+        let rem = |n| {
+            Ok(Self {
+                kind,
+                size: LengthUnit::rem(n),
+            })
+        };
+        let px = |n| {
+            Ok(Self {
+                kind,
+                size: LengthUnit::px(n),
+            })
+        };
         match pattern {
             ["none"] => px(0.0),
             ["sm"] => rem(0.125),

@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindContrast {
     percent: NumericValue,
@@ -14,7 +13,19 @@ impl Display for TailwindContrast {
     }
 }
 
-impl TailwindInstance for TailwindContrast {}
+impl TailwindInstance for TailwindContrast {
+    fn collision_id(&self) -> String {
+        if self.backdrop.0 {
+            "backdrop-contrast".into()
+        } else {
+            "contrast".into()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindContrast {
     pub fn parse(rest: &[&str], arbitrary: &TailwindArbitrary, backdrop: bool) -> Result<Self> {
@@ -22,6 +33,9 @@ impl TailwindContrast {
             [] if arbitrary.is_none() => 100u32.into(),
             _ => NumericValue::positive_parser("contrast", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { percent, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            percent,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

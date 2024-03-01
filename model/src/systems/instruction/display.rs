@@ -13,8 +13,6 @@ impl Display for TailwindInstruction {
     }
 }
 
-impl TailwindInstance for TailwindInstruction {}
-
 impl Display for TailwindVariant {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         if self.not {
@@ -24,10 +22,10 @@ impl Display for TailwindVariant {
         match self.pseudo {
             true => {
                 write!(f, "::")
-            },
+            }
             false => {
                 write!(f, ":")
-            },
+            }
         }
     }
 }

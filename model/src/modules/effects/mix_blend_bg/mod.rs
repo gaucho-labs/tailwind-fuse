@@ -11,12 +11,22 @@ impl Display for TailwindBackgroundBlend {
     }
 }
 
-impl TailwindInstance for TailwindBackgroundBlend {}
+impl TailwindInstance for TailwindBackgroundBlend {
+    fn collision_id(&self) -> String {
+        "background-blend".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindBackgroundBlend {
     /// <https://tailwindcss.com/docs/background-blend-mode>
     pub fn parse(input: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { wrapper: TailwindBlend::parse(input, arbitrary)? })
+        Ok(Self {
+            wrapper: TailwindBlend::parse(input, arbitrary)?,
+        })
     }
     pub fn check_valid(input: &str) -> bool {
         TailwindBlend::check_valid(input)

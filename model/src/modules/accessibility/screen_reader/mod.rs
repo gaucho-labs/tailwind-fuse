@@ -1,7 +1,6 @@
 use crate::TailwindInstance;
 use std::fmt::{Display, Formatter};
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug)]
 pub struct TailwindScreenReader {
     sr_only: bool,
@@ -16,7 +15,14 @@ impl Display for TailwindScreenReader {
     }
 }
 
-impl TailwindInstance for TailwindScreenReader {}
+impl TailwindInstance for TailwindScreenReader {
+    fn collision_id(&self) -> String {
+        self.to_string()
+    }
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.to_string()]
+    }
+}
 
 impl TailwindScreenReader {
     /// https://tailwindcss.com/docs/screen-readers

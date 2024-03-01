@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBreakAfter {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBreakAfter => "break-after");
+crate::macros::keyword_instance!(TailwindBreakAfter => "break-after");
 
 impl Display for TailwindBreakAfter {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -17,7 +16,9 @@ impl Display for TailwindBreakAfter {
 impl TailwindBreakAfter {
     /// <https://tailwindcss.com/docs/break-after>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("break-after", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("break-after", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
 
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

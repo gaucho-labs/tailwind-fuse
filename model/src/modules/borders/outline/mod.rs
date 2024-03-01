@@ -5,11 +5,16 @@ pub(crate) mod outline_offset;
 pub(crate) mod outline_style;
 pub(crate) mod outline_width;
 
-pub(crate) fn outline_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+pub(crate) fn outline_adaptor(
+    pattern: &[&str],
+    arbitrary: &TailwindArbitrary,
+) -> Result<Box<dyn TailwindInstance>> {
     let out = match pattern {
         // https://tailwindcss.com/docs/outline-style
         [] if arbitrary.is_none() => TailwindOutlineStyle::from("solid").boxed(),
-        [s @ ("dashed" | "dotted" | "double" | "hidden" | "solid")] => TailwindOutlineStyle::from(*s).boxed(),
+        [s @ ("dashed" | "dotted" | "double" | "hidden" | "solid")] => {
+            TailwindOutlineStyle::from(*s).boxed()
+        }
         ["none"] => TailwindOutlineStyle::from("<NONE>").boxed(),
         ["style", rest @ ..] => TailwindOutlineStyle::parse(rest, arbitrary)?.boxed(),
         // https://tailwindcss.com/docs/outline-offset
@@ -17,11 +22,14 @@ pub(crate) fn outline_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -
         // https://tailwindcss.com/docs/outline-width
         ["width", rest @ ..] => TailwindOutlineWidth::parse(rest, arbitrary)?.boxed(),
         // https://tailwindcss.com/docs/outline-color
-        ["black" | "white" | "inherit" | "current" | "transparent" | "revert"] =>
-            TailwindOutlineColor::parse(pattern, arbitrary)?.boxed(),
+        ["black" | "white" | "inherit" | "current" | "transparent" | "revert"] => {
+            TailwindOutlineColor::parse(pattern, arbitrary)?.boxed()
+        }
         ["color", rest @ ..] => TailwindOutlineColor::parse(rest, arbitrary)?.boxed(),
         // Flexible parsing pattern
-        [] if arbitrary.as_str().starts_with(|c: char| c.is_numeric()) => TailwindOutlineWidth::from(arbitrary).boxed(),
+        [] if arbitrary.as_str().starts_with(|c: char| c.is_numeric()) => {
+            TailwindOutlineWidth::from(arbitrary).boxed()
+        }
         [n] => resolve1(n)?,
         _ => TailwindOutlineColor::parse(pattern, arbitrary)?.boxed(),
     };
@@ -34,7 +42,7 @@ fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {
         return Ok(resolve1_length(&a).or_else(|_| resolve1_unit(&a))?.boxed());
     }
     if n.starts_with(|c: char| c == '#') {
-        return Ok(resolve1_color(&a)?.boxed());
+        return Ok(resolve1_color(a).boxed());
     }
     Ok(TailwindOutlineColor::from(TailwindColor::Themed(n.to_string(), 0)).boxed())
 }
@@ -47,6 +55,6 @@ fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindOutlineWidth> {
     Ok(TailwindOutlineWidth::from(a.as_integer()?))
 }
 
-fn resolve1_color(a: &TailwindArbitrary) -> Result<TailwindOutlineColor> {
-    Ok(TailwindOutlineColor::from(a.as_color()?))
+fn resolve1_color(a: TailwindArbitrary) -> TailwindOutlineColor {
+    TailwindOutlineColor::from(TailwindColor::Arbitrary(a))
 }

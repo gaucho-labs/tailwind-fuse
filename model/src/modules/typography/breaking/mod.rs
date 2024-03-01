@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindBreak {
     kind: WordBreak,
@@ -18,7 +17,9 @@ where
     T: Into<String>,
 {
     fn from(kind: T) -> Self {
-        Self { kind: WordBreak::Standard(kind.into()) }
+        Self {
+            kind: WordBreak::Standard(kind.into()),
+        }
     }
 }
 
@@ -36,11 +37,21 @@ impl Display for TailwindBreak {
 }
 
 impl TailwindInstance for TailwindBreak {
+    fn collision_id(&self) -> String {
+        "work-break".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindBreak {
     /// https://tailwindcss.com/docs/word-break
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let kind = match pattern {
             // https://tailwindcss.com/docs/break-before
             ["before", rest @ ..] => TailwindBreakBefore::parse(rest, arbitrary)?.boxed(),
@@ -54,7 +65,9 @@ impl TailwindBreak {
         Ok(kind)
     }
     fn parse_self(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: WordBreak::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: WordBreak::parse(pattern, arbitrary)?,
+        })
     }
 }
 
@@ -68,13 +81,21 @@ impl WordBreak {
                 let kind = pattern.join("-");
                 debug_assert!(Self::check_valid(&kind));
                 Self::Standard(kind)
-            },
+            }
         };
         Ok(kind)
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/word-break#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["break-all", "inherit", "initial", "keep-all", "normal", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "break-all",
+            "inherit",
+            "initial",
+            "keep-all",
+            "normal",
+            "revert",
+            "unset",
+        ]);
         set.contains(mode)
     }
 }

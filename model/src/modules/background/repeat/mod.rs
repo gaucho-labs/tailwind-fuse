@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindBackgroundRepeat {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundRepeat => "background-repeat");
+crate::macros::keyword_instance!(TailwindBackgroundRepeat => "background-repeat");
 
 impl Display for TailwindBackgroundRepeat {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

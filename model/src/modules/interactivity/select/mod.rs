@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindSelect {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSelect => "user-select");
+crate::macros::keyword_instance!(TailwindSelect => "user-select");
 
 impl Display for TailwindSelect {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -22,7 +21,9 @@ impl TailwindSelect {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/user-select#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["all", "auto", "contain", "inherit", "initial", "none", "revert", "text", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "all", "auto", "contain", "inherit", "initial", "none", "revert", "text", "unset",
+        ]);
         set.contains(mode)
     }
 }

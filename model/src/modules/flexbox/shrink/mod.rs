@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailWindShrink {
     shrink: NumericValue,
@@ -12,7 +11,15 @@ impl Display for TailWindShrink {
     }
 }
 
-impl TailwindInstance for TailWindShrink {}
+impl TailwindInstance for TailWindShrink {
+    fn collision_id(&self) -> String {
+        "shrink".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailWindShrink {
     /// <https://tailwindcss.com/docs/flex-shrink>

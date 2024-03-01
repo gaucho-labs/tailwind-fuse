@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindInvert {
     percent: NumericValue,
@@ -13,7 +12,19 @@ impl Display for TailwindInvert {
     }
 }
 
-impl TailwindInstance for TailwindInvert {}
+impl TailwindInstance for TailwindInvert {
+    fn collision_id(&self) -> String {
+        if self.backdrop.0 {
+            "backdrop-invert".to_string()
+        } else {
+            "invert".to_string()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindInvert {
     /// <https://tailwindcss.com/docs/invert>
@@ -22,6 +33,9 @@ impl TailwindInvert {
             [] if arbitrary.is_none() => 100u32.into(),
             _ => NumericValue::positive_parser("invert", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { percent, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            percent,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

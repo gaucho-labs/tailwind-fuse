@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindSepia {
     percent: NumericValue,
@@ -13,7 +12,15 @@ impl Display for TailwindSepia {
     }
 }
 
-impl TailwindInstance for TailwindSepia {}
+impl TailwindInstance for TailwindSepia {
+    fn collision_id(&self) -> String {
+        "sepia".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindSepia {
     /// <https://tailwindcss.com/docs/sepia>
@@ -22,6 +29,9 @@ impl TailwindSepia {
             [] if arbitrary.is_none() => 100i32.into(),
             _ => NumericValue::positive_parser("sepia", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { percent, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            percent,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

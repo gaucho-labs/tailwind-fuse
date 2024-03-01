@@ -8,7 +8,6 @@ enum FontSmoothing {
     Length(LengthUnit),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindFontSmoothing {
     kind: FontSmoothing,
@@ -19,7 +18,9 @@ where
     T: Into<String>,
 {
     fn from(kind: T) -> Self {
-        Self { kind: FontSmoothing::Standard(kind.into()) }
+        Self {
+            kind: FontSmoothing::Standard(kind.into()),
+        }
     }
 }
 
@@ -35,6 +36,13 @@ impl Display for TailwindFontSmoothing {
 }
 
 impl TailwindInstance for TailwindFontSmoothing {
+    fn collision_id(&self) -> String {
+        "font-smoothing".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindFontSmoothing {
@@ -47,15 +55,19 @@ impl TailwindFontSmoothing {
             [n] => {
                 let l = TailwindArbitrary::from(*n).as_length_or_fraction()?;
                 FontSmoothing::Length(l)
-            },
+            }
             [] => FontSmoothing::Length(arbitrary.as_length_or_fraction()?),
-            _ => return syntax_error!("Unknown font-smoothing instructions: {}", pattern.join("-")),
+            _ => {
+                return syntax_error!("Unknown font-smoothing instructions: {}", pattern.join("-"))
+            }
         };
         Ok(Self { kind })
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["auto", "never", "always", "inherit", "initial", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "auto", "never", "always", "inherit", "initial", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }

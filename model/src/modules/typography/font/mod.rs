@@ -7,11 +7,14 @@ pub(crate) mod font_style;
 pub(crate) mod font_variant_numeric;
 pub(crate) mod font_weight;
 
-pub fn font_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+pub fn font_adaptor(
+    pattern: &[&str],
+    arbitrary: &TailwindArbitrary,
+) -> Result<Box<dyn TailwindInstance>> {
     let out = match pattern {
         // https://tailwindcss.com/docs/font-size
-        [s @ ("xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl")] =>
-            TailwindFontSize::new(s).boxed(),
+        [s @ ("xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl"
+        | "8xl" | "9xl")] => TailwindFontSize::new(s).boxed(),
         // https://tailwindcss.com/docs/float
         ["thin"] => TailwindFontWeight::THIN.boxed(),
         ["extralight"] => TailwindFontWeight::EXTRA_LIGHT.boxed(),
@@ -26,11 +29,11 @@ pub fn font_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<B
         ["size", n] => {
             let a = TailwindArbitrary::from(*n);
             maybe_size(&a)?
-        },
+        }
         [n] => {
             let a = TailwindArbitrary::from(*n);
             maybe_weight(&a).or_else(|_| maybe_size(&a))?
-        },
+        }
         _ => TailwindFontFamily::from(pattern.join("-")).boxed(),
     };
     Ok(out)

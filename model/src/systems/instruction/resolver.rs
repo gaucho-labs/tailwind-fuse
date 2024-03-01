@@ -37,7 +37,9 @@ impl TailwindInstruction {
             ["overflow", rest @ ..] => TailwindOverflow::parse(rest, arbitrary)?.boxed(),
             ["overscroll", rest @ ..] => TailwindOverscroll::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/position#header
-            [s @ ("static" | "fixed" | "absolute" | "relative" | "sticky")] => TailwindPosition::from(*s).boxed(),
+            [s @ ("static" | "fixed" | "absolute" | "relative" | "sticky")] => {
+                TailwindPosition::from(*s).boxed()
+            }
             ["position", rest @ ..] => TailwindPosition::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/top-right-bottom-left
             ["inset", rest @ ..] => TailwindInset::parse(rest, arbitrary, neg)?.boxed(),
@@ -47,7 +49,9 @@ impl TailwindInstruction {
             ["left", rest @ ..] => TailwindLeft::parse(rest, arbitrary, neg)?.boxed(),
             // https://tailwindcss.com/docs/visibility
             ["invisible"] => TailwindVisibility::from("hidden").boxed(),
-            ["visible" | "visibility", rest @ ..] => TailwindVisibility::parse(rest, arbitrary)?.boxed(),
+            ["visible" | "visibility", rest @ ..] => {
+                TailwindVisibility::parse(rest, arbitrary)?.boxed()
+            }
             // https://tailwindcss.com/docs/z-index
             ["z", rest @ ..] => TailwindZIndex::parse(rest, arbitrary, neg)?.boxed(),
             // Flexbox & Grid
@@ -69,8 +73,12 @@ impl TailwindInstruction {
             ["place", rest @ ..] => TailwindPlace::adapt(rest, arbitrary)?,
             // justify catched
             // Spacing System
-            ["p" | "pl" | "pr" | "pb" | "pt" | "px" | "py", ..] => TailwindPadding::parse(pattern, arbitrary, neg)?.boxed(),
-            ["m" | "ml" | "mr" | "mb" | "mt" | "mx" | "my", ..] => TailwindMargin::parse(pattern, arbitrary, neg)?.boxed(),
+            ["p" | "pl" | "pr" | "pb" | "pt" | "px" | "py", ..] => {
+                TailwindPadding::parse(pattern, arbitrary, neg)?.boxed()
+            }
+            ["m" | "ml" | "mr" | "mb" | "mt" | "mx" | "my", ..] => {
+                TailwindMargin::parse(pattern, arbitrary, neg)?.boxed()
+            }
             ["space", rest @ ..] => TailwindSpace::parse(rest, arbitrary, neg)?,
             // Sizing System
             ["w", rest @ ..] => TailwindSizing::parse_width(rest, arbitrary)?.boxed(),
@@ -88,15 +96,21 @@ impl TailwindInstruction {
             ["italic"] => TailwindFontStyle::from("italic").boxed(),
             ["not", "italic"] => TailwindFontStyle::from("normal").boxed(),
             // https://tailwindcss.com/docs/font-variant-numeric
-            ["normal", "nums"] => TailwindFontVariantNumeric::from("normal").boxed(),
+            ["normal", "nums"] => TailwindFontVariantNumeric::from("normal-nums").boxed(),
             ["ordinal"] => TailwindFontVariantNumeric::from("ordinal").boxed(),
             ["slashed", "zero"] => TailwindFontVariantNumeric::from("slashed-zero").boxed(),
             ["lining", "nums"] => TailwindFontVariantNumeric::from("lining-nums").boxed(),
             ["oldstyle", "nums"] => TailwindFontVariantNumeric::from("oldstyle-nums").boxed(),
-            ["proportional", "nums"] => TailwindFontVariantNumeric::from("proportional-nums").boxed(),
+            ["proportional", "nums"] => {
+                TailwindFontVariantNumeric::from("proportional-nums").boxed()
+            }
             ["tabular", "nums"] => TailwindFontVariantNumeric::from("tabular-nums").boxed(),
-            ["diagonal", "fractions"] => TailwindFontVariantNumeric::from("diagonal-fractions").boxed(),
-            ["stacked", "fractions"] => TailwindFontVariantNumeric::from("stacked-fractions").boxed(),
+            ["diagonal", "fractions"] => {
+                TailwindFontVariantNumeric::from("diagonal-fractions").boxed()
+            }
+            ["stacked", "fractions"] => {
+                TailwindFontVariantNumeric::from("stacked-fractions").boxed()
+            }
             // https://tailwindcss.com/docs/letter-spacing
             ["tracking", rest @ ..] => TailwindTracking::parse(rest, arbitrary)?.boxed(),
             ["leading", rest @ ..] => TailwindLeading::parse(rest, arbitrary)?.boxed(),
@@ -108,7 +122,9 @@ impl TailwindInstruction {
             ["no", "underline"] => TailwindDecorationLine::from("none").boxed(),
             // https://tailwindcss.com/docs/text-decoration-color
             ["decoration", rest @ ..] => TailwindDecoration::adapt(rest, arbitrary)?,
-            ["underline", "offset", rest @ ..] => TailwindUnderlineOffset::parse(rest, arbitrary)?.boxed(),
+            ["underline", "offset", rest @ ..] => {
+                TailwindUnderlineOffset::parse(rest, arbitrary)?.boxed()
+            }
             // https://tailwindcss.com/docs/text-transform
             ["uppercase"] => TailwindTextTransform::from("uppercase").boxed(),
             ["lowercase"] => TailwindTextTransform::from("lowercase").boxed(),
@@ -144,7 +160,9 @@ impl TailwindInstruction {
             ["contrast", rest @ ..] => TailwindContrast::parse(rest, arbitrary, false)?.boxed(),
             ["drop", "shadow", rest @ ..] => TailwindShadow::parse(rest, arbitrary, true)?.boxed(),
             ["grayscale", rest @ ..] => TailwindGrayscale::parse(rest, arbitrary, false)?.boxed(),
-            ["hue", "rotate", rest @ ..] => TailwindHueRotate::parse(rest, arbitrary, false, neg)?.boxed(),
+            ["hue", "rotate", rest @ ..] => {
+                TailwindHueRotate::parse(rest, arbitrary, false, neg)?.boxed()
+            }
             ["invert", rest @ ..] => TailwindInvert::parse(rest, arbitrary, false)?.boxed(),
             ["saturate", rest @ ..] => TailwindSaturate::parse(rest, arbitrary, false)?.boxed(),
             ["sepia", rest @ ..] => TailwindSepia::parse(rest, arbitrary, false)?.boxed(),
@@ -169,7 +187,9 @@ impl TailwindInstruction {
             ["appearance", rest @ ..] => TailwindAppearance::parse(rest, arbitrary)?.boxed(),
             ["cursor", rest @ ..] => TailwindCursor::parse(rest, arbitrary)?.boxed(),
             ["caret", rest @ ..] => TailwindCaretColor::parse(rest, arbitrary)?.boxed(),
-            ["pointer", "events", rest @ ..] => TailwindPointerEvents::parse(rest, arbitrary)?.boxed(),
+            ["pointer", "events", rest @ ..] => {
+                TailwindPointerEvents::parse(rest, arbitrary)?.boxed()
+            }
             ["resize", rest @ ..] => TailwindResize::parse(rest, arbitrary)?.boxed(),
             ["scroll", rest @ ..] => scroll_adaptor(rest, arbitrary, neg)?,
             ["snap", rest @ ..] => snap_adaptor(rest, arbitrary)?,
@@ -183,12 +203,21 @@ impl TailwindInstruction {
             ["sr", "only"] => TailwindScreenReader::new(true).boxed(),
             ["not", "sr", "only"] => TailwindScreenReader::new(false).boxed(),
             // Form System Extension
-            _ => return syntax_error!("Unknown instructions: {} + {}", element.join("-"), arbitrary.get_class()),
+            _ => {
+                return syntax_error!(
+                    "Unknown instructions: {} + {}",
+                    element.join("-"),
+                    arbitrary.get_class()
+                )
+            }
         };
         Ok(instance)
     }
     #[inline]
-    fn bg_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    fn bg_adaptor(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/background-attachment
             [s @ ("fixed" | "local" | "scroll")] => TailwindBackgroundAttachment::from(*s).boxed(),
@@ -210,19 +239,28 @@ impl TailwindInstruction {
         Ok(out)
     }
     #[inline]
-    fn border_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    fn border_adaptor(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let color = |color| TailwindBorderColor::from(color).boxed();
         let out = match pattern {
             // https://tailwindcss.com/docs/border-style
-            [s @ ("solid" | "dashed" | "dotted" | "double" | "hidden" | "none")] => TailwindBorderStyle::from(*s).boxed(),
+            [s @ ("solid" | "dashed" | "dotted" | "double" | "hidden" | "none")] => {
+                TailwindBorderStyle::from(*s).boxed()
+            }
             // https://tailwindcss.com/docs/border-collapse
             ["separate"] => TailwindBorderCollapse::from("separate").boxed(),
             ["collapse"] if arbitrary.is_none() => TailwindBorderCollapse::from("collapse").boxed(),
             ["collapse", rest @ ..] => TailwindBorderCollapse::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/border-width
             [] => TailwindBorderWidth::parse(pattern, arbitrary)?.boxed(), // e.g. border-[3px]
-            ["0" | "2" | "4" | "8", ..] if arbitrary.is_none() => TailwindBorderWidth::parse(pattern, arbitrary)?.boxed(), // e.g. border-4
-            ["x" | "y" | "t" | "r" | "b" | "l", ..] => TailwindBorderWidth::parse(pattern, arbitrary)?.boxed(), // e.g. border-x-2
+            ["0" | "2" | "4" | "8", ..] if arbitrary.is_none() => {
+                TailwindBorderWidth::parse(pattern, arbitrary)?.boxed()
+            } // e.g. border-4
+            ["x" | "y" | "t" | "r" | "b" | "l", ..] => {
+                TailwindBorderWidth::parse(pattern, arbitrary)?.boxed()
+            } // e.g. border-x-2
             // https://tailwindcss.com/docs/border-color
             ["black"] => color(TailwindColor::Black),
             ["white"] => color(TailwindColor::White),
@@ -231,10 +269,15 @@ impl TailwindInstruction {
         Ok(out)
     }
     #[inline]
-    fn shadow_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    fn shadow_adaptor(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/box-shadow
-            ["black" | "white" | "current" | "transparent"] => TailwindShadowColor::parse(pattern, arbitrary)?.boxed(),
+            ["black" | "white" | "current" | "transparent"] => {
+                TailwindShadowColor::parse(pattern, arbitrary)?.boxed()
+            }
             ["color", rest @ ..] => TailwindShadowColor::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/box-shadow-color
             _ => TailwindShadow::parse(pattern, arbitrary, false)?.boxed(),
@@ -242,10 +285,15 @@ impl TailwindInstruction {
         Ok(out)
     }
     #[inline]
-    fn box_adaptor(str: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    fn box_adaptor(
+        str: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match str {
             // https://tailwindcss.com/docs/box-decoration-break
-            ["decoration" | "break", rest @ ..] => TailwindBoxDecoration::parse(rest, arbitrary)?.boxed(),
+            ["decoration" | "break", rest @ ..] => {
+                TailwindBoxDecoration::parse(rest, arbitrary)?.boxed()
+            }
             ["clone"] => TailwindBoxDecoration::from("clone").boxed(),
             ["slice"] => TailwindBoxDecoration::from("slice").boxed(),
             // https://tailwindcss.com/docs/box-sizing
@@ -258,7 +306,11 @@ impl TailwindInstruction {
     }
 
     #[inline]
-    fn backdrop_adaptor(str: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Box<dyn TailwindInstance>> {
+    fn backdrop_adaptor(
+        str: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match str {
             // https://tailwindcss.com/docs/backdrop-blur
             ["blur", rest @ ..] => TailwindBlur::parse(rest, arbitrary, true)?.boxed(),
@@ -269,7 +321,9 @@ impl TailwindInstruction {
             // https://tailwindcss.com/docs/backdrop-grayscale
             ["grayscale", rest @ ..] => TailwindGrayscale::parse(rest, arbitrary, true)?.boxed(),
             // https://tailwindcss.com/docs/backdrop-hue-rotate
-            ["hue", "rotate", rest @ ..] => TailwindHueRotate::parse(rest, arbitrary, true, negative)?.boxed(),
+            ["hue", "rotate", rest @ ..] => {
+                TailwindHueRotate::parse(rest, arbitrary, true, negative)?.boxed()
+            }
             // https://tailwindcss.com/docs/backdrop-invert
             ["invert", rest @ ..] => TailwindInvert::parse(rest, arbitrary, true)?.boxed(),
             // https://tailwindcss.com/docs/backdrop-opacity
@@ -283,7 +337,10 @@ impl TailwindInstruction {
         Ok(out)
     }
     #[inline]
-    fn table_adaptor(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    fn table_adaptor(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/display#flex
             [] if arbitrary.is_none() => TailwindDisplay::from("table").boxed(),

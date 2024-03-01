@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindDelay {
     ms: NumericValue,
@@ -13,6 +12,13 @@ impl Display for TailwindDelay {
 }
 
 impl TailwindInstance for TailwindDelay {
+    fn collision_id(&self) -> String {
+        "transition-delay".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindDelay {

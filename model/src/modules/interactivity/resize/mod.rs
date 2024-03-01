@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindResize {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindResize => "resize");
+crate::macros::keyword_instance!(TailwindResize => "resize");
 
 impl Display for TailwindResize {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

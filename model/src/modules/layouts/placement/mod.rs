@@ -1,6 +1,9 @@
 use super::*;
 
-pub use self::{bottom::TailwindBottom, inset::TailwindInset, left::TailwindLeft, right::TailwindRight, top::TailwindTop};
+pub use self::{
+    bottom::TailwindBottom, inset::TailwindInset, left::TailwindLeft, right::TailwindRight,
+    top::TailwindTop,
+};
 
 mod bottom;
 mod inset;
@@ -17,7 +20,9 @@ pub(crate) fn get_kind_px_full_auto_fact(
     let kind = match pattern {
         ["px"] => UnitValue::px(1.0),
         ["full"] => UnitValue::radio(1, 1),
-        _ => UnitValue::negative_parser(id, check_valid_auto, true, false, true)(pattern, arbitrary, negative)?,
+        _ => UnitValue::negative_parser(id, check_valid_auto, true, false, true)(
+            pattern, arbitrary, negative,
+        )?,
     };
     Ok(kind)
 }

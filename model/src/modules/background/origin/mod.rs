@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindBackgroundOrigin {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
+crate::macros::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
 
 // noinspection DuplicatedCode
 impl Display for TailwindBackgroundOrigin {
@@ -38,8 +37,15 @@ impl TailwindBackgroundOrigin {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set =
-            BTreeSet::from_iter(vec!["border-box", "content-box", "inherit", "initial", "padding-box", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "border-box",
+            "content-box",
+            "inherit",
+            "initial",
+            "padding-box",
+            "revert",
+            "unset",
+        ]);
         set.contains(mode)
     }
 }

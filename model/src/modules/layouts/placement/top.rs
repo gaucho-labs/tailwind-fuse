@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindTop {
     kind: UnitValue,
@@ -13,11 +12,24 @@ impl Display for TailwindTop {
     }
 }
 
-impl TailwindInstance for TailwindTop {}
+// TODO: HOW DO THESE REFINE?
+impl TailwindInstance for TailwindTop {
+    fn collision_id(&self) -> String {
+        "top".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindTop {
     /// <https://tailwindcss.com/docs/top-right-bottom-left>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let kind = get_kind_px_full_auto_fact("top", pattern, arbitrary, negative)?;
         Ok(Self { kind })
     }

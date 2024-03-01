@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBlur {
     px: NumericValue,
@@ -14,6 +13,17 @@ impl Display for TailwindBlur {
 }
 
 impl TailwindInstance for TailwindBlur {
+    fn collision_id(&self) -> String {
+        if self.backdrop.0 {
+            "backdrop-blur".into()
+        } else {
+            "blur".into()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 impl TailwindBlur {
@@ -22,6 +32,9 @@ impl TailwindBlur {
             [] if arbitrary.is_none() => 8u32.into(),
             _ => NumericValue::positive_parser("blur", |_| false)(rest, arbitrary)?,
         };
-        Ok(Self { px, backdrop: Backdrop::from(backdrop) })
+        Ok(Self {
+            px,
+            backdrop: Backdrop::from(backdrop),
+        })
     }
 }

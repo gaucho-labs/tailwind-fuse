@@ -11,12 +11,17 @@ pub struct TailwindDecoration {
 }
 
 impl TailwindDecoration {
-    pub fn adapt(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    pub fn adapt(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+    ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/text-decoration
             ["line", rest @ ..] => TailwindDecorationLine::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-style
-            [s @ ("solid" | "double" | "dotted" | "dashed" | "wavy")] => TailwindDecorationStyle::from(*s).boxed(),
+            [s @ ("solid" | "double" | "dotted" | "dashed" | "wavy")] => {
+                TailwindDecorationStyle::from(*s).boxed()
+            }
             ["style", rest @ ..] => TailwindDecorationStyle::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-thickness
             ["auto"] => TailwindDecorationThickness::from("auto").boxed(),
@@ -26,9 +31,12 @@ impl TailwindDecoration {
             ["color", rest @ ..] => {
                 let color = TailwindColor::parse(rest, arbitrary)?;
                 TailwindDecorationColor::from(color).boxed()
-            },
+            }
             // https://tailwindcss.com/docs/text-decoration-thickness
-            [] => TailwindDecoration { arbitrary: TailwindArbitrary::new(arbitrary)? }.boxed(),
+            [] => TailwindDecoration {
+                arbitrary: TailwindArbitrary::new(arbitrary)?,
+            }
+            .boxed(),
             [n] => resolve1(n)?,
             _ => TailwindDecorationColor::parse(pattern, arbitrary)?.boxed(),
         };
@@ -43,6 +51,13 @@ impl Display for TailwindDecoration {
 }
 
 impl TailwindInstance for TailwindDecoration {
+    fn collision_id(&self) -> String {
+        "decoration".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
 }
 
 fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {
@@ -51,7 +66,7 @@ fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {
         return Ok(resolve1_unit(&a)?.boxed());
     }
     if n.starts_with(|c: char| c == '#') {
-        return Ok(resolve1_color(&a)?.boxed());
+        return Ok(resolve1_color(a).boxed());
     }
     Ok(TailwindDecorationColor::from(TailwindColor::Themed(n.to_string(), 0)).boxed())
 }
@@ -60,6 +75,6 @@ fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindDecorationThickness> {
     Ok(TailwindDecorationThickness::from(a.as_integer()?))
 }
 
-fn resolve1_color(a: &TailwindArbitrary) -> Result<TailwindDecorationColor> {
-    Ok(TailwindDecorationColor::from(a.as_color()?))
+fn resolve1_color(a: TailwindArbitrary) -> TailwindDecorationColor {
+    TailwindDecorationColor::from(TailwindColor::Arbitrary(a))
 }

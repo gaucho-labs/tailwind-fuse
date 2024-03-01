@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindRingOffsetColor {
     color: TailwindColor,
 }
 
-crate::macros::sealed::color_instance!(TailwindRingOffsetColor);
+crate::macros::color_instance!(TailwindRingOffsetColor);
 
 impl Display for TailwindRingOffsetColor {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -14,4 +13,12 @@ impl Display for TailwindRingOffsetColor {
     }
 }
 
-impl TailwindInstance for TailwindRingOffsetColor {}
+impl TailwindInstance for TailwindRingOffsetColor {
+    fn collision_id(&self) -> String {
+        "ring-offset-color".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

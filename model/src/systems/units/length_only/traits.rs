@@ -32,6 +32,9 @@ impl From<&TailwindArbitrary> for UnitValue {
 
 impl From<i32> for UnitValue {
     fn from(n: i32) -> Self {
-        Self::Number { n: n as f32, is_negative: n < 0 }
+        Self::Number {
+            n: n as f32,
+            is_negative: n < 0,
+        }
     }
 }

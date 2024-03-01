@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindDivideReverse {
     axis: bool,
@@ -21,4 +20,13 @@ impl Display for TailwindDivideReverse {
     }
 }
 
-impl TailwindInstance for TailwindDivideReverse {}
+impl TailwindInstance for TailwindDivideReverse {
+    // TODO: CONFIRM
+    fn collision_id(&self) -> String {
+        self.to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

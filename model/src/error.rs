@@ -31,7 +31,6 @@ where
 use nom::Err as NomErr;
 impl From<NomErr<nom::error::Error<&str>>> for TailwindError {
     fn from(err: NomErr<nom::error::Error<&str>>) -> Self {
-        // Adjust the error message or handling logic as needed.
         TailwindError::NomError(format!("Nom parsing error: {:?}", err))
     }
 }

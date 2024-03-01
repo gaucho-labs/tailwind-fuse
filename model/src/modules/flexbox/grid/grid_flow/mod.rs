@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindGridFlow {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindGridFlow => "grid-auto-flow");
+crate::macros::keyword_instance!(TailwindGridFlow => "grid-auto-flow");
 
 impl Display for TailwindGridFlow {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -32,7 +31,9 @@ impl TailwindGridFlow {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["column", "dense", "inherit", "initial", "revert", "row", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "column", "dense", "inherit", "initial", "revert", "row", "unset",
+        ]);
         set.contains(mode)
     }
 }

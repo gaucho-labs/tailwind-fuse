@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindVisibility {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindVisibility => "visibility");
+crate::macros::keyword_instance!(TailwindVisibility => "visibility");
 
 impl Display for TailwindVisibility {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -33,7 +32,9 @@ impl TailwindVisibility {
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/visibility#syntax
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["collapse", "hidden", "inherit", "initial", "revert", "unset", "visible"]);
+        let set = BTreeSet::from_iter(vec![
+            "collapse", "hidden", "inherit", "initial", "revert", "unset", "visible",
+        ]);
         set.contains(mode)
     }
 }

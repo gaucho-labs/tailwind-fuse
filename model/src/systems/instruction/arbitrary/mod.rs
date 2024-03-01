@@ -23,13 +23,17 @@ impl Display for TailwindArbitrary {
 
 impl From<&str> for TailwindArbitrary {
     fn from(s: &str) -> Self {
-        Self { inner: Box::from(s) }
+        Self {
+            inner: Box::from(s),
+        }
     }
 }
 
 impl From<&Self> for TailwindArbitrary {
     fn from(s: &Self) -> Self {
-        Self { inner: s.inner.clone() }
+        Self {
+            inner: s.inner.clone(),
+        }
     }
 }
 
@@ -41,11 +45,15 @@ impl TailwindArbitrary {
         let out = s.into();
         if cfg!(compile_time) {
             if out.inner.is_empty() {
-                return Err(TailwindError::syntax_error("Arbitrary value cannot be empty"));
+                return Err(TailwindError::syntax_error(
+                    "Arbitrary value cannot be empty",
+                ));
             }
             // TODO: Check unbalanced quotes
             if out.inner.contains('\n') {
-                return Err(TailwindError::syntax_error("Arbitrary value does balance quotes"));
+                return Err(TailwindError::syntax_error(
+                    "Arbitrary value does balance quotes",
+                ));
             }
         }
         Ok(out)

@@ -3,7 +3,6 @@ mod aspect;
 
 use self::aspect::Aspect;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindAspect {
     kind: Aspect,
@@ -14,7 +13,9 @@ where
     T: Into<String>,
 {
     fn from(kind: T) -> Self {
-        Self { kind: Aspect::Standard(kind.into()) }
+        Self {
+            kind: Aspect::Standard(kind.into()),
+        }
     }
 }
 
@@ -24,16 +25,28 @@ impl Display for TailwindAspect {
     }
 }
 
-impl TailwindInstance for TailwindAspect {}
+impl TailwindInstance for TailwindAspect {
+    fn collision_id(&self) -> String {
+        "aspect-ratio".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindAspect {
     /// <https://tailwindcss.com/docs/aspect-ratio>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Aspect::parse(pattern, arbitrary)? })
+        Ok(Self {
+            kind: Aspect::parse(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: Aspect::parse_arbitrary(arbitrary)? })
+        Ok(Self {
+            kind: Aspect::parse_arbitrary(arbitrary)?,
+        })
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio>
     pub fn check_valid(mode: &str) -> bool {

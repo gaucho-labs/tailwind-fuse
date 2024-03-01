@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBackgroundImage {
     kind: AnchorPoint,
@@ -12,10 +11,20 @@ impl Display for TailwindBackgroundImage {
     }
 }
 
-impl TailwindInstance for TailwindBackgroundImage {}
+impl TailwindInstance for TailwindBackgroundImage {
+    fn collision_id(&self) -> String {
+        "bg-gradient-".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindBackgroundImage {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: AnchorPoint::parse(pattern, arbitrary, false)? })
+        Ok(Self {
+            kind: AnchorPoint::parse(pattern, arbitrary, false)?,
+        })
     }
 }

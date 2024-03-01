@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Copy, Clone, Default)]
 pub struct TailwindRingInset {}
 
@@ -10,4 +9,12 @@ impl Display for TailwindRingInset {
     }
 }
 
-impl TailwindInstance for TailwindRingInset {}
+impl TailwindInstance for TailwindRingInset {
+    fn collision_id(&self) -> String {
+        "ring-inset".to_string()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}

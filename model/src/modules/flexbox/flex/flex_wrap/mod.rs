@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindFlexWrap {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFlexWrap => "flex-wrap");
+crate::macros::keyword_instance!(TailwindFlexWrap => "flex-wrap");
 
 impl Display for TailwindFlexWrap {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -40,7 +39,15 @@ impl TailwindFlexWrap {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["inherit", "initial", "nowrap", "revert", "unset", "wrap", "wrap-reverse"]);
+        let set = BTreeSet::from_iter(vec![
+            "inherit",
+            "initial",
+            "nowrap",
+            "revert",
+            "unset",
+            "wrap",
+            "wrap-reverse",
+        ]);
         set.contains(mode)
     }
 }

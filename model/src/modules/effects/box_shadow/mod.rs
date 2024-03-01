@@ -20,7 +20,15 @@ impl Display for TailwindShadow {
     }
 }
 
-impl TailwindInstance for TailwindShadow {}
+impl TailwindInstance for TailwindShadow {
+    fn collision_id(&self) -> String {
+        "box-shadow".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindShadow {
     /// <https://tailwindcss.com/docs/box-shadow>
@@ -29,10 +37,16 @@ impl TailwindShadow {
             [] if arbitrary.is_some() => StandardValue::parse_arbitrary(arbitrary)?,
             _ => StandardValue::Keyword(input.join("-")),
         };
-        Ok(Self { kind, drop: Backdrop(drop) })
+        Ok(Self {
+            kind,
+            drop: Backdrop(drop),
+        })
     }
     /// <https://tailwindcss.com/docs/box-shadow#arbitrary-values>
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary, drop: bool) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parse_arbitrary(arbitrary)?, drop: Backdrop(drop) })
+        Ok(Self {
+            kind: StandardValue::parse_arbitrary(arbitrary)?,
+            drop: Backdrop(drop),
+        })
     }
 }

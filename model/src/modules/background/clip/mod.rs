@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBackgroundClip {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundClip => "background-clip");
+crate::macros::keyword_instance!(TailwindBackgroundClip => "background-clip");
 
 // noinspection DuplicatedCode
 impl Display for TailwindBackgroundClip {

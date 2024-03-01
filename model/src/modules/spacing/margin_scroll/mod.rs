@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindScrollMargin {
     negative: Negative,
@@ -18,29 +17,52 @@ impl Display for TailwindScrollMargin {
 
 // noinspection DuplicatedCode
 impl TailwindInstance for TailwindScrollMargin {
+    fn collision_id(&self) -> String {
+        self.axis.collision_id("scroll-margin")
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        self.axis.collisions("scroll-margin")
+    }
 }
 
 // noinspection DuplicatedCode
 impl TailwindScrollMargin {
     /// https://tailwindcss.com/docs/scroll-margin
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let (axis, rest) = match pattern {
-            ["m", rest @ ..] => (SpacingAxis::new("scroll-m", &["scroll-margin"]), rest),
-            ["ml", rest @ ..] => (SpacingAxis::new("scroll-ml", &["scroll-margin-left"]), rest),
-            ["mr", rest @ ..] => (SpacingAxis::new("scroll-mr", &["scroll-margin-right"]), rest),
-            ["mt", rest @ ..] => (SpacingAxis::new("scroll-mt", &["scroll-margin-top"]), rest),
-            ["mb", rest @ ..] => (SpacingAxis::new("scroll-mb", &["scroll-margin-bottom"]), rest),
-            ["mx", rest @ ..] => (SpacingAxis::new("scroll-mx", &["scroll-margin-left", "scroll-margin-right"]), rest),
-            ["my", rest @ ..] => (SpacingAxis::new("scroll-my", &["scroll-margin"]), rest),
+            ["m", rest @ ..] => (SpacingAxis::All, rest),
+            ["ml", rest @ ..] => (SpacingAxis::Left, rest),
+            ["mr", rest @ ..] => (SpacingAxis::Right, rest),
+            ["mt", rest @ ..] => (SpacingAxis::Top, rest),
+            ["mb", rest @ ..] => (SpacingAxis::Bottom, rest),
+            ["mx", rest @ ..] => (SpacingAxis::X, rest),
+            ["my", rest @ ..] => (SpacingAxis::Y, rest),
             _ => return syntax_error!("Unknown scroll-margin axis"),
         };
         let size = SpacingSize::parse(rest, arbitrary, &Self::check_valid)?;
-        Ok(Self { negative, axis, size })
+        Ok(Self {
+            negative,
+            axis,
+            size,
+        })
     }
     /// https://tailwindcss.com/docs/scroll-margin#arbitrary-values
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary, axis: SpacingAxis, negative: Negative) -> Result<Self> {
+    pub fn parse_arbitrary(
+        arbitrary: &TailwindArbitrary,
+        axis: SpacingAxis,
+        negative: Negative,
+    ) -> Result<Self> {
         let size = SpacingSize::parse_arbitrary(arbitrary)?;
-        Ok(Self { negative, axis, size })
+        Ok(Self {
+            negative,
+            axis,
+            size,
+        })
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/padding#syntax
     pub fn check_valid(mode: &str) -> bool {

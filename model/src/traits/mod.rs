@@ -25,4 +25,7 @@ pub trait TailwindInstance: Display {
     {
         Box::new(self)
     }
+
+    fn collision_id(&self) -> String;
+    fn get_collisions(&self) -> Vec<String>;
 }

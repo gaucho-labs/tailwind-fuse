@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindSnapAlign {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSnapAlign => "scroll-snap-align");
+crate::macros::keyword_instance!(TailwindSnapAlign => "scroll-snap-align");
 
 impl Display for TailwindSnapAlign {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -30,7 +29,9 @@ impl TailwindSnapAlign {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-align#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["center", "inherit", "initial", "none", "revert", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "center", "inherit", "initial", "none", "revert", "unset",
+        ]);
         set.contains(mode)
     }
 }

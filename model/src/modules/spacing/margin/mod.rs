@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindMargin {
     negative: Negative,
@@ -18,29 +17,52 @@ impl Display for TailwindMargin {
 
 // noinspection DuplicatedCode
 impl TailwindInstance for TailwindMargin {
+    fn collision_id(&self) -> String {
+        self.axis.collision_id("margin")
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        self.axis.collisions("margin")
+    }
 }
 
 // noinspection DuplicatedCode
 impl TailwindMargin {
     /// https://tailwindcss.com/docs/margin
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative) -> Result<Self> {
+    pub fn parse(
+        pattern: &[&str],
+        arbitrary: &TailwindArbitrary,
+        negative: Negative,
+    ) -> Result<Self> {
         let (axis, rest) = match pattern {
-            ["m", rest @ ..] => (SpacingAxis::new("m", &["margin"]), rest),
-            ["ml", rest @ ..] => (SpacingAxis::new("ml", &["margin-left"]), rest),
-            ["mr", rest @ ..] => (SpacingAxis::new("mr", &["margin-right"]), rest),
-            ["mt", rest @ ..] => (SpacingAxis::new("mt", &["margin-top"]), rest),
-            ["mb", rest @ ..] => (SpacingAxis::new("mb", &["margin-bottom"]), rest),
-            ["mx", rest @ ..] => (SpacingAxis::new("mx", &["margin-left", "margin-right"]), rest),
-            ["my", rest @ ..] => (SpacingAxis::new("my", &["margin-top", "margin-bottom"]), rest),
+            ["m", rest @ ..] => (SpacingAxis::All, rest),
+            ["ml", rest @ ..] => (SpacingAxis::Left, rest),
+            ["mr", rest @ ..] => (SpacingAxis::Right, rest),
+            ["mt", rest @ ..] => (SpacingAxis::Top, rest),
+            ["mb", rest @ ..] => (SpacingAxis::Bottom, rest),
+            ["mx", rest @ ..] => (SpacingAxis::X, rest),
+            ["my", rest @ ..] => (SpacingAxis::Y, rest),
             _ => return syntax_error!("Unknown margin axis"),
         };
         let size = SpacingSize::parse(rest, arbitrary, &Self::check_valid)?;
-        Ok(Self { negative, axis, size })
+        Ok(Self {
+            negative,
+            axis,
+            size,
+        })
     }
     /// https://tailwindcss.com/docs/margin#arbitrary-values
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary, axis: SpacingAxis, negative: Negative) -> Result<Self> {
+    pub fn parse_arbitrary(
+        arbitrary: &TailwindArbitrary,
+        axis: SpacingAxis,
+        negative: Negative,
+    ) -> Result<Self> {
         let size = SpacingSize::parse_arbitrary(arbitrary)?;
-        Ok(Self { negative, axis, size })
+        Ok(Self {
+            negative,
+            axis,
+            size,
+        })
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/padding#syntax
     pub fn check_valid(mode: &str) -> bool {

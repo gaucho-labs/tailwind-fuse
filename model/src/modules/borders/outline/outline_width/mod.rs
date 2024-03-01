@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindOutlineWidth {
     kind: UnitValue,
@@ -26,16 +25,30 @@ impl Display for TailwindOutlineWidth {
     }
 }
 
-impl TailwindInstance for TailwindOutlineWidth {}
+impl TailwindInstance for TailwindOutlineWidth {
+    fn collision_id(&self) -> String {
+        "outline-width".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindOutlineWidth {
     /// <https://tailwindcss.com/docs/outline-width>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = UnitValue::positive_parser("outline-width", Self::check_valid, true, false, false)(pattern, arbitrary)?;
+        let kind =
+            UnitValue::positive_parser("outline-width", Self::check_valid, true, false, false)(
+                pattern, arbitrary,
+            )?;
         Ok(Self { kind })
     }
     ///
     pub fn check_valid(mode: &str) -> bool {
-        ["inherit", "initial", "medium", "revert", "thick", "thin", "unset"].contains(&mode)
+        [
+            "inherit", "initial", "medium", "revert", "thick", "thin", "unset",
+        ]
+        .contains(&mode)
     }
 }

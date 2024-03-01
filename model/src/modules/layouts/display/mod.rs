@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindDisplay {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindDisplay => "display");
+crate::macros::keyword_instance!(TailwindDisplay => "display");
 
 impl Display for TailwindDisplay {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -17,7 +16,9 @@ impl Display for TailwindDisplay {
 impl TailwindDisplay {
     /// <https://tailwindcss.com/docs/display>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self { kind: StandardValue::parser("display", &Self::check_valid)(pattern, arbitrary)? })
+        Ok(Self {
+            kind: StandardValue::parser("display", &Self::check_valid)(pattern, arbitrary)?,
+        })
     }
     /// dispatch to [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {

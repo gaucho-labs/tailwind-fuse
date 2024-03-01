@@ -1,3 +1,4 @@
+pub mod cache;
 mod join;
 pub mod merge;
 

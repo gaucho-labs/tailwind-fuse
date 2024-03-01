@@ -5,7 +5,6 @@ pub(crate) mod grid_cols;
 pub(crate) mod grid_flow;
 pub(crate) mod grid_rows;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone, Copy)]
 pub struct TailwindGrid {}
 

@@ -1,7 +1,6 @@
 use super::*;
 use crate::StandardValue;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindDivideStyle {
     kind: StandardValue,
@@ -12,7 +11,9 @@ where
     T: Into<String>,
 {
     fn from(input: T) -> Self {
-        Self { kind: StandardValue::from(input.into()) }
+        Self {
+            kind: StandardValue::from(input.into()),
+        }
     }
 }
 
@@ -25,6 +26,14 @@ impl Display for TailwindDivideStyle {
 impl TailwindInstance for TailwindDivideStyle {
     fn inlineable(&self) -> bool {
         false
+    }
+
+    fn collision_id(&self) -> String {
+        "divide-style".into()
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
     }
 }
 

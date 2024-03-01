@@ -2,7 +2,6 @@ use crate::{AxisXY, StandardValue};
 
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindOverflow {
     kind: StandardValue,
@@ -15,7 +14,15 @@ impl Display for TailwindOverflow {
     }
 }
 
-impl TailwindInstance for TailwindOverflow {}
+impl TailwindInstance for TailwindOverflow {
+    fn collision_id(&self) -> String {
+        self.axis.collision_id("overflow")
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        self.axis.collisions("overflow")
+    }
+}
 
 impl TailwindOverflow {
     /// <https://tailwindcss.com/docs/overflow>
@@ -26,6 +33,9 @@ impl TailwindOverflow {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        ["auto", "clip", "hidden", "inherit", "initial", "revert", "scroll", "unset", "visible"].contains(&mode)
+        [
+            "auto", "clip", "hidden", "inherit", "initial", "revert", "scroll", "unset", "visible",
+        ]
+        .contains(&mode)
     }
 }

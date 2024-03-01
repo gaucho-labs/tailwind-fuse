@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindDecorationLine {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindDecorationLine => "text-decoration-line");
+crate::macros::keyword_instance!(TailwindDecorationLine => "text-decoration-line");
 
 impl Display for TailwindDecorationLine {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
@@ -32,8 +31,16 @@ impl TailwindDecorationLine {
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/cursor#syntax>
     pub fn check_valid(mode: &str) -> bool {
-        let set =
-            BTreeSet::from_iter(vec!["blink", "inherit", "initial", "line-through", "none", "overline", "underline", "unset"]);
+        let set = BTreeSet::from_iter(vec![
+            "blink",
+            "inherit",
+            "initial",
+            "line-through",
+            "none",
+            "overline",
+            "underline",
+            "unset",
+        ]);
         set.contains(mode)
     }
 }

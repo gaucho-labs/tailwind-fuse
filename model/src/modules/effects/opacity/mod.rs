@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindOpacity {
     percent: NumericValue,
@@ -14,14 +13,29 @@ impl Display for TailwindOpacity {
     }
 }
 
-impl TailwindInstance for TailwindOpacity {}
+impl TailwindInstance for TailwindOpacity {
+    fn collision_id(&self) -> String {
+        if self.backdrop.0 {
+            "backdrop-opacity".into()
+        } else {
+            "opacity".into()
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        vec![self.collision_id()]
+    }
+}
 
 impl TailwindOpacity {
     /// <https://tailwindcss.com/docs/opacity>
     pub fn parse(input: &[&str], arbitrary: &TailwindArbitrary, backdrop: bool) -> Result<Self> {
         let backdrop = Backdrop::from(backdrop);
         if input.is_empty() {
-            return Ok(Self { percent: NumericValue::from(50u32), backdrop });
+            return Ok(Self {
+                percent: NumericValue::from(50u32),
+                backdrop,
+            });
         };
         let percent = match backdrop.0 {
             true => NumericValue::positive_parser("opacity", |_| false)(input, arbitrary)?,

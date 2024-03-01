@@ -1,12 +1,11 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindSelf {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSelf => "align-self");
+crate::macros::keyword_instance!(TailwindSelf => "align-self");
 
 impl Display for TailwindSelf {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
