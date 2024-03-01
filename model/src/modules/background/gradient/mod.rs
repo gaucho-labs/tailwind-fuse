@@ -1,17 +1,14 @@
 use super::*;
 
-
 #[derive(Clone, Debug)]
 pub struct TailwindFrom {
     color: TailwindColor,
 }
 
-
 #[derive(Clone, Debug)]
 pub struct TailwindVia {
     color: TailwindColor,
 }
-
 
 #[derive(Clone, Debug)]
 pub struct TailwindTo {
@@ -41,8 +38,8 @@ impl TailwindInstance for TailwindFrom {
         "from-".to_string()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 impl TailwindInstance for TailwindVia {
@@ -50,8 +47,8 @@ impl TailwindInstance for TailwindVia {
         "via-".to_string()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 
@@ -60,7 +57,7 @@ impl TailwindInstance for TailwindTo {
         "to-".to_string()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }

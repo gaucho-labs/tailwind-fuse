@@ -19,8 +19,8 @@ impl TailwindInstance for TailwindInset {
         self.axis.collision_id("inset")
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("inset")
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

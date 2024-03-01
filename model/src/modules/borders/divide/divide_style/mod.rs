@@ -24,16 +24,12 @@ impl Display for TailwindDivideStyle {
 }
 
 impl TailwindInstance for TailwindDivideStyle {
-    fn inlineable(&self) -> bool {
-        false
-    }
-
     fn collision_id(&self) -> String {
         "divide-style".into()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

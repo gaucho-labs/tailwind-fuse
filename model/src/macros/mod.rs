@@ -15,8 +15,8 @@ macro_rules! keyword_instance {
             fn collision_id(&self) -> String {
                 $a.to_string()
             }
-            fn get_collisions(&self) -> Vec<String> {
-                vec![self.collision_id()]
+            fn get_collisions(&self) -> Vec<&'static str> {
+                vec![]
             }
         }
     };
@@ -61,5 +61,66 @@ macro_rules! syntax_error {
     };
 }
 
+#[macro_export]
+macro_rules! axisxy_collision {
+    ($t:ty => $a:literal) => {
+        impl TailwindInstance for $t {
+            fn collision_id(&self) -> String {
+                match self.axis {
+                    AxisXY::N => $a,
+                    AxisXY::X => concat!($a, "-x"),
+                    AxisXY::Y => concat!($a, "-y"),
+                }
+                .into()
+            }
+
+            fn get_collisions(&self) -> Vec<&'static str> {
+                match self.axis {
+                    AxisXY::N => vec![concat!($a, "-x"), concat!($a, "-y")],
+                    _ => vec![],
+                }
+            }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! spacing_collision {
+    ($t:ty => $base:literal) => {
+        impl $crate::TailwindInstance for $t {
+            fn collision_id(&self) -> String {
+                match self.axis {
+                    SpacingAxis::All => String::from($base),
+                    SpacingAxis::X => concat!($base, "-x").into(),
+                    SpacingAxis::Y => concat!($base, "-y").into(),
+                    SpacingAxis::Top => concat!($base, "-top").into(),
+                    SpacingAxis::Right => concat!($base, "-right").into(),
+                    SpacingAxis::Bottom => concat!($base, "-bottom").into(),
+                    SpacingAxis::Left => concat!($base, "-left").into(),
+                }
+            }
+
+            fn get_collisions(&self) -> Vec<&'static str> {
+                match self.axis {
+                    SpacingAxis::All => vec![
+                        concat!($base, "-x"),
+                        concat!($base, "-y"),
+                        concat!($base, "-top"),
+                        concat!($base, "-right"),
+                        concat!($base, "-bottom"),
+                        concat!($base, "-left"),
+                    ],
+                    SpacingAxis::X => vec![concat!($base, "-left"), concat!($base, "right")],
+                    SpacingAxis::Y => vec![concat!($base, "-top"), concat!($base, "-bottom")],
+                    _ => vec![],
+                }
+            }
+        }
+    };
+}
+
 pub(crate) use color_instance;
 pub(crate) use keyword_instance;
+
+pub(crate) use axisxy_collision;
+pub(crate) use spacing_collision;

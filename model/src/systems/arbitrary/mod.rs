@@ -1,5 +1,5 @@
-use super::*;
-use std::fmt::Write;
+use crate::*;
+use std::fmt::{Display, Formatter, Write};
 
 mod methods;
 
@@ -43,18 +43,16 @@ impl TailwindArbitrary {
         T: Into<Self>,
     {
         let out = s.into();
-        if cfg!(compile_time) {
-            if out.inner.is_empty() {
-                return Err(TailwindError::syntax_error(
-                    "Arbitrary value cannot be empty",
-                ));
-            }
-            // TODO: Check unbalanced quotes
-            if out.inner.contains('\n') {
-                return Err(TailwindError::syntax_error(
-                    "Arbitrary value does balance quotes",
-                ));
-            }
+        if out.inner.is_empty() {
+            return Err(TailwindError::syntax_error(
+                "Arbitrary value cannot be empty",
+            ));
+        }
+        // TODO: Check unbalanced quotes
+        if out.inner.contains('\n') {
+            return Err(TailwindError::syntax_error(
+                "Arbitrary value does balance quotes",
+            ));
         }
         Ok(out)
     }

@@ -34,20 +34,17 @@ impl TailwindInstance for TailwindFontVariantNumeric {
         }
     }
 
-    fn get_collisions(&self) -> Vec<String> {
+    fn get_collisions(&self) -> Vec<&'static str> {
         match &self.kind {
-            StandardValue::Keyword(s) if s == "normal-nums" => {
-                let collisions = [
-                    "fvn-normal",
-                    "fvn-ordinal",
-                    "fvn-slashed-zero",
-                    "fvn-figure",
-                    "fvn-spacing",
-                    "fvn-fraction",
-                ];
-                collisions.iter().map(|s| s.to_string()).collect()
-            }
-            _ => vec!["fvn-normal".into(), self.collision_id()],
+            StandardValue::Keyword(s) if s == "normal-nums" => vec![
+                "fvn-normal",
+                "fvn-ordinal",
+                "fvn-slashed-zero",
+                "fvn-figure",
+                "fvn-spacing",
+                "fvn-fraction",
+            ],
+            _ => vec!["fvn-normal"],
         }
     }
 }

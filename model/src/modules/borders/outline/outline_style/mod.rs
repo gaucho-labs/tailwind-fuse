@@ -38,8 +38,8 @@ impl TailwindInstance for TailwindOutlineStyle {
         "outline-style".into()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

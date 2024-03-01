@@ -18,7 +18,7 @@ impl TailwindInstance for TailwindRingOffsetColor {
         "ring-offset-color".into()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        vec![self.collision_id()]
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }

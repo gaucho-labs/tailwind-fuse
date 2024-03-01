@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeSet, HashSet};
 
 use tailwind_ast::AstStyle;
 use tailwind_model::TailwindInstruction;
@@ -25,7 +25,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
     };
 
     let mut valid_styles: Vec<AstStyle> = vec![];
-    let mut collision_styles: BTreeSet<String> = BTreeSet::new();
+    let mut collision_styles: HashSet<Collision> = HashSet::new();
 
     for style in styles.into_iter().rev() {
         let parse = TailwindInstruction::from(style.clone());
@@ -39,26 +39,37 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 let collision_id = instance.collision_id();
 
                 // hover:md:focus
-                let all_variants: String = {
+                let all_variants: Vec<&str> = {
                     let mut all_variants = style
                         .variants
                         .iter()
                         .flat_map(|v| v.names.iter().cloned())
                         .collect::<Vec<_>>();
                     all_variants.sort();
-                    all_variants.join(":")
+                    all_variants
                 };
 
-                let collision_id = format!("{all_variants}{collision_id}");
+                let collision_id = Collision {
+                    variants: all_variants.clone(),
+                    collision_id,
+                };
+
                 if collision_styles.contains(&collision_id) {
                     continue;
                 }
+
+                // Add the current collision_id.
+                collision_styles.insert(collision_id);
 
                 let collisions = instance.get_collisions();
                 println!("collisions {:?}", collisions);
 
                 collisions.into_iter().for_each(|collision| {
-                    let collision = format!("{all_variants}{collision}");
+                    let collision = Collision {
+                        variants: all_variants.clone(),
+                        collision_id: collision.to_string(),
+                    };
+
                     collision_styles.insert(collision);
                 });
 
@@ -76,4 +87,11 @@ pub fn tw_merge(class: &str) -> Option<String> {
     result.reverse();
 
     Some(result.join(" "))
+}
+
+// TODO: Use Oco<'static> to avoid clones for collisions_id.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct Collision<'a> {
+    variants: Vec<&'a str>,
+    collision_id: String,
 }

@@ -1,14 +1,9 @@
-mod arbitrary;
-mod display;
-mod resolver;
-pub use self::arbitrary::TailwindArbitrary;
-
 use crate::*;
-use std::{
-    fmt::{Debug, Display, Formatter},
-    str::FromStr,
-};
-use tailwind_ast::{parse_fraction, ASTVariant, AstStyle};
+use std::fmt::{Debug, Display, Formatter};
+use tailwind_ast::{ASTVariant, AstStyle};
+
+mod display;
+mod parser;
 
 /// `v:v:-a-a-[A]`
 #[derive(Debug, Clone)]
@@ -62,9 +57,5 @@ impl TailwindInstruction {
     #[inline]
     pub fn view_arbitrary(&self) -> &TailwindArbitrary {
         &self.arbitrary
-    }
-    // TODO
-    pub fn normalization(self) -> Self {
-        self
     }
 }

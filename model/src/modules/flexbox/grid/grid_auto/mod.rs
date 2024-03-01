@@ -45,8 +45,8 @@ impl TailwindInstance for TailwindGridAuto {
         todo!()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        todo!()
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

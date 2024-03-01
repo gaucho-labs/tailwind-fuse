@@ -7,7 +7,6 @@ pub struct TailwindScrollPadding {
     size: SpacingSize,
 }
 
-// noinspection DuplicatedCode
 impl Display for TailwindScrollPadding {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         self.negative.write(f)?;
@@ -15,18 +14,8 @@ impl Display for TailwindScrollPadding {
     }
 }
 
-// noinspection DuplicatedCode
-impl TailwindInstance for TailwindScrollPadding {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("scroll-padding")
-    }
+crate::spacing_collision!(TailwindScrollPadding => "scroll-padding");
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("scroll-padding")
-    }
-}
-
-// noinspection DuplicatedCode
 impl TailwindScrollPadding {
     /// https://tailwindcss.com/docs/scroll-padding
     pub fn parse(

@@ -1,9 +1,6 @@
 use std::fmt::{Display, Formatter};
 
 use crate::TailwindError;
-use nom::{branch::alt, bytes::complete::tag, sequence::tuple, IResult};
-
-use crate::utils::parse_f32;
 
 pub use self::{
     anchor::AnchorPoint, axis::SpacingAxis, axis_xy::AxisXY, integer_only::NumericValue,

@@ -21,20 +21,78 @@ impl Display for LengthUnit {
 
 impl LengthUnit {
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/length#syntax>
-    pub fn parse_faction(input: &str) -> Result<Self> {
-        let (a, b) = parse_fraction(input)?.1;
+    pub fn parse_fraction(input: &str) -> Result<Self> {
+        let (a, b) = parse_fraction(input)?;
         Ok(Self::radio(a as u32, b as u32))
     }
     pub fn parse_length(input: &str) -> Result<Self> {
-        let valid = (unit("px"), unit("em"), unit("rem"), unit("%"));
-        let (f, unit) = tuple((parse_f32, alt(valid)))(input)?.1;
-        Ok(Self::Unit(f, unit))
+        Self::parse_unit(input, Self::parse_css_length_unit)
     }
     pub fn parse_angle(input: &str) -> Result<Self> {
-        let valid = (unit("deg"), unit("rad"), unit("grad"), unit("turn"));
-        let (f, unit) = tuple((parse_f32, alt(valid)))(input)?.1;
-        Ok(Self::Unit(f, unit))
+        Self::parse_unit(input, Self::parse_angle_unit)
     }
+
+    fn parse_unit(
+        input: &str,
+        parse_unit: impl Fn(&str) -> Option<&'static str> + 'static,
+    ) -> Result<Self> {
+        let mut chars = input.chars().peekable();
+        let mut last_valid_index = None;
+        for (i, _) in input.char_indices() {
+            match chars.peek() {
+                Some(&ch) if ch.is_numeric() || ch == '.' || (i == 0 && ch == '-') => {
+                    chars.next(); // consume the character
+                    last_valid_index = Some(i);
+                }
+                _ => break,
+            }
+        }
+
+        last_valid_index
+            .and_then(|idx| {
+                let (number, rest) = input.split_at(idx + 1);
+                let number = number.parse::<f32>().unwrap();
+
+                let unit = parse_unit(rest)?;
+
+                Some(Self::Unit(number, unit))
+            })
+            .ok_or(TailwindError::syntax_error("Unknown LengthUnit"))
+    }
+
+    fn parse_angle_unit(input: &str) -> Option<&'static str> {
+        match input {
+            "deg" => Some("deg"),
+            "grad" => Some("grad"),
+            "rad" => Some("rad"),
+            "turn" => Some("turn"),
+            _ => None,
+        }
+    }
+
+    fn parse_css_length_unit(input: &str) -> Option<&'static str> {
+        match input {
+            "px" => Some("px"),
+            "cm" => Some("cm"),
+            "mm" => Some("mm"),
+            "Q" => Some("Q"),
+            "in" => Some("in"),
+            "pc" => Some("pc"),
+            "pt" => Some("pt"),
+            "em" => Some("em"),
+            "rem" => Some("rem"),
+            "vw" => Some("vw"),
+            "vh" => Some("vh"),
+            "vmin" => Some("vmin"),
+            "vmax" => Some("vmax"),
+            "ex" => Some("ex"),
+            "ch" => Some("ch"),
+            "lh" => Some("lh"),
+            "%" => Some("%"),
+            _ => None,
+        }
+    }
+
     pub fn px(x: f32) -> Self {
         Self::Unit(x, "px")
     }
@@ -67,10 +125,6 @@ where
     }
 }
 
-fn unit(unit: &'static str) -> impl Fn(&str) -> IResult<&str, &'static str> {
-    move |input: &str| tag(unit)(input).map(|(s, _)| (s, unit))
-}
-
 impl LengthUnit {
     #[inline]
     pub fn get_class(&self) -> String {
@@ -79,16 +133,6 @@ impl LengthUnit {
     #[inline]
     pub fn get_class_arbitrary(&self) -> String {
         format!("[{}]", self)
-    }
-    #[inline]
-    pub fn get_properties(&self) -> String {
-        match self {
-            Self::Fraction(a, b) => {
-                let p = *a as f32 / *b as f32;
-                format!("{}%", 100.0 * p)
-            }
-            Self::Unit(a, b) => format!("{}{}", a, b),
-        }
     }
 
     pub fn is_fraction(&self) -> bool {

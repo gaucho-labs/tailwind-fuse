@@ -19,6 +19,22 @@ enum RoundedKind {
     RoundedBR,
 }
 
+impl RoundedKind {
+    fn as_str(&self) -> &'static str {
+        match self {
+            Self::Rounded => "rounded",
+            Self::RoundedT => "rounded-t",
+            Self::RoundedR => "rounded-r",
+            Self::RoundedB => "rounded-b",
+            Self::RoundedL => "rounded-l",
+            Self::RoundedTL => "rounded-tl",
+            Self::RoundedTR => "rounded-tr",
+            Self::RoundedBL => "rounded-bl",
+            Self::RoundedBR => "rounded-br",
+        }
+    }
+}
+
 impl Display for RoundedKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -47,7 +63,7 @@ impl TailwindInstance for TailwindRounded {
     }
 
     // TODO: CONFIRM
-    fn get_collisions(&self) -> Vec<String> {
+    fn get_collisions(&self) -> Vec<&'static str> {
         let collisions = match self.kind {
             RoundedKind::Rounded => vec![
                 RoundedKind::RoundedT,
@@ -69,7 +85,7 @@ impl TailwindInstance for TailwindRounded {
             RoundedKind::RoundedBR => vec![RoundedKind::RoundedBR],
         };
 
-        collisions.into_iter().map(|x| x.to_string()).collect()
+        collisions.into_iter().map(|x| x.as_str()).collect()
     }
 }
 

@@ -17,6 +17,20 @@ enum BorderKind {
     BorderL,
 }
 
+impl BorderKind {
+    fn as_str(&self) -> &'static str {
+        match self {
+            Self::Border => "border",
+            Self::BorderX => "border-x",
+            Self::BorderY => "border-y",
+            Self::BorderT => "border-t",
+            Self::BorderR => "border-r",
+            Self::BorderB => "border-b",
+            Self::BorderL => "border-l",
+        }
+    }
+}
+
 impl Display for BorderKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -43,7 +57,7 @@ impl TailwindInstance for TailwindBorderWidth {
         self.kind.to_string()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
+    fn get_collisions(&self) -> Vec<&'static str> {
         let collisions = match self.kind {
             BorderKind::Border => vec![
                 BorderKind::BorderX,
@@ -61,7 +75,7 @@ impl TailwindInstance for TailwindBorderWidth {
             BorderKind::BorderL => vec![BorderKind::BorderL],
         };
 
-        collisions.into_iter().map(|x| x.to_string()).collect()
+        collisions.into_iter().map(|x| x.as_str()).collect()
     }
 }
 
