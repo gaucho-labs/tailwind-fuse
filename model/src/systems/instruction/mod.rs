@@ -8,7 +8,7 @@ use std::{
     fmt::{Debug, Display, Formatter},
     str::FromStr,
 };
-use tailwind_ast::{parse_fraction, ASTVariant, AstStyle};
+use tailwind_ast::{ASTVariant, AstStyle};
 
 /// `v:v:-a-a-[A]`
 #[derive(Debug, Clone)]

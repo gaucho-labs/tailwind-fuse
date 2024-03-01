@@ -10,28 +10,11 @@ pub enum TailwindError {
     Unexpected(String),
     Unimplemented(String),
     Syntax(String),
-    NomError(String),
 }
 
 impl TailwindError {
     pub fn syntax_error(message: impl Into<String>) -> Self {
         TailwindError::Syntax(message.into())
-    }
-}
-
-impl<I> From<nom::Err<(I, nom::error::ErrorKind)>> for TailwindError
-where
-    I: std::fmt::Debug,
-{
-    fn from(err: nom::Err<(I, nom::error::ErrorKind)>) -> Self {
-        TailwindError::NomError(format!("{:?}", err))
-    }
-}
-
-use nom::Err as NomErr;
-impl From<NomErr<nom::error::Error<&str>>> for TailwindError {
-    fn from(err: NomErr<nom::error::Error<&str>>) -> Self {
-        TailwindError::NomError(format!("Nom parsing error: {:?}", err))
     }
 }
 
