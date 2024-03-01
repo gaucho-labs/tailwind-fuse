@@ -37,25 +37,28 @@ pub fn tw_merge(class: &str) -> Option<String> {
             }
             Ok(instance) => {
                 let collision_id = instance.collision_id();
-                println!("collision id: {}", collision_id);
+
+                // hover:md:focus
+                let all_variants: String = {
+                    let mut all_variants = style
+                        .variants
+                        .iter()
+                        .flat_map(|v| v.names.iter().cloned())
+                        .collect::<Vec<_>>();
+                    all_variants.sort();
+                    all_variants.join(":")
+                };
+
+                let collision_id = format!("{all_variants}{collision_id}");
                 if collision_styles.contains(&collision_id) {
-                    println!("contains collision id");
                     continue;
                 }
 
                 let collisions = instance.get_collisions();
                 println!("collisions {:?}", collisions);
 
-                println!("style.variants: {:?}", style.variants);
-                let all_variants = style
-                    .variants
-                    .iter()
-                    .flat_map(|v| v.names.iter().cloned())
-                    .collect::<String>();
-
                 collisions.into_iter().for_each(|collision| {
                     let collision = format!("{all_variants}{collision}");
-                    println!("{all_variants}{collision}");
                     collision_styles.insert(collision);
                 });
 
@@ -350,6 +353,57 @@ mod hardmode {
 
         let classes = tw_merge!("gap-x-5", "gap-y-5", "gap-10");
         assert_eq!(classes, "gap-10");
+    }
+
+    #[test]
+    fn merges_classes_from_same_group_correctly() {
+        let class = "overflow-x-auto overflow-x-hidden";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "overflow-x-hidden");
+
+        let class = "basis-full basis-auto";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "basis-auto");
+
+        let class = "w-full w-fit";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "w-fit");
+
+        let class = "overflow-x-auto overflow-x-hidden overflow-x-scroll";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "overflow-x-scroll");
+
+        let class = "overflow-x-auto hover:overflow-x-hidden overflow-x-scroll";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "hover:overflow-x-hidden overflow-x-scroll");
+
+        let class =
+            "overflow-x-auto hover:overflow-x-hidden hover:overflow-x-auto overflow-x-scroll";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "hover:overflow-x-auto overflow-x-scroll");
+
+        let class = "col-span-1 col-span-full";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "col-span-full");
+    }
+
+    #[test]
+    fn merges_classes_from_font_variant_numeric_section_correctly() {
+        let class = "lining-nums tabular-nums diagonal-fractions";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "lining-nums tabular-nums diagonal-fractions");
+
+        let class = "normal-nums tabular-nums diagonal-fractions";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "tabular-nums diagonal-fractions");
+
+        let class = "tabular-nums diagonal-fractions normal-nums";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "normal-nums");
+
+        let class = "tabular-nums proportional-nums";
+        let result = tw_merge(class).unwrap();
+        assert_eq!(result, "proportional-nums");
     }
 }
 
