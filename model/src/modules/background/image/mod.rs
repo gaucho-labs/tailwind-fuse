@@ -14,11 +14,11 @@ impl Display for TailwindBackgroundImage {
 
 impl TailwindInstance for TailwindBackgroundImage {
     fn collision_id(&self) -> String {
-        todo!()
+        "bg-gradient-".to_string()
     }
 
     fn get_collisions(&self) -> Vec<String> {
-        todo!()
+        vec![self.collision_id()]
     }
 }
 
