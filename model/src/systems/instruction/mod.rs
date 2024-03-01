@@ -4,7 +4,6 @@ mod resolver;
 pub use self::arbitrary::TailwindArbitrary;
 
 use crate::*;
-use css_color::Srgb;
 use std::{
     fmt::{Debug, Display, Formatter},
     str::FromStr,
@@ -30,23 +29,6 @@ pub struct TailwindVariant {
 #[derive(Debug, Clone)]
 pub struct TailwindElements {
     inner: Vec<String>,
-}
-
-/// <https://github.com/tw-in-js/twind/blob/main/src/twind/variants.ts>
-#[derive(Copy, Clone, Debug)]
-pub enum TailwindVariantKind {
-    Dark,
-    Sticky,
-    MotionReduce,
-    MotionSafe,
-    First,
-    Last,
-    Even,
-    Odd,
-    Children,
-    Siblings,
-    Sibling,
-    Override,
 }
 
 impl<'a> From<AstStyle<'a>> for TailwindInstruction {

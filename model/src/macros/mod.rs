@@ -42,9 +42,9 @@ macro_rules! color_instance {
                 })
             }
             ///
-            pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
+            pub fn parse_arbitrary(arbitrary: TailwindArbitrary) -> Result<Self> {
                 Ok(Self {
-                    color: TailwindColor::parse_arbitrary(arbitrary)?,
+                    color: TailwindColor::Arbitrary(arbitrary),
                 })
             }
         }
@@ -63,4 +63,3 @@ macro_rules! syntax_error {
 
 pub(crate) use color_instance;
 pub(crate) use keyword_instance;
-pub(crate) use syntax_error;

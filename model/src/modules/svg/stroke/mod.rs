@@ -14,10 +14,10 @@ impl TailwindStroke {
             // https://tailwindcss.com/docs/text-decoration-color
             ["black"] => from_color(TailwindColor::Black),
             ["white"] => from_color(TailwindColor::White),
-            ["color"] => from_color(TailwindColor::parse_arbitrary(arbitrary)?),
+            ["color"] => from_color(TailwindColor::Arbitrary(arbitrary.clone())),
             ["color", rest] => {
                 let a = TailwindArbitrary::from(*rest);
-                from_color(TailwindColor::parse_arbitrary(&a)?)
+                from_color(TailwindColor::Arbitrary(a))
             }
             // https://tailwindcss.com/docs/text-decoration-color
             [theme, weight] => from_color(TailwindColor::parse_themed(theme, weight)?),

@@ -1,11 +1,5 @@
 use super::*;
 
-impl From<Srgb> for TailwindColor {
-    fn from(c: Srgb) -> Self {
-        Self::RGB(c)
-    }
-}
-
 impl From<&str> for TailwindColor {
     fn from(s: &str) -> Self {
         Self::Keyword(s.to_string())

@@ -5,11 +5,8 @@ license = "MPL-2.0"
 edition = "2021"
 
 [dependencies]
-css-color = "0.2.5"
 log = "0.4.20"
 nom = "7.1.3"
-xxhash-rust = { version = "0.8.7", features = ["xxh3"] }
-itertools = "0.11.0"
 tailwind-ast = "=0.4.1"
 
 

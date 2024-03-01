@@ -37,10 +37,4 @@ impl TailwindArbitrary {
     pub fn as_angle(&self) -> Result<LengthUnit> {
         LengthUnit::parse_angle(&self.inner)
     }
-
-    #[inline]
-    pub fn as_color(&self) -> Result<Srgb> {
-        Srgb::from_str(&self.inner)
-            .map_err(|_| TailwindError::Syntax(format!("Invalid color: {}", self.inner)))
-    }
 }
