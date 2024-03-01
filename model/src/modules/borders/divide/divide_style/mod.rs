@@ -24,10 +24,6 @@ impl Display for TailwindDivideStyle {
 }
 
 impl TailwindInstance for TailwindDivideStyle {
-    fn inlineable(&self) -> bool {
-        false
-    }
-
     fn collision_id(&self) -> String {
         "divide-style".into()
     }

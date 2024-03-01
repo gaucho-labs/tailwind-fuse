@@ -1,4 +1,5 @@
-use self::utils::parse_fraction;
+use crate::utils::parse_fraction;
+use std::str::FromStr;
 
 use super::*;
 

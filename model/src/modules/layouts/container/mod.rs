@@ -14,10 +14,6 @@ impl Display for TailwindContainer {
 //
 
 impl TailwindInstance for TailwindContainer {
-    fn inlineable(&self) -> bool {
-        false
-    }
-
     fn collision_id(&self) -> String {
         "container".into()
     }
