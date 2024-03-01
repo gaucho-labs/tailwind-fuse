@@ -29,17 +29,7 @@ impl UnitValue {
     pub fn radio(a: u32, b: u32) -> Self {
         Self::Length(LengthUnit::radio(a, b))
     }
-    pub fn get_properties(&self, number: impl FnOnce(&f32) -> String) -> String {
-        match self {
-            Self::Number { n, .. } => number(n),
-            Self::Length(n) => n.get_properties(),
-            Self::Keyword(s) => s.to_string(),
-            Self::Arbitrary(s) => s.get_properties(),
-        }
-    }
-    pub fn get_properties_rem(&self) -> String {
-        self.get_properties(|f| format!("{}rem", f / 4.0))
-    }
+
     pub fn write_negative(&self, f: &mut Formatter) -> std::fmt::Result {
         match is_negative(self) {
             true => write!(f, "-"),
