@@ -300,6 +300,7 @@ mod test {
 
 #[cfg(test)]
 mod hardmode {
+    use crate::merge::tw_merge;
     use crate::*;
 
     #[test]
