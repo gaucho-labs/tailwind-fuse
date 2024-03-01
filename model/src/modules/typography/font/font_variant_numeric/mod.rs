@@ -8,7 +8,52 @@ pub struct TailwindFontVariantNumeric {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFontVariantNumeric => "font-variant-numeric");
+impl<T> From<T> for TailwindFontVariantNumeric
+where
+    T: Into<String>,
+{
+    fn from(input: T) -> Self {
+        Self {
+            kind: StandardValue::from(input.into()),
+        }
+    }
+}
+
+impl TailwindInstance for TailwindFontVariantNumeric {
+    fn collision_id(&self) -> String {
+        match &self.kind {
+            StandardValue::Keyword(s) => match s.as_str() {
+                "normal-nums" => "fvn-normal".into(),
+                "ordinal" => "fvn-ordinal".into(),
+                "slashed-zero" => "fvn-slashed-zero".into(),
+                "lining-nums" | "oldstyle-nums" => "fvn-figure".into(),
+                "proportional-nums" | "tabular-nums" => "fvn-spacing".into(),
+                "diagonal-fractions" | "stacked-fractions" => "fvn-fraction".into(),
+                _ => s.clone(),
+            },
+            StandardValue::Arbitrary(_) => self.to_string(),
+        }
+    }
+
+    fn get_collisions(&self) -> Vec<String> {
+        match &self.kind {
+            StandardValue::Keyword(s) if s == "normal-nums" => {
+                let collisions = [
+                    "fvn-normal",
+                    "fvn-ordinal",
+                    "fvn-slashed-zero",
+                    "fvn-figure",
+                    "fvn-spacing",
+                    "fvn-fraction",
+                ];
+                collisions.iter().map(|s| s.to_string()).collect()
+            }
+            _ => vec!["fvn-normal".into(), self.collision_id()],
+        }
+    }
+}
+
+// crate::macros::sealed::keyword_instance!(TailwindFontVariantNumeric => "font-variant-numeric");
 
 impl Display for TailwindFontVariantNumeric {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

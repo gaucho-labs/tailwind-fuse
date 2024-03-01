@@ -96,7 +96,7 @@ impl TailwindInstruction {
             ["italic"] => TailwindFontStyle::from("italic").boxed(),
             ["not", "italic"] => TailwindFontStyle::from("normal").boxed(),
             // https://tailwindcss.com/docs/font-variant-numeric
-            ["normal", "nums"] => TailwindFontVariantNumeric::from("normal").boxed(),
+            ["normal", "nums"] => TailwindFontVariantNumeric::from("normal-nums").boxed(),
             ["ordinal"] => TailwindFontVariantNumeric::from("ordinal").boxed(),
             ["slashed", "zero"] => TailwindFontVariantNumeric::from("slashed-zero").boxed(),
             ["lining", "nums"] => TailwindFontVariantNumeric::from("lining-nums").boxed(),

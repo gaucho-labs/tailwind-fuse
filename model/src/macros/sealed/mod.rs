@@ -1,3 +1,4 @@
+// TODO: CONFIRM USAGES CAN HAVE THESE COLLISION IDS.
 macro_rules! keyword_instance {
     ($t:ty => $a:literal) => {
         impl<T> From<T> for $t
