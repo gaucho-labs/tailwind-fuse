@@ -21,7 +21,6 @@ impl Display for UnitValue {
     }
 }
 
-// noinspection DuplicatedCode
 impl UnitValue {
     pub fn px(x: f32) -> Self {
         Self::Length(LengthUnit::px(x))

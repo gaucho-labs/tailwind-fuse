@@ -14,15 +14,7 @@ impl Display for TailwindDivideWidth {
     }
 }
 
-impl TailwindInstance for TailwindDivideWidth {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("divide-width")
-    }
-
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("divide-width")
-    }
-}
+crate::axisxy_collision!(TailwindDivideWidth => "divide-width");
 
 impl TailwindDivideWidth {
     /// https://tailwindcss.com/docs/divide-width

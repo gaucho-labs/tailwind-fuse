@@ -3,6 +3,7 @@ use std::{
     fmt::{Debug, Display, Formatter},
 };
 
+use crate::AxisXY;
 use crate::{syntax_error, Result, SpacingAxis, TailwindArbitrary, TailwindInstance};
 
 use self::size::SpacingSize;

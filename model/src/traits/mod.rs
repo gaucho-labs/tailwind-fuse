@@ -11,6 +11,8 @@ pub trait TailwindInstance: Display {
         Box::new(self)
     }
 
+    /// Unique ID for the instance. Used to determine if two instances collide.
     fn collision_id(&self) -> String;
-    fn get_collisions(&self) -> Vec<String>;
+    /// All IDs that this instance collides with. Does not include [`Self::collision_id()`]
+    fn get_collisions(&self) -> Vec<&'static str>;
 }

@@ -17,17 +17,8 @@ impl Display for TailwindTranslate {
     }
 }
 
-impl TailwindInstance for TailwindTranslate {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("translate")
-    }
+crate::macros::axisxy_collision!(TailwindTranslate => "translate");
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("translate")
-    }
-}
-
-// noinspection DuplicatedCode
 impl TailwindTranslate {
     /// <https://tailwindcss.com/docs/translate>
     pub fn parse(

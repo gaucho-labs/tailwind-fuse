@@ -19,8 +19,8 @@ impl TailwindInstance for TailwindOverscroll {
         self.axis.collision_id("overscroll")
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("overscroll")
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

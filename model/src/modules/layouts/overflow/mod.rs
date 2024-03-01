@@ -19,8 +19,8 @@ impl TailwindInstance for TailwindOverflow {
         self.axis.collision_id("overflow")
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("overflow")
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

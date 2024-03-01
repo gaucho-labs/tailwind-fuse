@@ -13,15 +13,7 @@ impl Display for TailwindSkew {
     }
 }
 
-impl TailwindInstance for TailwindSkew {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("skew")
-    }
-
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("skew")
-    }
-}
+crate::macros::axisxy_collision!(TailwindSkew => "skew");
 
 impl TailwindSkew {
     // <https://tailwindcss.com/docs/skew>

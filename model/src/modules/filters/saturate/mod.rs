@@ -18,8 +18,8 @@ impl TailwindInstance for TailwindSaturate {
         "saturate".to_string()
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        todo!()
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 

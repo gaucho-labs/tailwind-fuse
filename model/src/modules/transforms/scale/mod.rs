@@ -21,12 +21,11 @@ impl TailwindInstance for TailwindScale {
         self.axis.collision_id("scale")
     }
 
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("scale")
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }
 
-// noinspection DuplicatedCode
 impl TailwindScale {
     // https://tailwindcss.com/docs/scale
     pub fn parse(

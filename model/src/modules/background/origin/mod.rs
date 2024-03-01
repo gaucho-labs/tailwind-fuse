@@ -7,7 +7,6 @@ pub struct TailwindBackgroundOrigin {
 
 crate::macros::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
 
-// noinspection DuplicatedCode
 impl Display for TailwindBackgroundOrigin {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "bg-origin-")?;
@@ -23,7 +22,6 @@ impl Display for TailwindBackgroundOrigin {
     }
 }
 
-// noinspection DuplicatedCode
 impl TailwindBackgroundOrigin {
     /// https://tailwindcss.com/docs/background-origin
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

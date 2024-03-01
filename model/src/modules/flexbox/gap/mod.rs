@@ -17,15 +17,7 @@ impl Display for TailwindGap {
     }
 }
 
-impl TailwindInstance for TailwindGap {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("gap")
-    }
-
-    fn get_collisions(&self) -> Vec<String> {
-        self.axis.collisions("gap")
-    }
-}
+crate::axisxy_collision!(TailwindGap => "gap");
 
 impl TailwindGap {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
