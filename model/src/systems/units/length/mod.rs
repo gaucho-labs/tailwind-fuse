@@ -22,7 +22,7 @@ impl Display for LengthUnit {
 impl LengthUnit {
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/length#syntax>
     pub fn parse_faction(input: &str) -> Result<Self> {
-        let (a, b) = parse_fraction(input)?.1;
+        let (a, b) = parse_fraction(input).map_err(|e| TailwindError::syntax_error(e))?;
         Ok(Self::radio(a as u32, b as u32))
     }
     pub fn parse_length(input: &str) -> Result<Self> {
