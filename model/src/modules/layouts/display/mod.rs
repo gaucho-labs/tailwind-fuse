@@ -6,7 +6,7 @@ pub struct TailwindDisplay {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindDisplay => "display");
+crate::macros::keyword_instance!(TailwindDisplay => "display");
 
 impl Display for TailwindDisplay {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

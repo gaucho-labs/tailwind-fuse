@@ -6,7 +6,7 @@ pub struct TailwindFlexWrap {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFlexWrap => "flex-wrap");
+crate::macros::keyword_instance!(TailwindFlexWrap => "flex-wrap");
 
 impl Display for TailwindFlexWrap {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

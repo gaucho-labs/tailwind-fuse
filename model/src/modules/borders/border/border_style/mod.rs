@@ -8,7 +8,7 @@ pub struct TailwindBorderStyle {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBorderStyle => "border-style");
+crate::macros::keyword_instance!(TailwindBorderStyle => "border-style");
 
 impl Display for TailwindBorderStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

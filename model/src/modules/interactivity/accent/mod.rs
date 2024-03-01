@@ -6,7 +6,7 @@ pub struct TailwindAccentColor {
     color: TailwindColor,
 }
 
-crate::macros::sealed::color_instance!(TailwindAccentColor);
+crate::macros::color_instance!(TailwindAccentColor);
 
 impl Display for TailwindAccentColor {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

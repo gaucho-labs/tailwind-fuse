@@ -6,7 +6,7 @@ pub struct TailwindWillChange {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindWillChange => "will-change");
+crate::macros::keyword_instance!(TailwindWillChange => "will-change");
 
 impl Display for TailwindWillChange {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

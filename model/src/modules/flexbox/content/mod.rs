@@ -8,7 +8,7 @@ pub struct TailwindContent {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindContent => "content");
+crate::macros::keyword_instance!(TailwindContent => "content");
 
 impl Display for TailwindContent {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

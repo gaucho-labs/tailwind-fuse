@@ -6,7 +6,7 @@ pub struct TailwindScrollBehavior {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindScrollBehavior => "scroll-behavior");
+crate::macros::keyword_instance!(TailwindScrollBehavior => "scroll-behavior");
 
 impl Display for TailwindScrollBehavior {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

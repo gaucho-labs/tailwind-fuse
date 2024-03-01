@@ -6,7 +6,7 @@ pub struct TailwindGridFlow {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindGridFlow => "grid-auto-flow");
+crate::macros::keyword_instance!(TailwindGridFlow => "grid-auto-flow");
 
 impl Display for TailwindGridFlow {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

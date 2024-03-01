@@ -6,7 +6,7 @@ pub struct TailwindTableLayout {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindTableLayout => "table-layout");
+crate::macros::keyword_instance!(TailwindTableLayout => "table-layout");
 
 impl Display for TailwindTableLayout {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

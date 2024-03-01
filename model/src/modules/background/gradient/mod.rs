@@ -17,9 +17,9 @@ pub struct TailwindVia {
 pub struct TailwindTo {
     color: TailwindColor,
 }
-crate::macros::sealed::color_instance!(TailwindFrom);
-crate::macros::sealed::color_instance!(TailwindVia);
-crate::macros::sealed::color_instance!(TailwindTo);
+crate::macros::color_instance!(TailwindFrom);
+crate::macros::color_instance!(TailwindVia);
+crate::macros::color_instance!(TailwindTo);
 
 impl Display for TailwindFrom {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

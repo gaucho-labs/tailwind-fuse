@@ -53,7 +53,7 @@ impl TailwindInstance for TailwindFontVariantNumeric {
     }
 }
 
-// crate::macros::sealed::keyword_instance!(TailwindFontVariantNumeric => "font-variant-numeric");
+// crate::macros::keyword_instance!(TailwindFontVariantNumeric => "font-variant-numeric");
 
 impl Display for TailwindFontVariantNumeric {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

@@ -6,7 +6,7 @@ pub struct TailwindDecorationStyle {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindDecorationStyle => "text-decoration-style");
+crate::macros::keyword_instance!(TailwindDecorationStyle => "text-decoration-style");
 
 impl Display for TailwindDecorationStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

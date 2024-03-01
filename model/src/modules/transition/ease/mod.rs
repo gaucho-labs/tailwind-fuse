@@ -6,7 +6,7 @@ use crate::StandardValue;
 pub struct TailwindEase {
     kind: StandardValue,
 }
-crate::macros::sealed::keyword_instance!(TailwindEase => "transition-timing-function");
+crate::macros::keyword_instance!(TailwindEase => "transition-timing-function");
 
 impl Display for TailwindEase {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

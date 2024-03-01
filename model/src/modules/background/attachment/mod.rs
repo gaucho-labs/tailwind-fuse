@@ -6,7 +6,7 @@ pub struct TailwindBackgroundAttachment {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundAttachment => "background-attachment");
+crate::macros::keyword_instance!(TailwindBackgroundAttachment => "background-attachment");
 
 impl Display for TailwindBackgroundAttachment {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

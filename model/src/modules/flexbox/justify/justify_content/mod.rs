@@ -6,7 +6,7 @@ pub struct TailwindJustifyContent {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindJustifyContent => "justify-content");
+crate::macros::keyword_instance!(TailwindJustifyContent => "justify-content");
 
 impl Display for TailwindJustifyContent {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

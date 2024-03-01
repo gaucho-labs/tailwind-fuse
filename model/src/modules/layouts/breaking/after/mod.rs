@@ -6,7 +6,7 @@ pub struct TailwindBreakAfter {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBreakAfter => "break-after");
+crate::macros::keyword_instance!(TailwindBreakAfter => "break-after");
 
 impl Display for TailwindBreakAfter {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

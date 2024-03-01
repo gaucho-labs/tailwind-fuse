@@ -6,7 +6,7 @@ pub struct TailwindSnapAlign {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSnapAlign => "scroll-snap-align");
+crate::macros::keyword_instance!(TailwindSnapAlign => "scroll-snap-align");
 
 impl Display for TailwindSnapAlign {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

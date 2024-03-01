@@ -6,7 +6,7 @@ pub struct TailwindListPosition {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindListPosition => "list-style-position");
+crate::macros::keyword_instance!(TailwindListPosition => "list-style-position");
 
 impl Display for TailwindListPosition {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

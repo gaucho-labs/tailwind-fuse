@@ -6,7 +6,7 @@ pub struct TailwindContentAlign {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindContentAlign => "align-content");
+crate::macros::keyword_instance!(TailwindContentAlign => "align-content");
 
 impl Display for TailwindContentAlign {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

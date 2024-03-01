@@ -6,7 +6,7 @@ pub struct TailwindObjectFit {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindObjectFit => "object-fit");
+crate::macros::keyword_instance!(TailwindObjectFit => "object-fit");
 
 impl Display for TailwindObjectFit {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

@@ -6,7 +6,7 @@ pub struct TailwindSelect {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSelect => "user-select");
+crate::macros::keyword_instance!(TailwindSelect => "user-select");
 
 impl Display for TailwindSelect {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

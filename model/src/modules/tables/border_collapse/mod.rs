@@ -6,7 +6,7 @@ pub struct TailwindBorderCollapse {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBorderCollapse => "border-collapse");
+crate::macros::keyword_instance!(TailwindBorderCollapse => "border-collapse");
 
 impl Display for TailwindBorderCollapse {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

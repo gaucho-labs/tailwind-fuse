@@ -6,7 +6,7 @@ pub struct TailwindItems {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindItems => "align-items");
+crate::macros::keyword_instance!(TailwindItems => "align-items");
 
 impl Display for TailwindItems {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

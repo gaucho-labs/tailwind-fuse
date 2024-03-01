@@ -6,7 +6,7 @@ pub struct TailwindBackgroundOrigin {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
+crate::macros::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
 
 // noinspection DuplicatedCode
 impl Display for TailwindBackgroundOrigin {

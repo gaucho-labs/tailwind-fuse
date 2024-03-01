@@ -6,7 +6,7 @@ pub struct TailwindBoxDecoration {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBoxDecoration => "box-decoration-break");
+crate::macros::keyword_instance!(TailwindBoxDecoration => "box-decoration-break");
 
 impl Display for TailwindBoxDecoration {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

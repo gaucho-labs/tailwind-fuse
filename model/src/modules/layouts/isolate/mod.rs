@@ -6,7 +6,7 @@ pub struct TailwindIsolation {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindIsolation => "isolation");
+crate::macros::keyword_instance!(TailwindIsolation => "isolation");
 
 impl Display for TailwindIsolation {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

@@ -6,7 +6,7 @@ pub struct TailwindTextAlignment {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindTextAlignment => "text-align");
+crate::macros::keyword_instance!(TailwindTextAlignment => "text-align");
 
 impl Display for TailwindTextAlignment {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

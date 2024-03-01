@@ -6,7 +6,7 @@ pub struct TailwindPointerEvents {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindPointerEvents => "pointer-events");
+crate::macros::keyword_instance!(TailwindPointerEvents => "pointer-events");
 
 impl Display for TailwindPointerEvents {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

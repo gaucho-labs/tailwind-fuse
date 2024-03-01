@@ -6,7 +6,7 @@ pub struct TailwindBackgroundSize {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBackgroundSize => "background-size");
+crate::macros::keyword_instance!(TailwindBackgroundSize => "background-size");
 
 impl Display for TailwindBackgroundSize {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

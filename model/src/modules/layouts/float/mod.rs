@@ -6,7 +6,7 @@ pub struct TailwindFloat {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFloat => "float");
+crate::macros::keyword_instance!(TailwindFloat => "float");
 
 impl Display for TailwindFloat {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

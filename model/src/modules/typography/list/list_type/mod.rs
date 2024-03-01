@@ -6,7 +6,7 @@ pub struct TailwindListStyle {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindListStyle => "list-style-type");
+crate::macros::keyword_instance!(TailwindListStyle => "list-style-type");
 
 impl Display for TailwindListStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

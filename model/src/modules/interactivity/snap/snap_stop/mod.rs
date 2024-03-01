@@ -6,7 +6,7 @@ pub struct TailwindSnapStop {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSnapStop => "scroll-snap-stop");
+crate::macros::keyword_instance!(TailwindSnapStop => "scroll-snap-stop");
 
 impl Display for TailwindSnapStop {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

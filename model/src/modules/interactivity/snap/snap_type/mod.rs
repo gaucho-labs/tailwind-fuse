@@ -6,7 +6,7 @@ pub struct TailwindSnapType {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindSnapType => "scroll-snap-type");
+crate::macros::keyword_instance!(TailwindSnapType => "scroll-snap-type");
 
 impl Display for TailwindSnapType {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

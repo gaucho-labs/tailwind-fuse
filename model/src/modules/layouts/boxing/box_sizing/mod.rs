@@ -6,7 +6,7 @@ pub struct TailwindBoxSizing {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindBoxSizing => "box-sizing");
+crate::macros::keyword_instance!(TailwindBoxSizing => "box-sizing");
 
 impl Display for TailwindBoxSizing {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

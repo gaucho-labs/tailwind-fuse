@@ -6,7 +6,7 @@ pub struct TailwindTorch {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindTorch => "user-select");
+crate::macros::keyword_instance!(TailwindTorch => "user-select");
 
 impl Display for TailwindTorch {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

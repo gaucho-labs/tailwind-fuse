@@ -6,7 +6,7 @@ pub struct TailwindFontStyle {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFontStyle => "font-style");
+crate::macros::keyword_instance!(TailwindFontStyle => "font-style");
 
 impl Display for TailwindFontStyle {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

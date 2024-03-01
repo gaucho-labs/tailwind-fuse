@@ -6,7 +6,7 @@ pub struct TailwindFlexDirection {
     kind: StandardValue,
 }
 
-crate::macros::sealed::keyword_instance!(TailwindFlexDirection => "flex-direction");
+crate::macros::keyword_instance!(TailwindFlexDirection => "flex-direction");
 
 impl Display for TailwindFlexDirection {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
