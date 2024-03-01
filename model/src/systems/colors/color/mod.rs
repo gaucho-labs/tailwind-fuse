@@ -55,7 +55,9 @@ impl TailwindColor {
             ["none"] | ["transparent"] => Self::from("transparent"),
             ["black"] => Self::Black,
             ["white"] => Self::White,
-            [s @ ("current" | "inherit" | "initial" | "unset")] => Self::from(*s),
+            // TODO: Confirm this. Is unset even valid?
+            // [s @ ("current" | "inherit" | "initial" | "unset")] => Self::from(*s),
+            [s] => Self::from(*s),
             [] => Self::parse_arbitrary(arbitrary)?,
             [name, weight] => Self::parse_themed(name, weight)?,
             _ => return syntax_error!("Unknown color pattern: {}", pattern.join("-")),
