@@ -3,7 +3,6 @@ use super::*;
 pub(crate) mod flex_direction;
 pub(crate) mod flex_wrap;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindFlex {
     kind: NumericValue,

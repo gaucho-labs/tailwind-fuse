@@ -2,7 +2,6 @@ use crate::NumericValue;
 
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindDivideWidth {
     axis: AxisXY,

@@ -9,7 +9,6 @@ enum GridAutoKind {
     Arbitrary(TailwindArbitrary),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindGridAuto {
     kind: GridAutoKind,

@@ -2,7 +2,6 @@ use crate::{AxisXY, StandardValue};
 
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindOverflow {
     kind: StandardValue,

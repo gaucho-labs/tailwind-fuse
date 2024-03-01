@@ -2,7 +2,6 @@ use crate::UnitValue;
 
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindIndent {
     kind: UnitValue,

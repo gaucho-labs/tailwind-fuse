@@ -1,7 +1,6 @@
 use super::*;
 use crate::NumericValue;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailWindOrder {
     kind: NumericValue,

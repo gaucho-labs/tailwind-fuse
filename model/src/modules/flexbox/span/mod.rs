@@ -4,13 +4,11 @@ use self::resolve::GridKind;
 
 mod resolve;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Copy, Clone)]
 pub struct TailwindRow {
     kind: GridKind,
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Copy, Clone)]
 pub struct TailwindColumn {
     kind: GridKind,

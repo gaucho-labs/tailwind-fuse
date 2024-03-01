@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBackgroundAttachment {
     kind: StandardValue,

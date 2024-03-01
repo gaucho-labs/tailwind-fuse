@@ -8,7 +8,6 @@ enum FontSmoothing {
     Length(LengthUnit),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindFontSmoothing {
     kind: FontSmoothing,

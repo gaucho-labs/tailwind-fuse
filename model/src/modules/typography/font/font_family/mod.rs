@@ -1,7 +1,6 @@
 use super::*;
 use crate::StandardValue;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindFontFamily {
     kind: StandardValue,

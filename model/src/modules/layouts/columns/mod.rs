@@ -2,7 +2,6 @@ use super::*;
 mod cols;
 pub use self::cols::Columns;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindColumns {
     kind: Columns,

@@ -3,7 +3,6 @@ mod aspect;
 
 use self::aspect::Aspect;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindAspect {
     kind: Aspect,

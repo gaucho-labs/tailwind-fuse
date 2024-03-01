@@ -8,7 +8,6 @@ enum Basis {
     Arbitrary(TailwindArbitrary),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindBasis {
     kind: Basis,

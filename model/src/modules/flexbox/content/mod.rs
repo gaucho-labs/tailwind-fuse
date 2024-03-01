@@ -2,7 +2,6 @@ use super::*;
 
 pub(crate) mod content_align;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Clone)]
 pub struct TailwindContent {
     kind: StandardValue,

@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindBackgroundImage {
     kind: AnchorPoint,

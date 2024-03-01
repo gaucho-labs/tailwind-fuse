@@ -12,7 +12,6 @@ enum Transition {
     Arbitrary(TailwindArbitrary),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindTransition {
     kind: Transition,

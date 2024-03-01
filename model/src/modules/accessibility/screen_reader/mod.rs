@@ -1,7 +1,6 @@
 use crate::TailwindInstance;
 use std::fmt::{Display, Formatter};
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug)]
 pub struct TailwindScreenReader {
     sr_only: bool,

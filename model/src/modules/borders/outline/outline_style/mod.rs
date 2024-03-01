@@ -2,7 +2,6 @@ use crate::StandardValue;
 
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindOutlineStyle {
     kind: StandardValue,

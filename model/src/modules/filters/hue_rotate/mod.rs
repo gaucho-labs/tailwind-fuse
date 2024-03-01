@@ -1,7 +1,6 @@
 use super::*;
 use crate::Negative;
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindHueRotate {
     degree: NumericValue,

@@ -7,7 +7,6 @@ enum ZIndex {
     Arbitrary(TailwindArbitrary),
 }
 
-#[doc=include_str!("readme.md")]
 #[derive(Clone, Debug)]
 pub struct TailwindZIndex {
     kind: ZIndex,

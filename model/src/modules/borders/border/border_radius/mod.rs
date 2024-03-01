@@ -1,6 +1,5 @@
 use super::*;
 
-#[doc=include_str!("readme.md")]
 #[derive(Copy, Clone, Debug)]
 pub struct TailwindRounded {
     kind: RoundedKind,

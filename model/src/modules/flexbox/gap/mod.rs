@@ -1,7 +1,6 @@
 use super::*;
 use crate::AxisXY;
 
-#[doc=include_str!("readme.md")]
 #[derive(Debug, Copy, Clone)]
 pub struct TailwindGap {
     size: LengthUnit,
