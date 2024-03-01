@@ -1,7 +1,9 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::HashSet;
 
 use tailwind_ast::AstStyle;
 use tailwind_model::TailwindInstruction;
+
+use crate::val_or_ref::ValOrRef;
 
 #[macro_export]
 macro_rules! tw_merge {
@@ -51,7 +53,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
                 let collision_id = Collision {
                     variants: all_variants.clone(),
-                    collision_id,
+                    collision_id: ValOrRef::Owned(collision_id),
                 };
 
                 if collision_styles.contains(&collision_id) {
@@ -67,7 +69,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 collisions.into_iter().for_each(|collision| {
                     let collision = Collision {
                         variants: all_variants.clone(),
-                        collision_id: collision.to_string(),
+                        collision_id: ValOrRef::Borrowed(collision),
                     };
 
                     collision_styles.insert(collision);
@@ -89,9 +91,8 @@ pub fn tw_merge(class: &str) -> Option<String> {
     Some(result.join(" "))
 }
 
-// TODO: Use Oco<'static> to avoid clones for collisions_id.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Collision<'a> {
     variants: Vec<&'a str>,
-    collision_id: String,
+    collision_id: ValOrRef<'static, str>,
 }
