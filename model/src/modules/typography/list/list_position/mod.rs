@@ -1,21 +1,8 @@
-use super::*;
-
+/// <https://tailwindcss.com/docs/list-style-position>
+/// https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-position#syntax
 #[derive(Debug, Clone)]
 pub struct TailwindListPosition {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindListPosition => "list-style-position");
-
-impl TailwindListPosition {
-    /// <https://tailwindcss.com/docs/list-style-position>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = StandardValue::parser("list-position", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(Self { kind })
-    }
-    /// https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-position#syntax
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["inherit", "initial", "inside", "outside", "unset"]);
-        set.contains(mode)
-    }
-}
+crate::macros::keyword_instance!(TailwindListPosition => "list-style-position", ["inside", "outside"]);

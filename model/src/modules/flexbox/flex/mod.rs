@@ -4,9 +4,7 @@ pub(crate) mod flex_direction;
 pub(crate) mod flex_wrap;
 
 #[derive(Debug, Clone)]
-pub struct TailwindFlex {
-    kind: NumericValue,
-}
+pub struct TailwindFlex {}
 
 // TODO: CONFIRM, this is prolly ok?
 impl TailwindInstance for TailwindFlex {
@@ -26,37 +24,21 @@ impl TailwindFlex {
     ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/display#flex
-            // This won't happen
-            [] if arbitrary.is_none() => TailwindDisplay::from("flex").boxed(),
+            [] if arbitrary.is_none() => TailwindDisplay::try_from("flex")?.boxed(),
             // https://tailwindcss.com/docs/flex#arbitrary-values
-            [] => TailwindFlex {
-                kind: NumericValue::Arbitrary,
-            }
-            .boxed(),
+            [] => TailwindFlex {}.boxed(),
             // https://tailwindcss.com/docs/flex-direction
-            ["row"] => TailwindFlexDirection::from("row").boxed(),
-            ["row", "reverse"] => TailwindFlexDirection::from("row-reverse").boxed(),
-            ["col"] => TailwindFlexDirection::from("column").boxed(),
-            ["col", "reverse"] => TailwindFlexDirection::from("column-reverse").boxed(),
-            ["direction", rest @ ..] => TailwindFlexDirection::parse(rest, arbitrary)?.boxed(),
+            ["row"] => TailwindFlexDirection::try_from("row")?.boxed(),
+            ["row", "reverse"] => TailwindFlexDirection::try_from("row-reverse")?.boxed(),
+            ["col"] => TailwindFlexDirection::try_from("column")?.boxed(),
+            ["col", "reverse"] => TailwindFlexDirection::try_from("column-reverse")?.boxed(),
             // https://tailwindcss.com/docs/flex-wrap
-            ["wrap", rest @ ..] => TailwindFlexWrap::parse(rest, arbitrary)?.boxed(),
-            ["nowrap"] => TailwindFlexWrap::from("nowrap").boxed(),
+            [s @ ("wrap" | "wrap-reverse" | "nowrap")] => TailwindFlexWrap::try_from(*s)?.boxed(),
             // https://tailwindcss.com/docs/flex
-            _ => Self::parse(pattern, arbitrary)?.boxed(),
+            // flex-1, flex-auto, flex-initial, flex-none + arbitrary values
+            [s] => TailwindFlex {}.boxed(),
+            _ => syntax_error!("Invalid decoration pattern")?,
         };
         Ok(out)
-    }
-    /// <https://tailwindcss.com/docs/flex>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<TailwindFlex> {
-        let kind = NumericValue::positive_parser("flex", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(TailwindFlex { kind })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "auto", "inherit", "initial", "initial", "none", "revert", "unset",
-        ]);
-        set.contains(mode)
     }
 }

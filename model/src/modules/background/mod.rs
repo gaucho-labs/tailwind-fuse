@@ -9,13 +9,8 @@ pub use self::{
     repeat::TailwindBackgroundRepeat,
     size::TailwindBackgroundSize,
 };
-use crate::{
-    AnchorPoint, Result, StandardValue, TailwindArbitrary, TailwindColor, TailwindInstance,
-};
-use std::{
-    collections::BTreeSet,
-    fmt::{Debug, Display, Formatter},
-};
+use crate::{AnchorPoint, Result, TailwindArbitrary, TailwindColor, TailwindInstance};
+use std::fmt::Debug;
 
 mod attachment;
 mod clip;

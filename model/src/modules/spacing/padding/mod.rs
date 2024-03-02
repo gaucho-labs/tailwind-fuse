@@ -7,7 +7,7 @@ pub struct TailwindPadding {
     size: SpacingSize,
 }
 
-crate::spacing_collision!(TailwindPadding => "padding");
+crate::macros::spacing_collision!(TailwindPadding => "padding");
 
 impl TailwindPadding {
     /// https://tailwindcss.com/docs/padding

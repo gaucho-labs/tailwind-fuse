@@ -8,7 +8,7 @@ pub enum Aspect {
 }
 
 impl Aspect {
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse(pattern: &[&str], _: &TailwindArbitrary) -> Result<Self> {
         let out = match pattern {
             ["square"] => Self::Radio(1, 1),
             ["video"] => Self::Radio(16, 9),

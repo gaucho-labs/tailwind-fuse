@@ -6,10 +6,7 @@ use crate::{
     Backdrop, NumericValue, Result, StandardValue, TailwindArbitrary, TailwindColor,
     TailwindInstance,
 };
-use std::{
-    collections::BTreeSet,
-    fmt::{Display, Formatter},
-};
+use std::collections::BTreeSet;
 mod box_shadow;
 mod mix_blend;
 mod mix_blend_bg;

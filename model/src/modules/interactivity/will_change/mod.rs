@@ -1,36 +1,13 @@
 use super::*;
 
 #[derive(Clone, Debug)]
-pub struct TailwindWillChange {
-    kind: StandardValue,
-}
+pub struct TailwindWillChange {}
 
-crate::macros::keyword_instance!(TailwindWillChange => "will-change");
-
-impl TailwindWillChange {
-    /// <https://tailwindcss.com/docs/will-change>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: StandardValue::parser("will-change", &Self::check_valid)(pattern, arbitrary)?,
-        })
+impl TailwindInstance for TailwindWillChange {
+    fn collision_id(&self) -> &'static str {
+        "will-change"
     }
-    /// dispatch to [will-change](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        StandardValue::parse_arbitrary(arbitrary).map(|kind| Self { kind })
-    }
-    /// https://developer.mozilla.org/en-US/docs/Web/CSS/will-change#syntax
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "auto",
-            "contents",
-            "inherit",
-            "initial",
-            "opacity",
-            "revert",
-            "scroll-position",
-            "transform",
-            "unset",
-        ]);
-        set.contains(mode)
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
     }
 }

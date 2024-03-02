@@ -1,11 +1,6 @@
-use std::{
-    collections::BTreeSet,
-    fmt::{Display, Formatter},
-};
-
 use crate::{
-    Negative, Result, StandardValue, TailwindArbitrary, TailwindColor, TailwindInstance,
-    TailwindScrollMargin, TailwindScrollPadding,
+    Negative, Result, TailwindArbitrary, TailwindColor, TailwindInstance, TailwindScrollMargin,
+    TailwindScrollPadding,
 };
 
 pub use self::{

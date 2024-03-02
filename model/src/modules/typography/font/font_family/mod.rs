@@ -1,9 +1,14 @@
-use super::*;
-use crate::StandardValue;
+use crate::TailwindInstance;
 
 #[derive(Debug, Clone)]
-pub struct TailwindFontFamily {
-    kind: StandardValue,
-}
+pub struct TailwindFontFamily {}
 
-crate::macros::keyword_instance!(TailwindFontFamily => "font-family");
+impl TailwindInstance for TailwindFontFamily {
+    fn collision_id(&self) -> &'static str {
+        "font-family"
+    }
+
+    fn get_collisions(&self) -> Vec<&'static str> {
+        vec![]
+    }
+}

@@ -15,7 +15,7 @@ pub fn font_adaptor(
         // https://tailwindcss.com/docs/font-size
         [s @ ("xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl"
         | "8xl" | "9xl")] => TailwindFontSize::new(s).boxed(),
-        // https://tailwindcss.com/docs/float
+        // https://tailwindcss.com/docs/font-weight
         ["thin"] => TailwindFontWeight::THIN.boxed(),
         ["extralight"] => TailwindFontWeight::EXTRA_LIGHT.boxed(),
         ["light"] => TailwindFontWeight::LIGHT.boxed(),
@@ -25,16 +25,16 @@ pub fn font_adaptor(
         ["bold"] => TailwindFontWeight::BOLD.boxed(),
         ["extrabold"] => TailwindFontWeight::EXTRA_BOLD.boxed(),
         ["black"] => TailwindFontWeight::BLACK.boxed(),
-        ["size"] => maybe_size(arbitrary)?,
-        ["size", n] => {
-            let a = TailwindArbitrary::from(*n);
-            maybe_size(&a)?
+        [] => {
+            // Try parsing number from arbitrary first `font-[1100]``
+            // If we parse then it's a size.
+            // Otherwise it's a font-family.
+            maybe_weight(arbitrary)
+                .or_else(|_| maybe_size(arbitrary))
+                .unwrap_or(TailwindFontFamily {}.boxed())
         }
-        [n] => {
-            let a = TailwindArbitrary::from(*n);
-            maybe_weight(&a).or_else(|_| maybe_size(&a))?
-        }
-        _ => TailwindFontFamily::from(pattern.join("-")).boxed(),
+        // TODO: This collision fails needs work?
+        _ => TailwindFontFamily {}.boxed(),
     };
     Ok(out)
 }

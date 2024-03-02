@@ -1,9 +1,9 @@
 use super::*;
 
+/// <https://tailwindcss.com/docs/flex-shrink>
+/// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex-shrink#syntax>
 #[derive(Debug, Clone)]
-pub struct TailWindShrink {
-    shrink: NumericValue,
-}
+pub struct TailWindShrink {}
 
 impl TailwindInstance for TailWindShrink {
     fn collision_id(&self) -> &'static str {
@@ -12,21 +12,5 @@ impl TailwindInstance for TailWindShrink {
 
     fn get_collisions(&self) -> Vec<&'static str> {
         vec![]
-    }
-}
-
-impl TailWindShrink {
-    /// <https://tailwindcss.com/docs/flex-shrink>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let shrink = match pattern {
-            [] if arbitrary.is_none() => 100u32.into(),
-            _ => NumericValue::positive_parser("shrink", Self::check_valid)(pattern, arbitrary)?,
-        };
-        Ok(Self { shrink })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex-shrink#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec!["inherit", "initial", "revert", "unset"]);
-        set.contains(mode)
     }
 }

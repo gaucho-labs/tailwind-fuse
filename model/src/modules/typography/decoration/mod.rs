@@ -8,6 +8,8 @@ pub(crate) mod thickness;
 #[derive(Debug, Clone)]
 pub struct TailwindDecoration {}
 
+// TODO: COLOR AND THICKNESS ARE BOTH CUSTOMIZABLE
+
 impl TailwindDecoration {
     pub fn adapt(
         pattern: &[&str],
@@ -15,26 +17,22 @@ impl TailwindDecoration {
     ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/text-decoration
-            ["line", rest @ ..] => TailwindDecorationLine::parse(rest, arbitrary)?.boxed(),
+            ["line", rest @ ..] => TailwindDecorationLine::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-style
             [s @ ("solid" | "double" | "dotted" | "dashed" | "wavy")] => {
-                TailwindDecorationStyle::from(*s).boxed()
+                TailwindDecorationStyle::try_from(*s)?.boxed()
             }
-            ["style", rest @ ..] => TailwindDecorationStyle::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-thickness
             ["auto"] => TailwindDecorationThickness::from("auto").boxed(),
             ["from", "font"] => TailwindDecorationThickness::from("from-font").boxed(),
-            ["thick", rest @ ..] => TailwindDecorationThickness::parse(rest, arbitrary)?.boxed(),
+
+            // At this point we need to decide between decoration color and thickness
+            // If it's a number or arbitrary len, it's thickness
+            // Otherwise, it's color
             // https://tailwindcss.com/docs/text-decoration-color
-            ["color", rest @ ..] => {
-                let color = TailwindColor::parse(rest, arbitrary)?;
-                TailwindDecorationColor::from(color).boxed()
-            }
-            // https://tailwindcss.com/docs/text-decoration-thickness
-            // TODO: ARBITRARY?
-            [] => TailwindDecoration {}.boxed(),
             [n] => resolve1(n)?,
-            _ => TailwindDecorationColor::parse(pattern, arbitrary)?.boxed(),
+            [] => resolve1(arbitrary.as_str())?,
+            _ => syntax_error!("Invalid decoration pattern")?,
         };
         Ok(out)
     }
@@ -56,15 +54,12 @@ fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {
         return Ok(resolve1_unit(&a)?.boxed());
     }
     if n.starts_with(|c: char| c == '#') {
-        return Ok(resolve1_color(a).boxed());
+        // TODO: Can you use non-hex colors?
+        return Ok(TailwindDecorationColor::from(TailwindColor::Arbitrary).boxed());
     }
     Ok(TailwindDecorationColor::from(TailwindColor::Themed(n.to_string(), 0)).boxed())
 }
 
 fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindDecorationThickness> {
     Ok(TailwindDecorationThickness::from(a.as_integer()?))
-}
-
-fn resolve1_color(a: TailwindArbitrary) -> TailwindDecorationColor {
-    TailwindDecorationColor::from(TailwindColor::Arbitrary)
 }

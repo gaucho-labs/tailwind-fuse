@@ -3,7 +3,6 @@ use super::*;
 #[derive(Copy, Clone, Debug)]
 pub struct TailwindBorderWidth {
     kind: BorderKind,
-    width: LengthUnit,
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -59,33 +58,18 @@ impl TailwindInstance for TailwindBorderWidth {
 }
 
 impl TailwindBorderWidth {
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse(pattern: &[&str]) -> Result<Self> {
         match pattern {
-            ["t", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderT, arbitrary),
-            ["r", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderR, arbitrary),
-            ["b", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderB, arbitrary),
-            ["l", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderL, arbitrary),
-            ["x", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderX, arbitrary),
-            ["y", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderY, arbitrary),
-            _ => Self::parse_inner(pattern, BorderKind::Border, arbitrary),
+            ["t", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderT),
+            ["r", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderR),
+            ["b", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderB),
+            ["l", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderL),
+            ["x", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderX),
+            ["y", rest @ ..] => Self::parse_inner(rest, BorderKind::BorderY),
+            _ => Self::parse_inner(pattern, BorderKind::Border),
         }
     }
-    fn parse_inner(
-        pattern: &[&str],
-        kind: BorderKind,
-        arbitrary: &TailwindArbitrary,
-    ) -> Result<Self> {
-        if arbitrary.is_some() {
-            Ok(Self {
-                kind,
-                width: arbitrary.as_length_or_fraction()?,
-            })
-        } else {
-            let width = pattern.first().unwrap_or(&"1");
-            Ok(Self {
-                kind,
-                width: LengthUnit::px(width.parse()?),
-            })
-        }
+    fn parse_inner(_: &[&str], kind: BorderKind) -> Result<Self> {
+        Ok(Self { kind })
     }
 }

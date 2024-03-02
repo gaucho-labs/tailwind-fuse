@@ -41,11 +41,11 @@ impl TailwindBreak {
     ) -> Result<Box<dyn TailwindInstance>> {
         let kind = match pattern {
             // https://tailwindcss.com/docs/break-before
-            ["before", rest @ ..] => TailwindBreakBefore::parse(rest, arbitrary)?.boxed(),
+            ["before", rest @ ..] => TailwindBreakBefore::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/break-inside
-            ["inside", rest @ ..] => TailwindBreakInside::parse(rest, arbitrary)?.boxed(),
+            ["inside", rest @ ..] => TailwindBreakInside::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/break-after
-            ["after", rest @ ..] => TailwindBreakAfter::parse(rest, arbitrary)?.boxed(),
+            ["after", rest @ ..] => TailwindBreakAfter::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/word-break
             _ => Self::parse_self(pattern, arbitrary)?.boxed(),
         };

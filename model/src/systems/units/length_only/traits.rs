@@ -19,13 +19,13 @@ impl From<String> for UnitValue {
 }
 
 impl<'a> From<TailwindArbitrary<'a>> for UnitValue {
-    fn from(a: TailwindArbitrary) -> Self {
+    fn from(_: TailwindArbitrary) -> Self {
         Self::Arbitrary
     }
 }
 
 impl<'a> From<&TailwindArbitrary<'a>> for UnitValue {
-    fn from(a: &TailwindArbitrary) -> Self {
+    fn from(_: &TailwindArbitrary) -> Self {
         Self::Arbitrary
     }
 }

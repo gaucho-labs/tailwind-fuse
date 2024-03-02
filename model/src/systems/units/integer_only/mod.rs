@@ -19,7 +19,7 @@ impl NumericValue {
         id: &'static str,
         checker: impl Fn(&str) -> bool,
     ) -> impl Fn(&[&str], &TailwindArbitrary, Negative) -> Result<Self> {
-        move |pattern: &[&str], arbitrary: &TailwindArbitrary, negative: Negative| {
+        move |pattern: &[&str], _: &TailwindArbitrary, negative: Negative| {
             let joined = pattern.join("-");
             match pattern {
                 _ if checker(&joined) => Ok(Self::Keyword(joined)),

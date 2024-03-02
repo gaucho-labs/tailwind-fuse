@@ -16,7 +16,7 @@ impl TailwindStroke {
             ["white"] => from_color(TailwindColor::White),
             // TODO: THIS LOOKS WEIRD?
             ["color"] => from_color(TailwindColor::Arbitrary),
-            ["color", rest] => from_color(TailwindColor::Arbitrary),
+            ["color", _] => from_color(TailwindColor::Arbitrary),
             // https://tailwindcss.com/docs/text-decoration-color
             [theme, weight] => from_color(TailwindColor::parse_themed(theme, weight)?),
             // https://tailwindcss.com/docs/text-decoration-thickness

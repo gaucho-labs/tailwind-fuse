@@ -18,7 +18,7 @@ impl TailwindColor {
     /// `white`
     pub const White: Self = Self::Static("black");
     /// https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse(pattern: &[&str], _: &TailwindArbitrary) -> Result<Self> {
         let out = match pattern {
             ["none"] | ["transparent"] => Self::from("transparent"),
             ["black"] => Self::Keyword("black".into()),

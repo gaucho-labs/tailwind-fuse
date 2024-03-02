@@ -15,60 +15,58 @@ impl<'a> TailwindInstruction<'a> {
             ["box", rest @ ..] => Self::box_adaptor(rest, arbitrary)?,
             // begin https://tailwindcss.com/docs/display
             // skip [flex, table]
-            ["block"] => TailwindDisplay::from("block").boxed(),
-            ["inline", "block"] => TailwindDisplay::from("inline-block").boxed(),
-            ["inline"] => TailwindDisplay::from("inline").boxed(),
-            ["inline", "flex"] => TailwindDisplay::from("inline-flex").boxed(),
-            ["inline", "table"] => TailwindDisplay::from("inline-table").boxed(),
-            ["flow", "root"] => TailwindDisplay::from("flow-root").boxed(),
-            ["grid"] => TailwindDisplay::from("grid").boxed(),
-            ["inline", "grid"] => TailwindDisplay::from("inline-grid").boxed(),
-            ["contents"] => TailwindDisplay::from("contents").boxed(),
-            ["list", "item"] => TailwindDisplay::from("inline-grid").boxed(),
-            ["hidden"] => TailwindDisplay::from("hidden").boxed(),
+            ["block"] => TailwindDisplay::try_from("block")?.boxed(),
+            ["inline", "block"] => TailwindDisplay::try_from("inline-block")?.boxed(),
+            ["inline"] => TailwindDisplay::try_from("inline")?.boxed(),
+            ["inline", "flex"] => TailwindDisplay::try_from("inline-flex")?.boxed(),
+            ["inline", "table"] => TailwindDisplay::try_from("inline-table")?.boxed(),
+            ["flow", "root"] => TailwindDisplay::try_from("flow-root")?.boxed(),
+            ["grid"] => TailwindDisplay::try_from("grid")?.boxed(),
+            ["inline", "grid"] => TailwindDisplay::try_from("inline-grid")?.boxed(),
+            ["contents"] => TailwindDisplay::try_from("contents")?.boxed(),
+            ["list", "item"] => TailwindDisplay::try_from("inline-grid")?.boxed(),
+            ["hidden"] => TailwindDisplay::try_from("hidden")?.boxed(),
             // https://tailwindcss.com/docs/float
-            ["float", rest @ ..] => TailwindFloat::parse(rest, arbitrary)?.boxed(),
-            ["clear", rest @ ..] => TailwindClear::parse(rest, arbitrary)?.boxed(),
-            ["isolate"] => TailwindIsolation::from("isolate").boxed(),
-            ["isolation", rest @ ..] => TailwindIsolation::parse(rest, arbitrary)?.boxed(),
+            ["float", ..] => TailwindFloat::try_from("float")?.boxed(),
+            ["clear", ..] => TailwindClear::try_from("clear")?.boxed(),
+            ["isolate"] => TailwindIsolation::try_from("isolate")?.boxed(),
+            ["isolation", "auto"] => TailwindIsolation::try_from("isolation-auto")?.boxed(),
             ["object", rest @ ..] => object_adaptor(rest, arbitrary)?,
-            ["overflow", rest @ ..] => TailwindOverflow::parse(rest, arbitrary)?.boxed(),
-            ["overscroll", rest @ ..] => TailwindOverscroll::parse(rest, arbitrary)?.boxed(),
+            ["overflow", rest @ ..] => TailwindOverflow::parse(rest).boxed(),
+            ["overscroll", rest @ ..] => TailwindOverscroll::parse(rest).boxed(),
             // https://tailwindcss.com/docs/position#header
             [s @ ("static" | "fixed" | "absolute" | "relative" | "sticky")] => {
-                TailwindPosition::from(*s).boxed()
+                TailwindPosition::try_from(*s)?.boxed()
             }
-            ["position", rest @ ..] => TailwindPosition::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/top-right-bottom-left
-            ["inset", rest @ ..] => TailwindInset::parse(rest, arbitrary, neg)?.boxed(),
-            ["top", rest @ ..] => TailwindTop::parse(rest, arbitrary, neg)?.boxed(),
-            ["right", rest @ ..] => TailwindRight::parse(rest, arbitrary, neg)?.boxed(),
-            ["bottom", rest @ ..] => TailwindBottom::parse(rest, arbitrary, neg)?.boxed(),
-            ["left", rest @ ..] => TailwindLeft::parse(rest, arbitrary, neg)?.boxed(),
+            ["inset", rest @ ..] => TailwindInset::parse(rest)?.boxed(),
+            ["top", ..] => TailwindTop {}.boxed(),
+            ["right", ..] => TailwindRight {}.boxed(),
+            ["bottom", ..] => TailwindBottom {}.boxed(),
+            ["left", ..] => TailwindLeft {}.boxed(),
             // https://tailwindcss.com/docs/visibility
-            ["invisible"] => TailwindVisibility::from("hidden").boxed(),
-            ["visible" | "visibility", rest @ ..] => {
-                TailwindVisibility::parse(rest, arbitrary)?.boxed()
+            [visibility @ ("visible" | "invisible" | "collapse")] => {
+                TailwindVisibility::try_from(*visibility)?.boxed()
             }
             // https://tailwindcss.com/docs/z-index
-            ["z", rest @ ..] => TailwindZIndex::parse(rest, arbitrary, neg)?.boxed(),
+            ["z", ..] => TailwindZIndex {}.boxed(),
             // Flexbox & Grid
-            ["basis", rest @ ..] => TailwindBasis::parse(rest, arbitrary)?.boxed(),
+            ["basis", ..] => TailwindBasis {}.boxed(),
             ["flex", rest @ ..] => TailwindFlex::adapt(rest, arbitrary)?,
-            ["grow", rest @ ..] => TailWindGrow::parse(rest, arbitrary)?.boxed(),
-            ["shrink", rest @ ..] => TailWindShrink::parse(rest, arbitrary)?.boxed(),
-            ["order", rest @ ..] => TailWindOrder::parse(rest, arbitrary, neg)?.boxed(),
+            ["grow", ..] => TailWindGrow {}.boxed(),
+            ["shrink", ..] => TailWindShrink {}.boxed(),
+            ["order", ..] => TailWindOrder {}.boxed(),
             ["grid", rest @ ..] => TailwindGrid::adapt(rest, arbitrary)?,
             // https://tailwindcss.com/docs/grid-column
             ["col", rest @ ..] => TailwindColumn::parse(rest, arbitrary)?.boxed(),
             ["row", rest @ ..] => TailwindRow::parse(rest, arbitrary)?.boxed(),
-            ["auto", rest @ ..] => TailwindGridAuto::parse(rest, arbitrary)?.boxed(),
+            ["auto", rest @ ..] => TailwindGridAuto::parse(rest)?.boxed(),
             ["gap", rest @ ..] => TailwindGap::parse(rest, arbitrary)?.boxed(),
-            ["justify", rest @ ..] => justify_adaptor(rest, arbitrary)?,
+            ["justify", rest @ ..] => justify_adaptor(rest)?,
             ["content", rest @ ..] => TailwindContent::adapt(rest, arbitrary)?,
-            ["items", rest @ ..] => TailwindItems::parse(rest, arbitrary)?.boxed(),
-            ["self", rest @ ..] => TailwindSelf::parse(rest, arbitrary)?.boxed(),
-            ["place", rest @ ..] => TailwindPlace::adapt(rest, arbitrary)?,
+            ["items", rest @ ..] => TailwindItems::try_from(rest)?.boxed(),
+            ["self", rest @ ..] => TailwindSelf::try_from(rest)?.boxed(),
+            ["place", rest @ ..] => TailwindPlace::adapt(rest)?,
             // justify catched
             // Spacing System
             ["p" | "pl" | "pr" | "pb" | "pt" | "px" | "py", ..] => {
@@ -91,8 +89,8 @@ impl<'a> TailwindInstruction<'a> {
             // begin https://tailwindcss.com/docs/font-variant-numeric
             ["antialiased"] => TailwindFontSmoothing::from("todo").boxed(),
             ["subpixel", "antialiased"] => TailwindFontSmoothing::from("todo").boxed(),
-            ["italic"] => TailwindFontStyle::from("italic").boxed(),
-            ["not", "italic"] => TailwindFontStyle::from("normal").boxed(),
+            ["italic"] => TailwindFontStyle::try_from("italic")?.boxed(),
+            ["not", "italic"] => TailwindFontStyle::try_from("not-italic")?.boxed(),
             // https://tailwindcss.com/docs/font-variant-numeric
             ["normal", "nums"] => TailwindFontVariantNumeric::from("normal-nums").boxed(),
             ["ordinal"] => TailwindFontVariantNumeric::from("ordinal").boxed(),
@@ -114,25 +112,23 @@ impl<'a> TailwindInstruction<'a> {
             ["leading", rest @ ..] => TailwindLeading::parse(rest, arbitrary)?.boxed(),
             ["list", rest @ ..] => list_adaptor(rest, arbitrary)?,
             // https://tailwindcss.com/docs/text-decoration
-            ["underline"] => TailwindDecorationLine::from("underline").boxed(),
-            ["overline"] => TailwindDecorationLine::from("overline").boxed(),
-            ["line", "through"] => TailwindDecorationLine::from("line-through").boxed(),
-            ["no", "underline"] => TailwindDecorationLine::from("none").boxed(),
+            ["underline"] => TailwindDecorationLine::try_from("underline")?.boxed(),
+            ["overline"] => TailwindDecorationLine::try_from("overline")?.boxed(),
+            ["line", "through"] => TailwindDecorationLine::try_from("line-through")?.boxed(),
+            ["no", "underline"] => TailwindDecorationLine::try_from("none")?.boxed(),
             // https://tailwindcss.com/docs/text-decoration-color
             ["decoration", rest @ ..] => TailwindDecoration::adapt(rest, arbitrary)?,
-            ["underline", "offset", rest @ ..] => {
-                TailwindUnderlineOffset::parse(rest, arbitrary)?.boxed()
-            }
+            ["underline", "offset", ..] => TailwindUnderlineOffset {}.boxed(),
             // https://tailwindcss.com/docs/text-transform
-            ["uppercase"] => TailwindTextTransform::from("uppercase").boxed(),
-            ["lowercase"] => TailwindTextTransform::from("lowercase").boxed(),
-            ["capitalize"] => TailwindTextTransform::from("capitalize").boxed(),
-            ["normal", "case"] => TailwindTextTransform::from("none").boxed(),
+            ["uppercase"] => TailwindTextTransform::try_from("uppercase")?.boxed(),
+            ["lowercase"] => TailwindTextTransform::try_from("lowercase")?.boxed(),
+            ["capitalize"] => TailwindTextTransform::try_from("capitalize")?.boxed(),
+            ["normal", "case"] => TailwindTextTransform::try_from("normal-case")?.boxed(),
             // https://tailwindcss.com/docs/text-overflow
-            ["truncate"] => TailwindTextOverflow::Truncate.boxed(),
+            ["truncate"] => TailwindTextOverflow::try_from("truncate")?.boxed(),
             ["indent", rest @ ..] => TailwindIndent::parse(rest, arbitrary)?.boxed(),
             ["align", rest @ ..] => TailwindAlign::parse(rest, arbitrary)?.boxed(),
-            ["whitespace", rest @ ..] => TailwindWhiteSpace::parse(rest, arbitrary)?.boxed(),
+            ["whitespace", rest @ ..] => TailwindWhiteSpace::try_from(rest)?.boxed(),
             // break catched
             // content catched
             // Typography System Extension
@@ -151,7 +147,7 @@ impl<'a> TailwindInstruction<'a> {
             // Effects System
             ["shadow", rest @ ..] => Self::shadow_adaptor(rest, arbitrary)?,
             ["opacity", rest @ ..] => TailwindOpacity::parse(rest, arbitrary, false)?.boxed(),
-            ["mix", "blend", rest @ ..] => TailwindBlend::parse(rest, arbitrary)?.boxed(),
+            ["mix", "blend", rest @ ..] => TailwindBlend::try_from(rest)?.boxed(),
             // Filters System
             ["blur", rest @ ..] => TailwindBlur::parse(rest, arbitrary, false)?.boxed(),
             ["brightness", rest @ ..] => TailwindBrightness::parse(rest, arbitrary, false)?.boxed(),
@@ -170,7 +166,8 @@ impl<'a> TailwindInstruction<'a> {
             // Transitions System
             ["transition", rest @ ..] => TailwindTransition::parse(rest, arbitrary)?.boxed(),
             ["duration", rest @ ..] => TailwindDuration::parse(rest, arbitrary)?.boxed(),
-            ["ease", rest @ ..] => TailwindEase::parse(rest, arbitrary)?.boxed(),
+            //TODO: maybe check rest is not empty?
+            ["ease", ..] => TailwindEase {}.boxed(),
             ["delay", rest @ ..] => TailwindDelay::parse(rest, arbitrary)?.boxed(),
             ["animate", rest @ ..] => TailwindAnimate::parse(rest, arbitrary)?.boxed(),
             // Transforms System
@@ -182,18 +179,16 @@ impl<'a> TailwindInstruction<'a> {
             // Interactivity System
             ["accent", rest @ ..] => TailwindAccentColor::parse(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/appearance
-            ["appearance", rest @ ..] => TailwindAppearance::parse(rest, arbitrary)?.boxed(),
-            ["cursor", rest @ ..] => TailwindCursor::parse(rest, arbitrary)?.boxed(),
+            ["appearance", rest @ ..] => TailwindAppearance::try_from(rest)?.boxed(),
+            ["cursor", ..] => TailwindCursor {}.boxed(),
             ["caret", rest @ ..] => TailwindCaretColor::parse(rest, arbitrary)?.boxed(),
-            ["pointer", "events", rest @ ..] => {
-                TailwindPointerEvents::parse(rest, arbitrary)?.boxed()
-            }
-            ["resize", rest @ ..] => TailwindResize::parse(rest, arbitrary)?.boxed(),
+            ["pointer", "events", rest @ ..] => TailwindPointerEvents::try_from(rest)?.boxed(),
+            ["resize", rest @ ..] => TailwindResize::try_from(rest)?.boxed(),
             ["scroll", rest @ ..] => scroll_adaptor(rest, arbitrary, neg)?,
-            ["snap", rest @ ..] => snap_adaptor(rest, arbitrary)?,
-            ["touch", rest @ ..] => TailwindTorch::parse(rest, arbitrary)?.boxed(),
-            ["select", rest @ ..] => TailwindSelect::parse(rest, arbitrary)?.boxed(),
-            ["will", "change", rest @ ..] => TailwindWillChange::parse(rest, arbitrary)?.boxed(),
+            ["snap", rest @ ..] => snap_adaptor(rest)?,
+            ["touch", rest @ ..] => TailwindTorch::try_from(rest)?.boxed(),
+            ["select", rest @ ..] => TailwindSelect::try_from(rest)?.boxed(),
+            ["will", "change", ..] => TailwindWillChange {}.boxed(),
             // SVG System
             ["fill", rest @ ..] => TailwindFillColor::parse(rest, arbitrary)?.boxed(),
             ["stroke", rest @ ..] => TailwindStroke::parse(rest, arbitrary)?,
@@ -212,20 +207,22 @@ impl<'a> TailwindInstruction<'a> {
     ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/background-attachment
-            [s @ ("fixed" | "local" | "scroll")] => TailwindBackgroundAttachment::from(*s).boxed(),
-            ["attach", rest @ ..] => TailwindBackgroundAttachment::parse(rest, arbitrary)?.boxed(),
+            [s @ ("fixed" | "local" | "scroll")] => {
+                TailwindBackgroundAttachment::try_from(*s)?.boxed()
+            }
             // https://tailwindcss.com/docs/background-clip
-            ["clip", rest @ ..] => TailwindBackgroundClip::parse(rest, arbitrary)?.boxed(),
+            ["clip", rest @ ..] => TailwindBackgroundClip::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/background-origin
-            ["origin", rest @ ..] => TailwindBackgroundOrigin::parse(rest, arbitrary)?.boxed(),
+            ["origin", rest @ ..] => TailwindBackgroundOrigin::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/background-repeat
-            ["no", "repeat"] => TailwindBackgroundRepeat::from("no-repeat").boxed(),
-            ["repeat", rest @ ..] => TailwindBackgroundRepeat::parse(rest, arbitrary)?.boxed(),
+            ["no", "repeat"] => TailwindBackgroundRepeat::try_from("no-repeat")?.boxed(),
+            ["repeat", rest @ ..] => TailwindBackgroundRepeat::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/background-size
-            [s @ ("auto" | "cover" | "contain")] => TailwindBackgroundSize::from(*s).boxed(),
-            ["size", rest @ ..] => TailwindBackgroundSize::parse(rest, arbitrary)?.boxed(),
+            [s @ ("auto" | "cover" | "contain")] => TailwindBackgroundSize::try_from(*s)?.boxed(),
+            // TODO: Handle override?
+            // ["size", rest @ ..] => TailwindBackgroundSize::try_from(rest, arbitrary)?.boxed(),
             // https://tailwindcss.com/docs/background-blend-mode
-            ["blend", rest @ ..] => TailwindBackgroundBlend::parse(rest, arbitrary)?.boxed(),
+            ["blend", rest @ ..] => TailwindBackgroundBlend::parse(rest)?.boxed(),
             _ => TailwindBackgroundColor::parse(pattern, arbitrary)?.boxed(),
         };
         Ok(out)
@@ -239,20 +236,18 @@ impl<'a> TailwindInstruction<'a> {
         let out = match pattern {
             // https://tailwindcss.com/docs/border-style
             [s @ ("solid" | "dashed" | "dotted" | "double" | "hidden" | "none")] => {
-                TailwindBorderStyle::from(*s).boxed()
+                TailwindBorderStyle::try_from(*s)?.boxed()
             }
             // https://tailwindcss.com/docs/border-collapse
-            ["separate"] => TailwindBorderCollapse::from("separate").boxed(),
-            ["collapse"] if arbitrary.is_none() => TailwindBorderCollapse::from("collapse").boxed(),
-            ["collapse", rest @ ..] => TailwindBorderCollapse::parse(rest, arbitrary)?.boxed(),
+            [s @ ("collapse" | "separate")] => TailwindBorderCollapse::try_from(*s)?.boxed(),
             // https://tailwindcss.com/docs/border-width
-            [] => TailwindBorderWidth::parse(pattern, arbitrary)?.boxed(), // e.g. border-[3px]
+            [] => TailwindBorderWidth::parse(pattern)?.boxed(), // e.g. border-[3px]
+            // e.g. border-4
             ["0" | "2" | "4" | "8", ..] if arbitrary.is_none() => {
-                TailwindBorderWidth::parse(pattern, arbitrary)?.boxed()
-            } // e.g. border-4
-            ["x" | "y" | "t" | "r" | "b" | "l", ..] => {
-                TailwindBorderWidth::parse(pattern, arbitrary)?.boxed()
-            } // e.g. border-x-2
+                TailwindBorderWidth::parse(pattern)?.boxed()
+            }
+            // e.g. border-x-2
+            ["x" | "y" | "t" | "r" | "b" | "l", ..] => TailwindBorderWidth::parse(pattern)?.boxed(),
             // https://tailwindcss.com/docs/border-color
             ["black"] => color(TailwindColor::Black),
             ["white"] => color(TailwindColor::White),
@@ -260,6 +255,7 @@ impl<'a> TailwindInstruction<'a> {
         };
         Ok(out)
     }
+
     #[inline]
     fn shadow_adaptor(
         pattern: &[&str],
@@ -276,22 +272,16 @@ impl<'a> TailwindInstruction<'a> {
         };
         Ok(out)
     }
+
     #[inline]
-    fn box_adaptor(
-        str: &[&str],
-        arbitrary: &TailwindArbitrary,
-    ) -> Result<Box<dyn TailwindInstance>> {
+    fn box_adaptor(str: &[&str], _: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
         let out = match str {
             // https://tailwindcss.com/docs/box-decoration-break
-            ["decoration" | "break", rest @ ..] => {
-                TailwindBoxDecoration::parse(rest, arbitrary)?.boxed()
-            }
-            ["clone"] => TailwindBoxDecoration::from("clone").boxed(),
-            ["slice"] => TailwindBoxDecoration::from("slice").boxed(),
+            ["clone"] => TailwindBoxDecoration::try_from("clone")?.boxed(),
+            ["slice"] => TailwindBoxDecoration::try_from("slice")?.boxed(),
             // https://tailwindcss.com/docs/box-sizing
-            ["border"] => TailwindBoxSizing::from("border-box").boxed(),
-            ["content"] => TailwindBoxSizing::from("content-box").boxed(),
-            ["sizing", rest @ ..] => TailwindBoxSizing::parse(rest, arbitrary)?.boxed(),
+            ["border"] => TailwindBoxSizing::try_from("border")?.boxed(),
+            ["content"] => TailwindBoxSizing::try_from("content")?.boxed(),
             _ => return syntax_error!("Unknown box instructions: {}", str.join("-")),
         };
         Ok(out)
@@ -328,6 +318,7 @@ impl<'a> TailwindInstruction<'a> {
         };
         Ok(out)
     }
+
     #[inline]
     fn table_adaptor(
         pattern: &[&str],
@@ -335,17 +326,17 @@ impl<'a> TailwindInstruction<'a> {
     ) -> Result<Box<dyn TailwindInstance>> {
         let out = match pattern {
             // https://tailwindcss.com/docs/display#flex
-            [] if arbitrary.is_none() => TailwindDisplay::from("table").boxed(),
-            ["caption"] => TailwindDisplay::from("table-caption").boxed(),
-            ["cell"] => TailwindDisplay::from("table-cell").boxed(),
-            ["column"] => TailwindDisplay::from("table-column").boxed(),
-            ["column", "group"] => TailwindDisplay::from("table-column-group").boxed(),
-            ["footer", "group"] => TailwindDisplay::from("table-footer-group").boxed(),
-            ["header", "group"] => TailwindDisplay::from("table-header-group").boxed(),
-            ["row", "group"] => TailwindDisplay::from("table-row-group").boxed(),
-            ["row"] => TailwindDisplay::from("table-row").boxed(),
+            [] if arbitrary.is_none() => TailwindDisplay::try_from("table")?.boxed(),
+            ["caption"] => TailwindDisplay::try_from("table-caption")?.boxed(),
+            ["cell"] => TailwindDisplay::try_from("table-cell")?.boxed(),
+            ["column"] => TailwindDisplay::try_from("table-column")?.boxed(),
+            ["column", "group"] => TailwindDisplay::try_from("table-column-group")?.boxed(),
+            ["footer", "group"] => TailwindDisplay::try_from("table-footer-group")?.boxed(),
+            ["header", "group"] => TailwindDisplay::try_from("table-header-group")?.boxed(),
+            ["row", "group"] => TailwindDisplay::try_from("table-row-group")?.boxed(),
+            ["row"] => TailwindDisplay::try_from("table-row")?.boxed(),
             // https://tailwindcss.com/docs/table-layout
-            _ => TailwindTableLayout::parse(pattern, arbitrary)?.boxed(),
+            _ => TailwindTableLayout::try_from(pattern)?.boxed(),
         };
         Ok(out)
     }

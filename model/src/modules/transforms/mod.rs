@@ -6,7 +6,7 @@ use crate::{
     AnchorPoint, AxisXY, Negative, NumericValue, Result, TailwindArbitrary, TailwindInstance,
     UnitValue,
 };
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::Debug;
 
 mod origin;
 mod rotate;

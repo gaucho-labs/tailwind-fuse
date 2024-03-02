@@ -55,6 +55,6 @@ fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindOutlineWidth> {
     Ok(TailwindOutlineWidth::from(a.as_integer()?))
 }
 
-fn resolve1_color(a: TailwindArbitrary) -> TailwindOutlineColor {
+fn resolve1_color(_: TailwindArbitrary) -> TailwindOutlineColor {
     TailwindOutlineColor::from(TailwindColor::Arbitrary)
 }

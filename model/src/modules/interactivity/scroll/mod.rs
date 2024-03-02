@@ -14,7 +14,7 @@ pub(crate) fn scroll_adaptor(
         ["m" | "ml" | "mr" | "mb" | "mt" | "mx" | "my", ..] => {
             TailwindScrollMargin::parse(pattern, arbitrary, negative)?.boxed()
         }
-        _ => TailwindScrollBehavior::parse(pattern, arbitrary)?.boxed(),
+        _ => TailwindScrollBehavior::try_from(pattern)?.boxed(),
     };
     Ok(kind)
 }

@@ -8,7 +8,4 @@ pub use self::{
     transit::TailwindTransition,
 };
 use crate::{syntax_error, NumericValue, Result, TailwindArbitrary, TailwindInstance};
-use std::{
-    collections::BTreeSet,
-    fmt::{Display, Formatter},
-};
+use std::collections::BTreeSet;

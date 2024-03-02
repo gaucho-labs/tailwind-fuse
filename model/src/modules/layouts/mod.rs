@@ -19,13 +19,10 @@ pub use self::{
     z_index::TailwindZIndex,
 };
 use crate::{
-    syntax_error, AnchorPoint, AxisXY, LengthUnit, Negative, Result, StandardValue,
-    TailwindArbitrary, TailwindInstance, UnitValue,
+    syntax_error, AnchorPoint, AxisXY, LengthUnit, Negative, Result, TailwindArbitrary,
+    TailwindInstance, UnitValue,
 };
-use std::{
-    collections::BTreeSet,
-    fmt::{Debug, Display, Formatter},
-};
+use std::{collections::BTreeSet, fmt::Debug};
 
 mod aspect_ratio;
 mod boxing;

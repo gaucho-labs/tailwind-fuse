@@ -9,17 +9,14 @@ mod justify_content;
 mod justify_item;
 mod justify_self;
 
-pub(crate) fn justify_adaptor(
-    str: &[&str],
-    arbitrary: &TailwindArbitrary,
-) -> Result<Box<dyn TailwindInstance>> {
+pub(crate) fn justify_adaptor(str: &[&str]) -> Result<Box<dyn TailwindInstance>> {
     let out = match str {
         // https://tailwindcss.com/docs/justify-items
-        ["items", rest @ ..] => TailwindJustifyItems::parse(rest, arbitrary)?.boxed(),
+        ["items", rest @ ..] => TailwindJustifyItems::try_from(rest)?.boxed(),
         // https://tailwindcss.com/docs/justify-self
-        ["self", rest @ ..] => TailwindJustifySelf::parse(rest, arbitrary)?.boxed(),
+        ["self", rest @ ..] => TailwindJustifySelf::try_from(rest)?.boxed(),
         // https://tailwindcss.com/docs/justify-content
-        _ => TailwindJustifyContent::parse(str, arbitrary)?.boxed(),
+        _ => TailwindJustifyContent::try_from(str)?.boxed(),
     };
     Ok(out)
 }

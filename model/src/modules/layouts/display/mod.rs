@@ -2,42 +2,32 @@ use super::*;
 
 #[derive(Clone, Debug)]
 pub struct TailwindDisplay {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindDisplay => "display");
+// https://developer.mozilla.org/en-US/docs/Web/CSS/display#syntax
+crate::macros::keyword_instance!(TailwindDisplay => "display", [
+    "block",
+    "inline-block",
+    "inline",
+    "flex",
+    "inline-flex",
+    "table",
+    "inline-table",
+    "table-caption",
+    "table-cell",
+    "table-column",
+    "table-column-group",
+    "table-footer-group",
+    "table-header-group",
+    "table-row-group",
+    "table-row",
+    "flow-root",
+    "grid",
+    "inline-grid",
+    "contents",
+    "list-item",
+    "hidden",
+]);
 
-impl TailwindDisplay {
-    /// <https://tailwindcss.com/docs/display>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: StandardValue::parser("display", &Self::check_valid)(pattern, arbitrary)?,
-        })
-    }
-    /// dispatch to [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        StandardValue::parse_arbitrary(arbitrary).map(|kind| Self { kind })
-    }
-    /// https://developer.mozilla.org/en-US/docs/Web/CSS/display#syntax
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "block",
-            "contents",
-            "flex",
-            "flow-root",
-            "grid",
-            "inherit",
-            "initial",
-            "inline",
-            "inline-block",
-            "inline-flex",
-            "inline-grid",
-            "list-item",
-            "none",
-            "revert",
-            "table",
-            "table-row",
-        ]);
-        set.contains(mode)
-    }
-}
+impl TailwindDisplay {}

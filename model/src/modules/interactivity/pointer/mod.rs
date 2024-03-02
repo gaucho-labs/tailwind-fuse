@@ -1,36 +1,6 @@
-use super::*;
-
 #[derive(Debug, Clone)]
 pub struct TailwindPointerEvents {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindPointerEvents => "pointer-events");
-
-impl TailwindPointerEvents {
-    /// <https://tailwindcss.com/docs/pointer-events>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = StandardValue::parser("pointer-events", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(Self { kind })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "all",
-            "auto",
-            "fill",
-            "inherit",
-            "initial",
-            "none",
-            "painted",
-            "revert",
-            "stroke",
-            "unset",
-            "visible",
-            "visibleFill",
-            "visiblePainted",
-            "visibleStroke",
-        ]);
-        set.contains(mode)
-    }
-}
+crate::macros::keyword_instance!(TailwindPointerEvents => "pointer-events", ["auto", "none"]);

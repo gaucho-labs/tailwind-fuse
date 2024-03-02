@@ -22,10 +22,7 @@ use crate::{
     syntax_error, AxisXY, LengthUnit, NumericValue, Result, TailwindArbitrary, TailwindColor,
     TailwindInstance, UnitValue,
 };
-use std::{
-    collections::BTreeSet,
-    fmt::{Display, Formatter},
-};
+use std::collections::BTreeSet;
 
 mod border;
 mod divide;

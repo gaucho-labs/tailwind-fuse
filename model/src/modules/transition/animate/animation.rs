@@ -11,7 +11,7 @@ pub(super) enum Animation {
 }
 
 impl Animation {
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse(pattern: &[&str], _: &TailwindArbitrary) -> Result<Self> {
         let kind = match pattern {
             ["none"] => Self::None,
             ["spin"] => Self::Spin,

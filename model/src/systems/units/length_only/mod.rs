@@ -73,7 +73,7 @@ impl UnitValue {
             Ok(kind)
         }
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse_arbitrary(_: &TailwindArbitrary) -> Result<Self> {
         Ok(Self::Arbitrary)
     }
     pub fn parse_number(

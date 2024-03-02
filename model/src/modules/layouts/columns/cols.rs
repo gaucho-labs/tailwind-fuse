@@ -10,7 +10,7 @@ pub enum Columns {
 
 impl Columns {
     #[inline]
-    pub fn parse(input: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse(input: &[&str], _: &TailwindArbitrary) -> Result<Self> {
         let rem = |n: usize| Self::Length(LengthUnit::rem(n as f32));
         let out = match input {
             [s] if Self::check_valid(s) => Self::Standard(s.to_string()),

@@ -22,4 +22,4 @@ pub use self::{
     transition::*, typography::*,
 };
 
-use std::fmt::{Debug, Display, Formatter};
+use std::fmt::Debug;

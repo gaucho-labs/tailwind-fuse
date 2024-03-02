@@ -26,11 +26,7 @@ pub enum AnchorPoint {
 }
 
 impl AnchorPoint {
-    pub fn parse(
-        pattern: &[&str],
-        arbitrary: &TailwindArbitrary,
-        allow_center: bool,
-    ) -> Result<Self> {
+    pub fn parse(pattern: &[&str], _: &TailwindArbitrary, allow_center: bool) -> Result<Self> {
         let out = match pattern {
             ["7" | "tl" | "lt"] | ["left", "top"] | ["top", "left"] => Self::LeftTop,
             ["8" | "t"] | ["top"] => Self::Top,

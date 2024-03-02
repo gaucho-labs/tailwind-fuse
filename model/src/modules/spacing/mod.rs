@@ -1,9 +1,5 @@
-use std::{
-    collections::BTreeSet,
-    fmt::{Debug, Display, Formatter},
-};
+use std::{collections::BTreeSet, fmt::Debug};
 
-use crate::AxisXY;
 use crate::{syntax_error, Result, SpacingAxis, TailwindArbitrary, TailwindInstance};
 
 use self::size::SpacingSize;

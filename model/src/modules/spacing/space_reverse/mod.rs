@@ -7,4 +7,4 @@ pub struct TailwindSpaceReverse {
     pub(crate) axis: Axis2D,
 }
 
-crate::axis2d_collision!(TailwindSpaceReverse => "space");
+crate::macros::axis2d_collision!(TailwindSpaceReverse => "space");

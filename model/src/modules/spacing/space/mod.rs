@@ -9,7 +9,7 @@ pub struct TailwindSpace {
     size: SpacingSize,
 }
 
-crate::axis2d_collision!(TailwindSpace => "space");
+crate::macros::axis2d_collision!(TailwindSpace => "space");
 
 impl TailwindSpace {
     /// https://tailwindcss.com/docs/space

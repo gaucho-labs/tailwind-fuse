@@ -1,22 +1,39 @@
 // TODO: CONFIRM USAGES CAN HAVE THESE COLLISION IDS.
 macro_rules! keyword_instance {
-    ($t:ty => $a:literal) => {
-        impl<T> From<T> for $t
-        where
-            T: Into<String>,
-        {
-            fn from(input: T) -> Self {
-                Self {
-                    kind: StandardValue::from(input.into()),
-                }
-            }
-        }
-        impl TailwindInstance for $t {
+    // Extend the macro to accept a type, a collision ID, and an array of literals.
+    ($t:ty => $a:literal, [$($values:literal),* $(,)?]) => {
+        impl $crate::TailwindInstance for $t {
             fn collision_id(&self) -> &'static str {
                 $a
             }
             fn get_collisions(&self) -> Vec<&'static str> {
                 vec![]
+            }
+        }
+
+
+        impl TryFrom<&str> for $t {
+            type Error = $crate::TailwindError;
+
+            fn try_from(value: &str) -> std::result::Result<Self, Self::Error> {
+                match value {
+                    // TODO: CONFIRM THIS.
+                    $a => Ok(Self { kind: $a }),
+                    $( $values => Ok(Self { kind: $values }), )*
+                    _ => $crate::syntax_error!("Unknown keyword"),
+                }
+            }
+        }
+
+        impl TryFrom<&[&str]> for $t {
+            type Error = $crate::TailwindError;
+
+            fn try_from(value: &[&str]) -> std::result::Result<Self, Self::Error>  {
+                match value {
+                    [] => $crate::syntax_error!("Expected at least a single keyword for {}", $a),
+                    [value] => Self::try_from(*value),
+                    rest => Self::try_from(rest.join("-").as_str()),
+                }
             }
         }
     };
@@ -70,7 +87,7 @@ macro_rules! syntax_error {
 #[macro_export]
 macro_rules! axisxy_collision {
     ($t:ty => $a:literal) => {
-        impl TailwindInstance for $t {
+        impl $crate::TailwindInstance for $t {
             fn collision_id(&self) -> &'static str {
                 match self.axis {
                     AxisXY::N => $a,
@@ -92,7 +109,7 @@ macro_rules! axisxy_collision {
 #[macro_export]
 macro_rules! axis2d_collision {
     ($t:ty => $a:literal) => {
-        impl TailwindInstance for $t {
+        impl $crate::TailwindInstance for $t {
             fn collision_id(&self) -> &'static str {
                 match self.axis {
                     Axis2D::X => concat!($a, "-x-dimension"),

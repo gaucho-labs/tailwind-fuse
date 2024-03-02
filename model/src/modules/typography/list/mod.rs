@@ -9,10 +9,12 @@ pub(crate) fn list_adaptor(
 ) -> Result<Box<dyn TailwindInstance>> {
     let out = match str {
         // https://tailwindcss.com/docs/list-style-position
-        [s @ ("inside" | "outside")] => TailwindListPosition::from(*s).boxed(),
-        ["position", rest @ ..] => TailwindListPosition::parse(rest, arbitrary)?.boxed(),
+        [s @ ("inside" | "outside")] => TailwindListPosition::try_from(*s)?.boxed(),
         // https://tailwindcss.com/docs/list-style-type
-        _ => TailwindListStyle::parse(str, arbitrary)?.boxed(),
+        _ => TailwindListStyle::try_from(str)
+            .or_else(|_| TailwindListStyle::try_from(arbitrary.as_str()))?
+            .boxed(),
+        // TODO: https://tailwindcss.com/docs/list-style-image
     };
     Ok(out)
 }

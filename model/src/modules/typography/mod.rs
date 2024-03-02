@@ -26,10 +26,7 @@ use crate::{
     syntax_error, LengthUnit, Result, StandardValue, TailwindArbitrary, TailwindBreakAfter,
     TailwindBreakBefore, TailwindBreakInside, TailwindColor, TailwindInstance,
 };
-use std::{
-    collections::BTreeSet,
-    fmt::{Display, Formatter},
-};
+use std::collections::BTreeSet;
 
 mod align;
 mod breaking;

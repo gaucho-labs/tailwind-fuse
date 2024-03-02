@@ -10,7 +10,7 @@ pub(super) enum SpacingSize {
 impl SpacingSize {
     pub fn parse(
         pattern: &[&str],
-        arbitrary: &TailwindArbitrary,
+        _: &TailwindArbitrary,
         check_valid: &'static impl Fn(&str) -> bool,
     ) -> Result<Self> {
         match pattern {

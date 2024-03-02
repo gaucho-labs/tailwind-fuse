@@ -8,14 +8,14 @@ use super::*;
 pub struct TailwindPlace {}
 
 impl TailwindPlace {
-    pub fn adapt(str: &[&str], arbitrary: &TailwindArbitrary) -> Result<Box<dyn TailwindInstance>> {
+    pub fn adapt(str: &[&str]) -> Result<Box<dyn TailwindInstance>> {
         let out = match str {
             // https://tailwindcss.com/docs/place-content
-            ["content", rest @ ..] => TailwindPlaceContent::parse(rest, arbitrary)?.boxed(),
+            ["content", rest @ ..] => TailwindPlaceContent::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/place-items
-            ["items", rest @ ..] => TailwindPlaceItems::parse(rest, arbitrary)?.boxed(),
+            ["items", rest @ ..] => TailwindPlaceItems::try_from(rest)?.boxed(),
             // https://tailwindcss.com/docs/place-self
-            ["self", rest @ ..] => TailwindPlaceSelf::parse(rest, arbitrary)?.boxed(),
+            ["self", rest @ ..] => TailwindPlaceSelf::try_from(rest)?.boxed(),
             _ => return syntax_error!("Unknown place instructions: {}", str.join("-")),
         };
         Ok(out)

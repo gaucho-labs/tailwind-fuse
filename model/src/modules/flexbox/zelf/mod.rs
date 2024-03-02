@@ -1,37 +1,8 @@
-use super::*;
-
+/// <https://tailwindcss.com/docs/align-self>
+/// <https://developer.mozilla.org/en-US/docs/Web/CSS/align-self#syntax>
 #[derive(Clone, Debug)]
 pub struct TailwindSelf {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindSelf => "align-self");
-
-impl TailwindSelf {
-    /// <https://tailwindcss.com/docs/align-self>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = StandardValue::parser("self", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(Self { kind })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/align-self#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "auto",
-            "baseline",
-            "center",
-            "end",
-            "flex-end",
-            "flex-start",
-            "inherit",
-            "initial",
-            "normal",
-            "revert",
-            "self-end",
-            "self-start",
-            "start",
-            "stretch",
-            "unset",
-        ]);
-        set.contains(mode)
-    }
-}
+crate::macros::keyword_instance!(TailwindSelf => "align-self", ["auto", "start", "end", "center", "stretch", "baseline"]);

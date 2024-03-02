@@ -7,7 +7,7 @@ pub struct TailwindMargin {
     size: SpacingSize,
 }
 
-crate::spacing_collision!(TailwindMargin => "scroll-margin");
+crate::macros::spacing_collision!(TailwindMargin => "scroll-margin");
 
 impl TailwindMargin {
     /// https://tailwindcss.com/docs/margin

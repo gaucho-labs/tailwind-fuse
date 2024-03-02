@@ -1,23 +1,6 @@
-use super::*;
-
 #[derive(Debug, Clone)]
 pub struct TailwindSelect {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindSelect => "user-select");
-
-impl TailwindSelect {
-    /// <https://tailwindcss.com/docs/user-select>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = StandardValue::parser("select", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(Self { kind })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/user-select#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "all", "auto", "contain", "inherit", "initial", "none", "revert", "text", "unset",
-        ]);
-        set.contains(mode)
-    }
-}
+crate::macros::keyword_instance!(TailwindSelect => "user-select", ["none", "text", "all", "auto"]);

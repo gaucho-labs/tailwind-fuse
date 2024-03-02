@@ -19,7 +19,7 @@ impl StandardValue {
             _ => Self::parse_keyword(pattern, id, check_valid),
         }
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
+    pub fn parse_arbitrary(_: &TailwindArbitrary) -> Result<Self> {
         Ok(Self::Arbitrary)
     }
     pub fn parse_keyword(

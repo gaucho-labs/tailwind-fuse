@@ -9,14 +9,12 @@ pub(crate) fn object_adaptor(
     pattern: &[&str],
     arbitrary: &TailwindArbitrary,
 ) -> Result<Box<dyn TailwindInstance>> {
-    let joint = pattern.join("-");
     let out = match pattern {
         // https://tailwindcss.com/docs/object-fit
-        ["fit", rest @ ..] => TailwindObjectFit::parse(rest, arbitrary)?.boxed(),
+        ["fit", rest @ ..] => TailwindObjectFit::try_from(rest)?.boxed(),
         // https://tailwindcss.com/docs/object-position
         ["position", rest @ ..] => TailwindObjectPosition::parse(rest, arbitrary)?.boxed(),
-        // Flexible parsing pattern
-        _ if TailwindObjectFit::check_valid(&joint) => TailwindObjectFit::from(joint).boxed(),
+        // position is customizable
         [..] => TailwindObjectPosition::parse(pattern, arbitrary)?.boxed(),
     };
     Ok(out)

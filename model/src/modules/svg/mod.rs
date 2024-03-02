@@ -5,7 +5,6 @@ pub use self::{
     },
 };
 use crate::{LengthUnit, Result, TailwindArbitrary, TailwindColor, TailwindInstance};
-use std::fmt::{Display, Formatter};
 
 mod fill;
 mod stroke;

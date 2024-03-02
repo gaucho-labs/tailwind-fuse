@@ -1,34 +1,10 @@
-use super::*;
-
+/// <https://tailwindcss.com/docs/align-items>
+/// <https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#syntax>
 #[derive(Clone, Debug)]
 pub struct TailwindItems {
-    kind: StandardValue,
+    kind: &'static str,
 }
 
-crate::macros::keyword_instance!(TailwindItems => "align-items");
-
-impl TailwindItems {
-    /// <https://tailwindcss.com/docs/align-items>
-    pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
-        let kind = StandardValue::parser("items", &Self::check_valid)(pattern, arbitrary)?;
-        Ok(Self { kind })
-    }
-    /// <https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#syntax>
-    pub fn check_valid(mode: &str) -> bool {
-        let set = BTreeSet::from_iter(vec![
-            "baseline",
-            "center",
-            "end",
-            "flex-end",
-            "flex-start",
-            "inherit",
-            "initial",
-            "normal",
-            "revert",
-            "start",
-            "stretch",
-            "unset",
-        ]);
-        set.contains(mode)
-    }
-}
+crate::macros::keyword_instance!(TailwindItems => "align-items", [
+    "start", "end", "center","baseline", "stretch"
+]);
