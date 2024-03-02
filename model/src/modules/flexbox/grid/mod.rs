@@ -27,7 +27,7 @@ impl TailwindGrid {
 enum GridTemplate {
     None,
     Unit(i32),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl GridTemplate {
@@ -35,11 +35,8 @@ impl GridTemplate {
         let kind = match pattern {
             ["none"] => Self::None,
             [n] => Self::Unit(TailwindArbitrary::from(*n).as_integer()?),
-            _ => Self::parse_arbitrary(arbitrary)?,
+            _ => Self::Arbitrary,
         };
         Ok(kind)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
 }

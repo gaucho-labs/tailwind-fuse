@@ -24,12 +24,6 @@ impl TailwindColumns {
             kind: Columns::parse(input, arbitrary)?,
         })
     }
-    /// dispatch to [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/columns)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: Columns::parse_arbitrary(arbitrary)?,
-        })
-    }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/columns#syntax>
     pub fn check_valid(mode: &str) -> bool {
         Columns::check_valid(mode)

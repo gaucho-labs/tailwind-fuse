@@ -33,19 +33,6 @@ impl TailwindPadding {
             size,
         })
     }
-    /// https://tailwindcss.com/docs/padding#arbitrary-values
-    pub fn parse_arbitrary(
-        arbitrary: &TailwindArbitrary,
-        axis: SpacingAxis,
-        negative: Negative,
-    ) -> Result<Self> {
-        let size = SpacingSize::parse_arbitrary(arbitrary)?;
-        Ok(Self {
-            negative,
-            axis,
-            size,
-        })
-    }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/padding#syntax
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec!["inherit", "initial", "revert", "unset"]);

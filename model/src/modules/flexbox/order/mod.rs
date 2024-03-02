@@ -33,11 +33,6 @@ impl TailWindOrder {
         };
         Ok(Self { kind })
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: NumericValue::parse_arbitrary(arbitrary)?,
-        })
-    }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit#syntax
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec!["inherit", "initial", "revert", "unset"]);

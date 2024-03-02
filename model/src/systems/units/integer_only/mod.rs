@@ -11,7 +11,7 @@ pub enum NumericValue {
         can_be_negative: bool,
     },
     Keyword(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl NumericValue {
@@ -23,7 +23,7 @@ impl NumericValue {
             let joined = pattern.join("-");
             match pattern {
                 _ if checker(&joined) => Ok(Self::Keyword(joined)),
-                [] => Self::parse_arbitrary(arbitrary),
+                [] => Ok(Self::Arbitrary),
                 [n] => Self::parse_number(n, negative),
                 _ => Err(TailwindError::syntax_error(format!(
                     "Unknown {} pattern",
@@ -36,11 +36,11 @@ impl NumericValue {
         id: &'static str,
         checker: impl Fn(&str) -> bool,
     ) -> impl Fn(&[&str], &TailwindArbitrary) -> Result<Self> {
-        move |pattern: &[&str], arbitrary: &TailwindArbitrary| {
+        move |pattern: &[&str], _: &TailwindArbitrary| {
             let joined = pattern.join("-");
             match pattern {
                 _ if checker(&joined) => Ok(Self::Keyword(joined)),
-                [] => Self::parse_arbitrary(arbitrary),
+                [] => Ok(Self::Arbitrary),
                 [n] => {
                     let i = TailwindArbitrary::from(*n).as_integer()?;
                     Ok(Self::Number {
@@ -55,9 +55,6 @@ impl NumericValue {
                 ))),
             }
         }
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
     pub fn parse_number(n: &str, negative: Negative) -> Result<Self> {
         let mut n = TailwindArbitrary::from(n).as_float()?;

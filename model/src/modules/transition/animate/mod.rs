@@ -26,9 +26,4 @@ impl TailwindAnimate {
             kind: Animation::parse(pattern, arbitrary)?,
         })
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: Animation::parse_arbitrary(arbitrary)?,
-        })
-    }
 }

@@ -8,7 +8,7 @@ pub enum TailwindColor {
     Themed(String, u32),
     Keyword(String),
     Static(&'static str),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 #[allow(non_upper_case_globals)]
@@ -26,7 +26,7 @@ impl TailwindColor {
             // TODO: Confirm this. Is unset even valid?
             // [s @ ("current" | "inherit" | "initial" | "unset")] => Self::from(*s),
             [s] => Self::from(*s),
-            [] => Self::Arbitrary(arbitrary.clone()),
+            [] => Self::Arbitrary,
             [name, weight] => Self::parse_themed(name, weight)?,
             _ => return syntax_error!("Unknown color pattern: {}", pattern.join("-")),
         };

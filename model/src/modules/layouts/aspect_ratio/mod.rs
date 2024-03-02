@@ -36,12 +36,6 @@ impl TailwindAspect {
             kind: Aspect::parse(pattern, arbitrary)?,
         })
     }
-    /// dispatch to [aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: Aspect::parse_arbitrary(arbitrary)?,
-        })
-    }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio>
     pub fn check_valid(mode: &str) -> bool {
         Aspect::check_valid(mode)

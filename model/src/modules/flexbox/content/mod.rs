@@ -34,7 +34,7 @@ impl TailwindContent {
     }
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
         Ok(Self {
-            kind: StandardValue::Arbitrary(arbitrary.to_owned()),
+            kind: StandardValue::Arbitrary,
         })
     }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/content#syntax

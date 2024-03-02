@@ -9,7 +9,7 @@ enum Transition {
     Opacity,
     Shadow,
     Transform,
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 #[derive(Clone, Debug)]
@@ -33,18 +33,13 @@ impl TailwindTransition {
             kind: Transition::parse(pattern, arbitrary)?,
         })
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: Transition::parse_arbitrary(arbitrary)?,
-        })
-    }
 }
 
 impl Transition {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let t = match pattern {
             [] if arbitrary.is_none() => Self::Default,
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             ["none"] => Self::None,
             ["all"] => Self::All,
             ["colors"] => Self::Colors,
@@ -54,8 +49,5 @@ impl Transition {
             _ => return syntax_error!("Unknown transition instructions: {}", pattern.join("-")),
         };
         Ok(t)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
 }

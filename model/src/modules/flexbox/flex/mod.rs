@@ -29,7 +29,10 @@ impl TailwindFlex {
             // This won't happen
             [] if arbitrary.is_none() => TailwindDisplay::from("flex").boxed(),
             // https://tailwindcss.com/docs/flex#arbitrary-values
-            [] => TailwindFlex::parse_arbitrary(arbitrary)?.boxed(),
+            [] => TailwindFlex {
+                kind: NumericValue::Arbitrary,
+            }
+            .boxed(),
             // https://tailwindcss.com/docs/flex-direction
             ["row"] => TailwindFlexDirection::from("row").boxed(),
             ["row", "reverse"] => TailwindFlexDirection::from("row-reverse").boxed(),
@@ -48,10 +51,6 @@ impl TailwindFlex {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<TailwindFlex> {
         let kind = NumericValue::positive_parser("flex", &Self::check_valid)(pattern, arbitrary)?;
         Ok(TailwindFlex { kind })
-    }
-    /// dispatch to [flex](https://developer.mozilla.org/en-US/docs/Web/CSS/flex)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        NumericValue::parse_arbitrary(arbitrary).map(|kind| Self { kind })
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/flex#syntax>
     pub fn check_valid(mode: &str) -> bool {

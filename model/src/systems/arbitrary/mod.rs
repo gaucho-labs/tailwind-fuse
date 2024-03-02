@@ -1,62 +1,26 @@
 use crate::*;
-use std::fmt::{Display, Formatter, Write};
+use std::fmt::Formatter;
 
 mod methods;
 
 #[derive(Debug, Clone)]
-pub struct TailwindArbitrary {
-    inner: Box<str>,
+pub struct TailwindArbitrary<'a> {
+    inner: &'a str,
 }
 
-impl Display for TailwindArbitrary {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.write_char('[')?;
-        for c in self.inner.chars() {
-            match c {
-                ' ' => f.write_char('_')?,
-                _ => f.write_char(c)?,
-            }
-        }
-        f.write_char(']')
+impl TailwindArbitrary<'_> {
+    pub fn new(inner: &str) -> TailwindArbitrary {
+        TailwindArbitrary { inner }
     }
 }
 
-impl From<&str> for TailwindArbitrary {
-    fn from(s: &str) -> Self {
-        Self {
-            inner: Box::from(s),
-        }
+impl<'a> From<&'a str> for TailwindArbitrary<'a> {
+    fn from(inner: &'a str) -> Self {
+        TailwindArbitrary { inner }
     }
 }
 
-impl From<&Self> for TailwindArbitrary {
-    fn from(s: &Self) -> Self {
-        Self {
-            inner: s.inner.clone(),
-        }
-    }
-}
-
-impl TailwindArbitrary {
-    pub fn new<T>(s: T) -> Result<Self>
-    where
-        T: Into<Self>,
-    {
-        let out = s.into();
-        if out.inner.is_empty() {
-            return Err(TailwindError::syntax_error(
-                "Arbitrary value cannot be empty",
-            ));
-        }
-        // TODO: Check unbalanced quotes
-        if out.inner.contains('\n') {
-            return Err(TailwindError::syntax_error(
-                "Arbitrary value does balance quotes",
-            ));
-        }
-        Ok(out)
-    }
-
+impl<'a> TailwindArbitrary<'a> {
     pub fn get_class(&self) -> String {
         let mut class = String::with_capacity(self.inner.len() + 2);
         class.push('[');

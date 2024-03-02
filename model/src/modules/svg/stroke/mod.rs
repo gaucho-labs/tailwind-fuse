@@ -14,11 +14,9 @@ impl TailwindStroke {
             // https://tailwindcss.com/docs/text-decoration-color
             ["black"] => from_color(TailwindColor::Black),
             ["white"] => from_color(TailwindColor::White),
-            ["color"] => from_color(TailwindColor::Arbitrary(arbitrary.clone())),
-            ["color", rest] => {
-                let a = TailwindArbitrary::from(*rest);
-                from_color(TailwindColor::Arbitrary(a))
-            }
+            // TODO: THIS LOOKS WEIRD?
+            ["color"] => from_color(TailwindColor::Arbitrary),
+            ["color", rest] => from_color(TailwindColor::Arbitrary),
             // https://tailwindcss.com/docs/text-decoration-color
             [theme, weight] => from_color(TailwindColor::parse_themed(theme, weight)?),
             // https://tailwindcss.com/docs/text-decoration-thickness

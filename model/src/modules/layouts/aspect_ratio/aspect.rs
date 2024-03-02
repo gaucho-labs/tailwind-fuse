@@ -4,7 +4,7 @@ use super::*;
 pub enum Aspect {
     Radio(usize, usize),
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl Aspect {
@@ -17,13 +17,10 @@ impl Aspect {
                 let (a, b) = TailwindArbitrary::from(*n).as_fraction()?;
                 Self::Radio(a, b)
             }
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             _ => return syntax_error!("unknown aspect-ratio elements"),
         };
         Ok(out)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec!["auto", "inherit", "initial", "revert", "unset"]);

@@ -16,10 +16,6 @@ impl TailwindBlend {
     /// get class of `<blend-mode>`
     ///
     /// - https://developer.mozilla.org/zh-CN/docs/Web/CSS/blend-mode
-    #[inline]
-    pub fn get_class(&self) -> String {
-        self.kind.to_string()
-    }
 
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec![

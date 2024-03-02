@@ -22,7 +22,7 @@ pub enum AnchorPoint {
     /// `100% 100%` to the viewport.
     RightBottom,
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl AnchorPoint {
@@ -42,46 +42,12 @@ impl AnchorPoint {
             ["2" | "b"] | ["bottom"] => Self::Bottom,
             ["3" | "rb" | "br"] | ["right", "bottom"] | ["bottom", "right"] => Self::RightBottom,
             [n] if Self::check_valid(n) => Self::Standard(n.to_string()),
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             _ => return syntax_error!("Unknown anchor-point instructions: {}", pattern.join("-")),
         };
         Ok(out)
     }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
-    }
 
-    pub fn get_class(&self) -> String {
-        match self {
-            Self::LeftTop => "7".to_string(),
-            Self::Top => "8".to_string(),
-            Self::RightTop => "9".to_string(),
-            Self::Left => "4".to_string(),
-            Self::Center => "5".to_string(),
-            Self::Right => "6".to_string(),
-            Self::LeftBottom => "1".to_string(),
-            Self::Bottom => "2".to_string(),
-            Self::RightBottom => "3".to_string(),
-            Self::Standard(s) => s.to_string(),
-            Self::Arbitrary(s) => s.get_class(),
-        }
-    }
-
-    pub fn get_properties(&self) -> String {
-        match self {
-            Self::LeftTop => "0% 0%".to_string(),
-            Self::Top => "50% 0%".to_string(),
-            Self::RightTop => "100% 0%".to_string(),
-            Self::Left => "0% 50%".to_string(),
-            Self::Center => "50% 50%".to_string(),
-            Self::Right => "100% 50%".to_string(),
-            Self::LeftBottom => "0% 100%".to_string(),
-            Self::Bottom => "50% 100%".to_string(),
-            Self::RightBottom => "100% 100%".to_string(),
-            Self::Standard(s) => s.to_string(),
-            Self::Arbitrary(s) => s.get_properties(),
-        }
-    }
     pub fn check_valid(mode: &str) -> bool {
         ["inherit", "initial", "revert", "unset"].contains(&mode)
     }

@@ -9,7 +9,7 @@ pub struct TailwindTextOverflow {
 enum TextOverflow {
     Truncate,
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl TailwindInstance for TailwindTextOverflow {
@@ -30,7 +30,7 @@ impl TailwindTextOverflow {
     /// https://tailwindcss.com/docs/text-overflow
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let kind = match pattern {
-            [] => TextOverflow::Arbitrary(arbitrary.to_owned()),
+            [] => TextOverflow::Arbitrary,
             _ => {
                 let input = pattern.join("-");
                 debug_assert!(Self::check_valid(&input));

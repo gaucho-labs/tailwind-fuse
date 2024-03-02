@@ -5,7 +5,7 @@ pub enum Columns {
     Columns(i32),
     Length(LengthUnit),
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl Columns {
@@ -31,13 +31,10 @@ impl Columns {
                 let a = TailwindArbitrary::from(*name);
                 Self::Columns(a.as_integer()?)
             }
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             _ => return syntax_error!("Unknown columns instructions: {}", input.join("-")),
         };
         Ok(out)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
     pub fn check_valid(mode: &str) -> bool {
         let set = BTreeSet::from_iter(vec!["auto", "inherit", "initial", "revert", "unset"]);

@@ -30,7 +30,7 @@ impl TailwindInstance for TailwindFontVariantNumeric {
                 "diagonal-fractions" | "stacked-fractions" => "fvn-fraction",
                 _ => "fvn-other",
             },
-            StandardValue::Arbitrary(_) => "fvn-other",
+            StandardValue::Arbitrary => "fvn-other",
         }
     }
 

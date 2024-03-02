@@ -4,7 +4,7 @@ use super::*;
 enum ZIndex {
     Unit(i32),
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 #[derive(Clone, Debug)]
@@ -30,7 +30,9 @@ impl TailwindZIndex {
         negative: Negative,
     ) -> Result<Self> {
         match pattern {
-            [] => Self::parse_arbitrary(arbitrary),
+            [] => Ok(Self {
+                kind: ZIndex::Arbitrary,
+            }),
             [s] if Self::check_valid(s) => Ok(Self {
                 kind: ZIndex::Standard(s.to_string()),
             }),
@@ -45,12 +47,6 @@ impl TailwindZIndex {
             }
             _ => syntax_error!("Unknown z-index instructions"),
         }
-    }
-    /// dispatch to [z-index](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: ZIndex::Arbitrary(arbitrary.to_owned()),
-        })
     }
     /// <https://developer.mozilla.org/en-US/docs/Web/CSS/z-index#syntax>
     pub fn check_valid(mode: &str) -> bool {

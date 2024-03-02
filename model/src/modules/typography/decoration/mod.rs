@@ -6,9 +6,7 @@ pub(crate) mod style;
 pub(crate) mod thickness;
 
 #[derive(Debug, Clone)]
-pub struct TailwindDecoration {
-    arbitrary: TailwindArbitrary,
-}
+pub struct TailwindDecoration {}
 
 impl TailwindDecoration {
     pub fn adapt(
@@ -33,10 +31,8 @@ impl TailwindDecoration {
                 TailwindDecorationColor::from(color).boxed()
             }
             // https://tailwindcss.com/docs/text-decoration-thickness
-            [] => TailwindDecoration {
-                arbitrary: TailwindArbitrary::new(arbitrary)?,
-            }
-            .boxed(),
+            // TODO: ARBITRARY?
+            [] => TailwindDecoration {}.boxed(),
             [n] => resolve1(n)?,
             _ => TailwindDecorationColor::parse(pattern, arbitrary)?.boxed(),
         };
@@ -70,5 +66,5 @@ fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindDecorationThickness> {
 }
 
 fn resolve1_color(a: TailwindArbitrary) -> TailwindDecorationColor {
-    TailwindDecorationColor::from(TailwindColor::Arbitrary(a))
+    TailwindDecorationColor::from(TailwindColor::Arbitrary)
 }

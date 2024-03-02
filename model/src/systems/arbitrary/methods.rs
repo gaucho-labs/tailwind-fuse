@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 use super::*;
 
-impl TailwindArbitrary {
+impl<'a> TailwindArbitrary<'a> {
     #[inline]
     pub fn is_some(&self) -> bool {
         !self.inner.is_empty()

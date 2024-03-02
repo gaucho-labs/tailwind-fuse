@@ -1,13 +1,11 @@
 use super::*;
 
-// noinspection SpellCheckingInspection
-impl TailwindInstruction {
+impl<'a> TailwindInstruction<'a> {
     #[inline(never)]
     pub fn get_instance(&self) -> Result<Box<dyn TailwindInstance>> {
-        let element = self.view_elements();
-        let pattern = element.as_slice();
-        let arbitrary = self.view_arbitrary();
-        let neg = self.negative;
+        let pattern = self.view_elements();
+        let arbitrary = &self.view_arbitrary();
+        let neg = self.negative();
         let instance = match pattern {
             // Layout System
             ["aspect", rest @ ..] => TailwindAspect::parse(rest, arbitrary)?.boxed(),
@@ -203,13 +201,7 @@ impl TailwindInstruction {
             ["sr", "only"] => TailwindScreenReader::new(true).boxed(),
             ["not", "sr", "only"] => TailwindScreenReader::new(false).boxed(),
             // Form System Extension
-            _ => {
-                return syntax_error!(
-                    "Unknown instructions: {} + {}",
-                    element.join("-"),
-                    arbitrary.get_class()
-                )
-            }
+            _ => return syntax_error!("Unknown instructions: {}", self.ast.to_string(),),
         };
         Ok(instance)
     }

@@ -6,7 +6,7 @@ enum GridAutoKind {
     Min,
     Max,
     Fr,
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 #[derive(Debug, Clone)]
@@ -20,7 +20,7 @@ crate::axis2d_collision!(TailwindGridAuto => "grid-auto");
 impl GridAutoKind {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let kind = match pattern {
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             ["auto"] => Self::Auto,
             ["min"] => Self::Min,
             ["max"] => Self::Max,
@@ -28,9 +28,6 @@ impl GridAutoKind {
             _ => return syntax_error!("Unknown shadow instructions: {}", pattern.join("-")),
         };
         Ok(kind)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
 }
 

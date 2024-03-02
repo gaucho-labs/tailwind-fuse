@@ -18,15 +18,15 @@ impl From<String> for UnitValue {
     }
 }
 
-impl From<TailwindArbitrary> for UnitValue {
+impl<'a> From<TailwindArbitrary<'a>> for UnitValue {
     fn from(a: TailwindArbitrary) -> Self {
-        Self::Arbitrary(a)
+        Self::Arbitrary
     }
 }
 
-impl From<&TailwindArbitrary> for UnitValue {
+impl<'a> From<&TailwindArbitrary<'a>> for UnitValue {
     fn from(a: &TailwindArbitrary) -> Self {
-        Self::Arbitrary(a.clone())
+        Self::Arbitrary
     }
 }
 

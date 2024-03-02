@@ -37,7 +37,7 @@ pub(crate) fn outline_adaptor(
 }
 
 fn resolve1(n: &str) -> Result<Box<dyn TailwindInstance>> {
-    let a = TailwindArbitrary::from(n);
+    let a = TailwindArbitrary::new(n);
     if n.starts_with(|c: char| c.is_numeric()) {
         return Ok(resolve1_length(&a).or_else(|_| resolve1_unit(&a))?.boxed());
     }
@@ -56,5 +56,5 @@ fn resolve1_unit(a: &TailwindArbitrary) -> Result<TailwindOutlineWidth> {
 }
 
 fn resolve1_color(a: TailwindArbitrary) -> TailwindOutlineColor {
-    TailwindOutlineColor::from(TailwindColor::Arbitrary(a))
+    TailwindOutlineColor::from(TailwindColor::Arbitrary)
 }

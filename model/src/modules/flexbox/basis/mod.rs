@@ -6,7 +6,7 @@ enum Basis {
     Length(LengthUnit),
     // TODO: should probably be static?
     Standard(String),
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 #[derive(Debug, Clone)]
@@ -33,11 +33,6 @@ impl TailwindBasis {
         })
     }
 
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self {
-            kind: Basis::parse_arbitrary(arbitrary)?,
-        })
-    }
     /// https://developer.mozilla.org/en-US/docs/Web/CSS/flex-basis#syntax
     pub fn check_valid(mode: &str) -> bool {
         Basis::check_valid(mode)
@@ -53,16 +48,13 @@ impl Basis {
             [s @ ("fit" | "min" | "max")] => Self::Standard(format!("{}-content", s)),
             [s] if Self::check_valid(s) => Self::Standard(s.to_string()),
             [n] => {
-                let a = TailwindArbitrary::from(*n);
+                let a = TailwindArbitrary::new(*n);
                 Self::maybe_length(&a).or_else(|_| Self::maybe_float(&a))?
             }
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             _ => return syntax_error!("Unknown basis instructions"),
         };
         Ok(out)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
     fn maybe_float(arbitrary: &TailwindArbitrary) -> Result<Self> {
         Ok(Self::Number(arbitrary.as_float()?))

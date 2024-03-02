@@ -40,9 +40,9 @@ macro_rules! color_instance {
                     color: TailwindColor::parse(input, arbitrary)?,
                 })
             }
-            pub fn parse_arbitrary(arbitrary: TailwindArbitrary) -> Result<Self> {
+            pub fn parse_arbitrary(_: TailwindArbitrary) -> Result<Self> {
                 Ok(Self {
-                    color: TailwindColor::Arbitrary(arbitrary),
+                    color: TailwindColor::Arbitrary,
                 })
             }
         }

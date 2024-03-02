@@ -7,7 +7,7 @@ pub(super) enum Animation {
     Ping,
     Pulse,
     Bounce,
-    Arbitrary(TailwindArbitrary),
+    Arbitrary,
 }
 
 impl Animation {
@@ -18,12 +18,9 @@ impl Animation {
             ["ping"] => Self::Ping,
             ["pulse"] => Self::Pulse,
             ["bounce"] => Self::Bounce,
-            [] => Self::parse_arbitrary(arbitrary)?,
+            [] => Self::Arbitrary,
             _ => return syntax_error!("Unknown outline instructions: {}", pattern.join("-")),
         };
         Ok(kind)
-    }
-    pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
     }
 }

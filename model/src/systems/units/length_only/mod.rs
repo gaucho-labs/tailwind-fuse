@@ -7,18 +7,7 @@ pub enum UnitValue {
     Number { n: f32, is_negative: bool },
     Length(LengthUnit),
     Keyword(String),
-    Arbitrary(TailwindArbitrary),
-}
-
-impl Display for UnitValue {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Number { n, .. } => write!(f, "{}", n.abs()),
-            Self::Length(n) => write!(f, "{}", n),
-            Self::Keyword(s) => write!(f, "{}", s),
-            Self::Arbitrary(s) => write!(f, "{}", s),
-        }
-    }
+    Arbitrary,
 }
 
 impl UnitValue {
@@ -27,16 +16,6 @@ impl UnitValue {
     }
     pub fn radio(a: u32, b: u32) -> Self {
         Self::Length(LengthUnit::radio(a, b))
-    }
-
-    pub fn write_negative(&self, f: &mut Formatter) -> std::fmt::Result {
-        match is_negative(self) {
-            true => write!(f, "-"),
-            false => write!(f, ""),
-        }
-    }
-    pub fn write_class(&self, f: &mut Formatter, before: &str) -> std::fmt::Result {
-        write!(f, "{}{}", before, self)
     }
 }
 
@@ -95,7 +74,7 @@ impl UnitValue {
         }
     }
     pub fn parse_arbitrary(arbitrary: &TailwindArbitrary) -> Result<Self> {
-        Ok(Self::Arbitrary(TailwindArbitrary::new(arbitrary)?))
+        Ok(Self::Arbitrary)
     }
     pub fn parse_number(
         n: &str,
