@@ -16,24 +16,9 @@ where
     }
 }
 
-impl Display for TailwindDecorationThickness {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "decoration-")?;
-
-        match &self.px {
-            NumericValue::Number { n, .. } => write!(f, "{}", n),
-            NumericValue::Keyword(s) => match s.as_str() {
-                "from-font" | "auto" => write!(f, "{}", s),
-                _ => write!(f, "thick-{}", s),
-            },
-            NumericValue::Arbitrary(s) => s.write_class(f, "thick-"),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindDecorationThickness {
-    fn collision_id(&self) -> String {
-        "decoration-thickness".into()
+    fn collision_id(&self) -> &'static str {
+        "decoration-thickness"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

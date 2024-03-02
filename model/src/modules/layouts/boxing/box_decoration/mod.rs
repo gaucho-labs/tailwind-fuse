@@ -7,19 +7,6 @@ pub struct TailwindBoxDecoration {
 
 crate::macros::keyword_instance!(TailwindBoxDecoration => "box-decoration-break");
 
-impl Display for TailwindBoxDecoration {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "clone" => write!(f, "box-clone"),
-                "slice" => write!(f, "box-slice"),
-                _ => write!(f, "box-break-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "box-break-"),
-        }
-    }
-}
-
 impl TailwindBoxDecoration {
     /// <https://tailwindcss.com/docs/box-decoration-break>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

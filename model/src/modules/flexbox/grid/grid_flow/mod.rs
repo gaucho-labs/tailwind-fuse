@@ -7,17 +7,6 @@ pub struct TailwindGridFlow {
 
 crate::macros::keyword_instance!(TailwindGridFlow => "grid-auto-flow");
 
-impl Display for TailwindGridFlow {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_class(f, "grid-flow-", |f, s| match s {
-            "column" => write!(f, "col"),
-            "row dense" => write!(f, "row-dense"),
-            "column dense" => write!(f, "col-dense"),
-            _ => Err(std::fmt::Error),
-        })
-    }
-}
-
 impl TailwindGridFlow {
     /// <https://tailwindcss.com/docs/grid-auto-flow>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

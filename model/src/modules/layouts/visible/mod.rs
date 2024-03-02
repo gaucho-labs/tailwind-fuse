@@ -7,19 +7,6 @@ pub struct TailwindVisibility {
 
 crate::macros::keyword_instance!(TailwindVisibility => "visibility");
 
-impl Display for TailwindVisibility {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "visible" => write!(f, "visible"),
-                "hidden" => write!(f, "invisible"),
-                _ => write!(f, "visible-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "visible-"),
-        }
-    }
-}
-
 impl TailwindVisibility {
     /// <https://tailwindcss.com/docs/visibility>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,13 +7,6 @@ pub struct TailwindPadding {
     size: SpacingSize,
 }
 
-impl Display for TailwindPadding {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.negative.write(f)?;
-        write!(f, "{}-{}", self.axis, self.size)
-    }
-}
-
 crate::spacing_collision!(TailwindPadding => "padding");
 
 impl TailwindPadding {

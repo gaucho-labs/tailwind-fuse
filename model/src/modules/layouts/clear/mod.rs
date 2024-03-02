@@ -7,12 +7,6 @@ pub struct TailwindClear {
 
 crate::macros::keyword_instance!(TailwindClear => "clear");
 
-impl Display for TailwindClear {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "float-{}", self.kind)
-    }
-}
-
 impl TailwindClear {
     /// <https://tailwindcss.com/docs/clear>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

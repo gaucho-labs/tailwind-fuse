@@ -7,12 +7,6 @@ pub struct TailwindPlaceContent {
 
 crate::macros::keyword_instance!(TailwindPlaceContent => "place-content");
 
-impl Display for TailwindPlaceContent {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "place-content-{}", self.kind)
-    }
-}
-
 impl TailwindPlaceContent {
     /// <https://tailwindcss.com/docs/place-content>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,12 +7,6 @@ pub struct TailwindScrollBehavior {
 
 crate::macros::keyword_instance!(TailwindScrollBehavior => "scroll-behavior");
 
-impl Display for TailwindScrollBehavior {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "scroll-behavior-{}", self.kind)
-    }
-}
-
 impl TailwindScrollBehavior {
     /// <https://tailwindcss.com/docs/scroll-behavior>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

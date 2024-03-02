@@ -4,6 +4,7 @@ use super::*;
 enum Basis {
     Number(f32),
     Length(LengthUnit),
+    // TODO: should probably be static?
     Standard(String),
     Arbitrary(TailwindArbitrary),
 }
@@ -13,28 +14,10 @@ pub struct TailwindBasis {
     kind: Basis,
 }
 
-impl Display for TailwindBasis {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "basis-")?;
-        match &self.kind {
-            Basis::Number(n) => write!(f, "{}", n),
-            Basis::Length(n) if n.is_fraction() => write!(f, "{}", n.get_class()),
-            Basis::Length(n) => write!(f, "{}", n.get_class_arbitrary()),
-            Basis::Standard(s) => match s.as_str() {
-                "fit-content" => write!(f, "fit"),
-                "min-content" => write!(f, "min"),
-                "max-content" => write!(f, "max"),
-                _ => write!(f, "{}", s),
-            },
-            Basis::Arbitrary(s) => s.write(f),
-        }
-    }
-}
-
 // TODO: Is this flex basis? is there another basis?
 impl TailwindInstance for TailwindBasis {
-    fn collision_id(&self) -> String {
-        "basis".into()
+    fn collision_id(&self) -> &'static str {
+        "basis"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

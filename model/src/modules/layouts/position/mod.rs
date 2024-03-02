@@ -7,15 +7,6 @@ pub struct TailwindPosition {
 
 crate::macros::keyword_instance!(TailwindPosition => "position");
 
-impl Display for TailwindPosition {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_class(f, "position-", |f, s| match s {
-            "static" | "relative" | "absolute" | "fixed" | "sticky" => write!(f, "{}", s),
-            _ => Err(std::fmt::Error),
-        })
-    }
-}
-
 impl TailwindPosition {
     /// <https://tailwindcss.com/docs/position>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

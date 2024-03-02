@@ -5,15 +5,9 @@ pub struct TailwindDelay {
     ms: NumericValue,
 }
 
-impl Display for TailwindDelay {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "delay-{}", self.ms)
-    }
-}
-
 impl TailwindInstance for TailwindDelay {
-    fn collision_id(&self) -> String {
-        "transition-delay".into()
+    fn collision_id(&self) -> &'static str {
+        "transition-delay"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

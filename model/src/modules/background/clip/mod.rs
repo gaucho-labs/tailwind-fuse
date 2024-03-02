@@ -7,21 +7,6 @@ pub struct TailwindBackgroundClip {
 
 crate::macros::keyword_instance!(TailwindBackgroundClip => "background-clip");
 
-impl Display for TailwindBackgroundClip {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "bg-clip-")?;
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "border-box" => write!(f, "border"),
-                "padding-box" => write!(f, "padding"),
-                "content-box" => write!(f, "content"),
-                _ => write!(f, "{}", self.kind),
-            },
-            StandardValue::Arbitrary(s) => write!(f, "{}", s),
-        }
-    }
-}
-
 impl TailwindBackgroundClip {
     /// <https://tailwindcss.com/docs/background-clip>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,12 +7,6 @@ pub struct TailwindTextTransform {
 
 crate::macros::keyword_instance!(TailwindTextTransform => "text-transform");
 
-impl Display for TailwindTextTransform {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "text-transform-{}", self.kind)
-    }
-}
-
 impl TailwindTextTransform {
     /// <https://tailwindcss.com/docs/text-transform>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

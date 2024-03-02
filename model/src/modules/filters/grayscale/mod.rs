@@ -5,19 +5,13 @@ pub struct TailwindGrayscale {
     percent: NumericValue,
     backdrop: Backdrop,
 }
-impl Display for TailwindGrayscale {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "grayscale-{}", self.percent)
-    }
-}
 
 impl TailwindInstance for TailwindGrayscale {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-grayscale".into()
+            "backdrop-grayscale"
         } else {
-            "grayscale".into()
+            "grayscale"
         }
     }
 

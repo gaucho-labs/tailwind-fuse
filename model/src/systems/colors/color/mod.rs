@@ -11,23 +11,6 @@ pub enum TailwindColor {
     Arbitrary(TailwindArbitrary),
 }
 
-impl Display for TailwindColor {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Themed(name, weight) => write!(f, "{}-{}", name, weight),
-            Self::Arbitrary(a) => a.write(f),
-            Self::Keyword(s) => match s.as_str() {
-                "transparent" => write!(f, "transparent"),
-                "current" => write!(f, "current"),
-                _ => write!(f, "{}", s),
-            },
-            TailwindColor::Static(s) => {
-                write!(f, "{}", s)
-            }
-        }
-    }
-}
-
 #[allow(non_upper_case_globals)]
 impl TailwindColor {
     /// `black`
@@ -55,12 +38,5 @@ impl TailwindColor {
         let name = name.to_string();
         let weight = TailwindArbitrary::from(weight).as_integer()? as u32;
         Ok(Self::Themed(name, weight))
-    }
-    /// get class of `<color>`
-    ///
-    /// - https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value
-    #[inline]
-    pub fn get_class(&self) -> String {
-        self.to_string()
     }
 }

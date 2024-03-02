@@ -5,17 +5,9 @@ pub struct TailWindGrow {
     grow: NumericValue,
 }
 
-// TODO: THIS LOOKS WRONG?
-// Shouldn't `grow` also be permitted?
-impl Display for TailWindGrow {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "grow-{}", self.grow)
-    }
-}
-
 impl TailwindInstance for TailWindGrow {
-    fn collision_id(&self) -> String {
-        "flexbox-grow".into()
+    fn collision_id(&self) -> &'static str {
+        "flexbox-grow"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

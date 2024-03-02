@@ -5,17 +5,10 @@ pub struct TailwindLeft {
     kind: UnitValue,
 }
 
-impl Display for TailwindLeft {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.kind.write_class(f, "left-")
-    }
-}
-
 // TODO CONFIRM
 impl TailwindInstance for TailwindLeft {
-    fn collision_id(&self) -> String {
-        "left".into()
+    fn collision_id(&self) -> &'static str {
+        "left"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -7,12 +7,6 @@ pub struct TailwindSelf {
 
 crate::macros::keyword_instance!(TailwindSelf => "align-self");
 
-impl Display for TailwindSelf {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "self-{}", self.kind)
-    }
-}
-
 impl TailwindSelf {
     /// <https://tailwindcss.com/docs/align-self>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

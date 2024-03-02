@@ -7,19 +7,6 @@ pub struct TailwindBackgroundAttachment {
 
 crate::macros::keyword_instance!(TailwindBackgroundAttachment => "background-attachment");
 
-impl Display for TailwindBackgroundAttachment {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "bg-")?;
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                s @ ("fixed" | "local" | "scroll") => write!(f, "{}", s),
-                _ => write!(f, "attach-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "attach-"),
-        }
-    }
-}
-
 impl TailwindBackgroundAttachment {
     /// <https://tailwindcss.com/docs/background-attachment>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -70,6 +70,9 @@ impl LengthUnit {
         }
     }
 
+    // Please refer to MDN when updating this list:
+    // https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries#container_query_length_units
     fn parse_css_length_unit(input: &str) -> Option<&'static str> {
         match input {
             "px" => Some("px"),

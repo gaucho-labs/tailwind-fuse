@@ -14,26 +14,6 @@ pub(super) enum GridSize {
     Unit(i32),
 }
 
-impl Display for GridKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Start(n) => write!(f, "start-{}", n),
-            Self::End(n) => write!(f, "end-{}", n),
-            Self::Span(n) => write!(f, "span-{}", n),
-        }
-    }
-}
-
-impl Display for GridSize {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Auto => write!(f, "auto"),
-            Self::Full => write!(f, "full"),
-            Self::Unit(n) => write!(f, "{}", n),
-        }
-    }
-}
-
 impl GridSize {
     pub fn parse(pattern: &str, allow_full: bool) -> Result<Self> {
         debug_assert!(allow_full, "can't set to full");

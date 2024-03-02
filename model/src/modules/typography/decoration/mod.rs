@@ -44,15 +44,9 @@ impl TailwindDecoration {
     }
 }
 
-impl Display for TailwindDecoration {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.arbitrary.write_class(f, "decoration-")
-    }
-}
-
 impl TailwindInstance for TailwindDecoration {
-    fn collision_id(&self) -> String {
-        "decoration".into()
+    fn collision_id(&self) -> &'static str {
+        "decoration"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

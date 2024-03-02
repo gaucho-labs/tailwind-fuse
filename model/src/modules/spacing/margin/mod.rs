@@ -7,13 +7,6 @@ pub struct TailwindMargin {
     size: SpacingSize,
 }
 
-impl Display for TailwindMargin {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.negative.write(f)?;
-        write!(f, "{}-{}", self.axis, self.size)
-    }
-}
-
 crate::spacing_collision!(TailwindMargin => "scroll-margin");
 
 impl TailwindMargin {

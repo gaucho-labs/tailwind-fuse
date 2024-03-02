@@ -7,12 +7,6 @@ pub struct TailwindAppearance {
 
 crate::macros::keyword_instance!(TailwindAppearance => "appearance");
 
-impl Display for TailwindAppearance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "appearance-{}", self.kind)
-    }
-}
-
 impl TailwindAppearance {
     /// <https://tailwindcss.com/docs/appearance>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

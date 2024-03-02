@@ -19,15 +19,9 @@ where
     }
 }
 
-impl Display for TailwindAspect {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "aspect-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindAspect {
-    fn collision_id(&self) -> String {
-        "aspect-ratio".into()
+    fn collision_id(&self) -> &'static str {
+        "aspect-ratio"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

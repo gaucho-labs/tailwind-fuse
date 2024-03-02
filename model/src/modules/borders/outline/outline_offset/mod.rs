@@ -5,15 +5,9 @@ pub struct TailwindOutlineOffset {
     kind: UnitValue,
 }
 
-impl Display for TailwindOutlineOffset {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "outline-offset-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindOutlineOffset {
-    fn collision_id(&self) -> String {
-        "outline-offset".into()
+    fn collision_id(&self) -> &'static str {
+        "outline-offset"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -7,22 +7,9 @@ pub struct TailwindShadow {
     drop: Backdrop,
 }
 
-impl Display for TailwindShadow {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        if self.drop.0 {
-            write!(f, "drop-")?;
-        }
-        match &self.kind {
-            StandardValue::Keyword(s) if s.is_empty() => write!(f, "shadow"),
-            StandardValue::Keyword(s) => write!(f, "shadow-{}", s),
-            StandardValue::Arbitrary(s) => s.write_class(f, "shadow-"),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindShadow {
-    fn collision_id(&self) -> String {
-        "box-shadow".into()
+    fn collision_id(&self) -> &'static str {
+        "box-shadow"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

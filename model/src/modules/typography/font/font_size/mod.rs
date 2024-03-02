@@ -5,14 +5,8 @@ pub struct TailwindFontSize {
     name: String,
 }
 
-impl Display for TailwindFontSize {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "text-{}", self.name)
-    }
-}
-
 impl TailwindInstance for TailwindFontSize {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "font-size".into()
     }
 

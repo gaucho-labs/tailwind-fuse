@@ -9,12 +9,6 @@ pub struct TailwindBorderStyle {
 
 crate::macros::keyword_instance!(TailwindBorderStyle => "border-style");
 
-impl Display for TailwindBorderStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "border-{}", self.kind)
-    }
-}
-
 impl TailwindBorderStyle {
     /// https://tailwindcss.com/docs/object-fit
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

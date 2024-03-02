@@ -7,20 +7,6 @@ pub struct TailwindSnapAlign {
 
 crate::macros::keyword_instance!(TailwindSnapAlign => "scroll-snap-align");
 
-impl Display for TailwindSnapAlign {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "start" => write!(f, "snap-start"),
-                "end" => write!(f, "snap-end"),
-                "center" => write!(f, "snap-center"),
-                _ => write!(f, "snap-align-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "snap-align-"),
-        }
-    }
-}
-
 impl TailwindSnapAlign {
     /// <https://tailwindcss.com/docs/scroll-snap-align>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

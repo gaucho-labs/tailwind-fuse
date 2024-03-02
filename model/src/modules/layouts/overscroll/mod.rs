@@ -8,21 +8,7 @@ pub struct TailwindOverscroll {
     axis: AxisXY,
 }
 
-impl Display for TailwindOverscroll {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.axis.write_xyn(f, "overscroll", &self.kind)
-    }
-}
-
-impl TailwindInstance for TailwindOverscroll {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("overscroll")
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axisxy_collision!(TailwindOverscroll => "overscroll");
 
 impl TailwindOverscroll {
     /// <https://tailwindcss.com/docs/overscroll-behavior>

@@ -1,4 +1,4 @@
-use crate::{modules::flexbox::*, AxisXY};
+use crate::{modules::flexbox::*, Axis2D};
 
 #[derive(Debug, Clone)]
 enum GridAutoKind {
@@ -12,43 +12,10 @@ enum GridAutoKind {
 #[derive(Debug, Clone)]
 pub struct TailwindGridAuto {
     kind: GridAutoKind,
-    // - ture: rows
-    // - false: cols
-    axis: AxisXY,
+    axis: Axis2D,
 }
 
-impl Display for GridAutoKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Auto => write!(f, "auto"),
-            Self::Min => write!(f, "min"),
-            Self::Max => write!(f, "max"),
-            Self::Fr => write!(f, "fr"),
-            Self::Arbitrary(s) => s.write(f),
-        }
-    }
-}
-
-impl Display for TailwindGridAuto {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.axis {
-            AxisXY::X => write!(f, "auto-rows-{}", self.kind),
-            AxisXY::Y => write!(f, "auto-cols-{}", self.kind),
-            _ => unreachable!(),
-        }
-    }
-}
-
-// TODO: FIX HIGH PRIORITY
-impl TailwindInstance for TailwindGridAuto {
-    fn collision_id(&self) -> String {
-        todo!()
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axis2d_collision!(TailwindGridAuto => "grid-auto");
 
 impl GridAutoKind {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
@@ -70,8 +37,8 @@ impl GridAutoKind {
 impl TailwindGridAuto {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let (axis, rest) = match pattern {
-            ["rows", rest @ ..] => (AxisXY::X, rest),
-            ["cols", rest @ ..] => (AxisXY::Y, rest),
+            ["rows", rest @ ..] => (Axis2D::X, rest),
+            ["cols", rest @ ..] => (Axis2D::Y, rest),
             _ => return syntax_error!("Unknown auto instructions: {}", pattern.join("-")),
         };
         let kind = GridAutoKind::parse(rest, arbitrary)?;

@@ -6,16 +6,9 @@ pub struct TailwindSaturate {
     backdrop: Backdrop,
 }
 
-impl Display for TailwindSaturate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "saturate-{}", self.percent)
-    }
-}
-
 impl TailwindInstance for TailwindSaturate {
-    fn collision_id(&self) -> String {
-        "saturate".to_string()
+    fn collision_id(&self) -> &'static str {
+        "saturate"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -7,12 +7,6 @@ pub struct TailwindFloat {
 
 crate::macros::keyword_instance!(TailwindFloat => "float");
 
-impl Display for TailwindFloat {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "float-{}", self.kind)
-    }
-}
-
 impl TailwindFloat {
     /// <https://tailwindcss.com/docs/float>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

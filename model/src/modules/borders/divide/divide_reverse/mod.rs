@@ -11,21 +11,17 @@ impl From<bool> for TailwindDivideReverse {
     }
 }
 
-impl Display for TailwindDivideReverse {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.axis {
-            true => write!(f, "divide-x-reverse"),
-            false => write!(f, "divide-y-reverse"),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindDivideReverse {
     // TODO: CONFIRM
-    fn collision_id(&self) -> String {
-        self.to_string()
+    fn collision_id(&self) -> &'static str {
+        if self.axis {
+            "divide-x-reverse"
+        } else {
+            "divide-y-reverse"
+        }
     }
 
+    // TODO: confirm?
     fn get_collisions(&self) -> Vec<&'static str> {
         vec![]
     }

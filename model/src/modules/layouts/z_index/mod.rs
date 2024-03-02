@@ -12,25 +12,9 @@ pub struct TailwindZIndex {
     kind: ZIndex,
 }
 
-impl Display for TailwindZIndex {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            ZIndex::Unit(s) => {
-                let n = s.abs();
-                match *s > 0i32 {
-                    true => write!(f, "z-{}", n),
-                    false => write!(f, "-z-{}", n),
-                }
-            }
-            ZIndex::Standard(s) => write!(f, "z-{}", s),
-            ZIndex::Arbitrary(s) => s.write_class(f, "z-"),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindZIndex {
-    fn collision_id(&self) -> String {
-        "z-".into()
+    fn collision_id(&self) -> &'static str {
+        "z-index"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

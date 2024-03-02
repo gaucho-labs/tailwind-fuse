@@ -11,23 +11,8 @@ enum LineHeight {
     Standard(String),
 }
 
-impl Display for LineHeight {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Length(n) => write!(f, "{}", n.get_class_arbitrary()),
-            Self::Standard(g) => write!(f, "{}", g),
-        }
-    }
-}
-
-impl Display for TailwindLeading {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "leading-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindLeading {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "leading".into()
     }
 

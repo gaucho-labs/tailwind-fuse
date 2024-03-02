@@ -6,16 +6,9 @@ pub struct TailWindOrder {
     kind: NumericValue,
 }
 
-impl Display for TailWindOrder {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        write!(f, "order-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailWindOrder {
-    fn collision_id(&self) -> String {
-        "order".into()
+    fn collision_id(&self) -> &'static str {
+        "order"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -6,19 +6,12 @@ pub struct TailwindOpacity {
     backdrop: Backdrop,
 }
 
-impl Display for TailwindOpacity {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "opacity-{}", self.percent)
-    }
-}
-
 impl TailwindInstance for TailwindOpacity {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-opacity".into()
+            "backdrop-opacity"
         } else {
-            "opacity".into()
+            "opacity"
         }
     }
 

@@ -30,16 +30,6 @@ enum GridTemplate {
     Arbitrary(TailwindArbitrary),
 }
 
-impl Display for GridTemplate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            GridTemplate::None => write!(f, "none"),
-            GridTemplate::Unit(s) => write!(f, "{}", s),
-            GridTemplate::Arbitrary(s) => s.write(f),
-        }
-    }
-}
-
 impl GridTemplate {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let kind = match pattern {

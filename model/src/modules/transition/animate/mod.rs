@@ -9,16 +9,10 @@ pub struct TailwindAnimate {
     kind: Animation,
 }
 
-impl Display for TailwindAnimate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "animate-{}", self.kind)
-    }
-}
-
 // TODO: Can animations be stacked??
 impl TailwindInstance for TailwindAnimate {
-    fn collision_id(&self) -> String {
-        "animation".into()
+    fn collision_id(&self) -> &'static str {
+        "animation"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

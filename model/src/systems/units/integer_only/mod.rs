@@ -15,27 +15,6 @@ pub enum NumericValue {
 }
 
 impl NumericValue {
-    pub fn get_properties(&self, number: impl FnOnce(&f32) -> String) -> String {
-        match self {
-            Self::Number { n, .. } => number(n),
-            Self::Keyword(s) => s.to_string(),
-            Self::Arbitrary(s) => s.get_properties(),
-        }
-    }
-    pub fn write_negative(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Self::Number {
-                n, can_be_negative, ..
-            } if can_be_negative && n < 0.0 => write!(f, "-"),
-            _ => write!(f, ""),
-        }
-    }
-    pub fn write_class(&self, f: &mut Formatter, before: &str) -> std::fmt::Result {
-        write!(f, "{}{}", before, self)
-    }
-}
-
-impl NumericValue {
     pub fn negative_parser(
         id: &'static str,
         checker: impl Fn(&str) -> bool,

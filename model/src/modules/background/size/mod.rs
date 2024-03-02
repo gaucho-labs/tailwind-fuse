@@ -7,18 +7,6 @@ pub struct TailwindBackgroundSize {
 
 crate::macros::keyword_instance!(TailwindBackgroundSize => "background-size");
 
-impl Display for TailwindBackgroundSize {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                s @ ("auto" | "cover" | "contain") => write!(f, "bg-{}", s),
-                _ => write!(f, "bg-size-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "bg-size-"),
-        }
-    }
-}
-
 impl TailwindBackgroundSize {
     /// <https://tailwindcss.com/docs/background-size>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

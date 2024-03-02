@@ -7,21 +7,6 @@ pub struct TailwindBackgroundRepeat {
 
 crate::macros::keyword_instance!(TailwindBackgroundRepeat => "background-repeat");
 
-impl Display for TailwindBackgroundRepeat {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "repeat" => write!(f, "bg-repeat"),
-                "no-repeat" => write!(f, "bg-no-repeat"),
-                "repeat-x" => write!(f, "bg-repeat-x"),
-                "repeat-y" => write!(f, "bg-repeat-y"),
-                _ => write!(f, "bg-repeat-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "bg-repeat-"),
-        }
-    }
-}
-
 impl TailwindBackgroundRepeat {
     /// <https://tailwindcss.com/docs/background-repeat>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

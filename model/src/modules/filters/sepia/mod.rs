@@ -5,16 +5,10 @@ pub struct TailwindSepia {
     percent: NumericValue,
     backdrop: Backdrop,
 }
-impl Display for TailwindSepia {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "sepia-{}", self.percent)
-    }
-}
 
 impl TailwindInstance for TailwindSepia {
-    fn collision_id(&self) -> String {
-        "sepia".into()
+    fn collision_id(&self) -> &'static str {
+        "sepia"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

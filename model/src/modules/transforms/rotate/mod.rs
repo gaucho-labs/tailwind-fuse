@@ -5,16 +5,9 @@ pub struct TailwindRotate {
     kind: UnitValue,
 }
 
-impl Display for TailwindRotate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.kind.write_class(f, "rotate-")
-    }
-}
-
 impl TailwindInstance for TailwindRotate {
-    fn collision_id(&self) -> String {
-        "rotate".into()
+    fn collision_id(&self) -> &'static str {
+        "rotate"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

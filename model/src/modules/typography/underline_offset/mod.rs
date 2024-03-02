@@ -12,24 +12,8 @@ enum UnderlineOffset {
     Length(LengthUnit),
 }
 
-impl Display for UnderlineOffset {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Auto => write!(f, "auto"),
-            Self::Unit(n) => write!(f, "{}", n),
-            Self::Length(n) => write!(f, "{}", n.get_class_arbitrary()),
-        }
-    }
-}
-
-impl Display for TailwindUnderlineOffset {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "underline-offset-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindUnderlineOffset {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "underline-offset".into()
     }
 

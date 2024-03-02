@@ -7,18 +7,6 @@ pub struct TailwindDecorationStyle {
 
 crate::macros::keyword_instance!(TailwindDecorationStyle => "text-decoration-style");
 
-impl Display for TailwindDecorationStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "solid" | "double" | "dotted" | "dashed" | "wavy" => write!(f, "decoration-{}", s),
-                _ => write!(f, "decoration-style-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "decoration-style-"),
-        }
-    }
-}
-
 impl TailwindDecorationStyle {
     /// <https://tailwindcss.com/docs/object-fit>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

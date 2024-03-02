@@ -7,12 +7,6 @@ pub struct TailwindContentAlign {
 
 crate::macros::keyword_instance!(TailwindContentAlign => "align-content");
 
-impl Display for TailwindContentAlign {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "content-align-{}", self.kind)
-    }
-}
-
 impl TailwindContentAlign {
     /// https://tailwindcss.com/docs/align-content
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,12 +7,6 @@ pub struct TailwindTableLayout {
 
 crate::macros::keyword_instance!(TailwindTableLayout => "table-layout");
 
-impl Display for TailwindTableLayout {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "table-{}", self.kind)
-    }
-}
-
 impl TailwindTableLayout {
     /// <https://tailwindcss.com/docs/table-layout>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -5,15 +5,9 @@ pub struct TailwindBackgroundBlend {
     wrapper: TailwindBlend,
 }
 
-impl Display for TailwindBackgroundBlend {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "bg-blend-{}", self.wrapper.get_class())
-    }
-}
-
 impl TailwindInstance for TailwindBackgroundBlend {
-    fn collision_id(&self) -> String {
-        "background-blend".into()
+    fn collision_id(&self) -> &'static str {
+        "background-blend"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

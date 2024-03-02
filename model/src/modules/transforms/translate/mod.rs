@@ -6,17 +6,6 @@ pub struct TailwindTranslate {
     kind: UnitValue,
 }
 
-impl Display for TailwindTranslate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        match self.axis {
-            AxisXY::X => write!(f, "translate-x-{}", self.kind),
-            AxisXY::Y => write!(f, "translate-y-{}", self.kind),
-            AxisXY::N => write!(f, "translate-{}", self.kind),
-        }
-    }
-}
-
 crate::macros::axisxy_collision!(TailwindTranslate => "translate");
 
 impl TailwindTranslate {

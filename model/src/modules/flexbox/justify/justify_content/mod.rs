@@ -7,23 +7,6 @@ pub struct TailwindJustifyContent {
 
 crate::macros::keyword_instance!(TailwindJustifyContent => "justify-content");
 
-impl Display for TailwindJustifyContent {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "flex-start" => write!(f, "justify-start"),
-                "flex-end" => write!(f, "justify-end"),
-                "center" => write!(f, "justify-center"),
-                "space-between" => write!(f, "justify-between"),
-                "space-around" => write!(f, "justify-around"),
-                "space-evenly" => write!(f, "justify-evenly"),
-                _ => write!(f, "justify-content-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "justify-content-"),
-        }
-    }
-}
-
 impl TailwindJustifyContent {
     /// <https://tailwindcss.com/docs/justify-content>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

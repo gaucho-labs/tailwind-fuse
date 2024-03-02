@@ -18,24 +18,9 @@ where
     }
 }
 
-impl Display for TailwindOutlineStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "outline")?;
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "solid" => write!(f, ""),
-                "<NONE>" => write!(f, "-none"),
-                s @ ("dashed" | "dotted" | "double" | "hidden") => write!(f, "-{}", s),
-                _ => write!(f, "-style-{}", s),
-            },
-            StandardValue::Arbitrary(a) => a.write_class(f, "-style-"),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindOutlineStyle {
-    fn collision_id(&self) -> String {
-        "outline-style".into()
+    fn collision_id(&self) -> &'static str {
+        "outline-style"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -7,12 +7,6 @@ pub struct TailwindDisplay {
 
 crate::macros::keyword_instance!(TailwindDisplay => "display");
 
-impl Display for TailwindDisplay {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "display-{}", self.kind)
-    }
-}
-
 impl TailwindDisplay {
     /// <https://tailwindcss.com/docs/display>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

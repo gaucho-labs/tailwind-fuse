@@ -6,23 +6,8 @@ pub struct TailwindInset {
     kind: UnitValue,
 }
 
-impl Display for TailwindInset {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.axis.write_xyn(f, "inset", &self.kind)
-    }
-}
-
 // TODO: HOW DOES INSET INTERACT WITH TOP/BOTTOM/LEFT/RIGHT?
-impl TailwindInstance for TailwindInset {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("inset")
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axisxy_collision!(TailwindInset => "inset");
 
 impl TailwindInset {
     pub fn parse(

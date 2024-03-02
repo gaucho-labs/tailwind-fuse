@@ -1,35 +1,10 @@
+use crate::Axis2D;
+
 use super::*;
 
 #[derive(Clone, Debug)]
 pub struct TailwindSpaceReverse {
-    axis: bool,
+    pub(crate) axis: Axis2D,
 }
 
-impl From<bool> for TailwindSpaceReverse {
-    fn from(axis: bool) -> Self {
-        Self { axis }
-    }
-}
-
-impl Display for TailwindSpaceReverse {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.axis {
-            true => write!(f, "space-x-reverse"),
-            false => write!(f, "space-y-reverse"),
-        }
-    }
-}
-
-impl TailwindInstance for TailwindSpaceReverse {
-    fn collision_id(&self) -> String {
-        if self.axis {
-            "space-x-reverse".to_string()
-        } else {
-            "space-y-reverse".to_string()
-        }
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axis2d_collision!(TailwindSpaceReverse => "space");

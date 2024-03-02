@@ -5,17 +5,10 @@ pub struct TailwindTop {
     kind: UnitValue,
 }
 
-impl Display for TailwindTop {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.kind.write_class(f, "top-")
-    }
-}
-
 // TODO: HOW DO THESE REFINE?
 impl TailwindInstance for TailwindTop {
-    fn collision_id(&self) -> String {
-        "top".into()
+    fn collision_id(&self) -> &'static str {
+        "top"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

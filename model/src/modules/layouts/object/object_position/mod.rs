@@ -5,15 +5,9 @@ pub struct TailwindObjectPosition {
     kind: AnchorPoint,
 }
 
-impl Display for TailwindObjectPosition {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "object-{}", self.kind.get_class())
-    }
-}
-
 impl TailwindInstance for TailwindObjectPosition {
-    fn collision_id(&self) -> String {
-        "object-position".into()
+    fn collision_id(&self) -> &'static str {
+        "object-position"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

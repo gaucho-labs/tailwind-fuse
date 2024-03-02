@@ -7,16 +7,6 @@ pub enum Aspect {
     Arbitrary(TailwindArbitrary),
 }
 
-impl Display for Aspect {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Radio(a, b) => write!(f, "{}/{}", a, b),
-            Self::Standard(s) => write!(f, "{}", s),
-            Self::Arbitrary(s) => s.write(f),
-        }
-    }
-}
-
 impl Aspect {
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
         let out = match pattern {

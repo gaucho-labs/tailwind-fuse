@@ -7,18 +7,6 @@ pub struct TailwindBorderCollapse {
 
 crate::macros::keyword_instance!(TailwindBorderCollapse => "border-collapse");
 
-impl Display for TailwindBorderCollapse {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "collapse" | "separate" => write!(f, "border-{}", s),
-                _ => write!(f, "border-collapse-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "border-collapse-"),
-        }
-    }
-}
-
 impl TailwindBorderCollapse {
     /// <https://tailwindcss.com/docs/border-collapse>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

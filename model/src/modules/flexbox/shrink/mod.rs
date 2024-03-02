@@ -5,15 +5,9 @@ pub struct TailWindShrink {
     shrink: NumericValue,
 }
 
-impl Display for TailWindShrink {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "shrink-{}", self.shrink)
-    }
-}
-
 impl TailwindInstance for TailWindShrink {
-    fn collision_id(&self) -> String {
-        "shrink".into()
+    fn collision_id(&self) -> &'static str {
+        "shrink"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

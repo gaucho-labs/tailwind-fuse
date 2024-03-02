@@ -5,15 +5,9 @@ pub struct TailwindGridColumns {
     kind: GridTemplate,
 }
 
-impl Display for TailwindGridColumns {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "grid-cols-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindGridColumns {
-    fn collision_id(&self) -> String {
-        "grid-columns".into()
+    fn collision_id(&self) -> &'static str {
+        "grid-columns"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

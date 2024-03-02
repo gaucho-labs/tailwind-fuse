@@ -7,12 +7,6 @@ pub struct TailwindListStyle {
 
 crate::macros::keyword_instance!(TailwindListStyle => "list-style-type");
 
-impl Display for TailwindListStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "list-{}", self.kind)
-    }
-}
-
 impl TailwindListStyle {
     /// https://tailwindcss.com/docs/list-style-type
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

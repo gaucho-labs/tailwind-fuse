@@ -7,21 +7,6 @@ pub struct TailwindBackgroundOrigin {
 
 crate::macros::keyword_instance!(TailwindBackgroundOrigin => "background-origin");
 
-impl Display for TailwindBackgroundOrigin {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "bg-origin-")?;
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "border-box" => write!(f, "border"),
-                "padding-box" => write!(f, "padding"),
-                "content-box" => write!(f, "content"),
-                _ => write!(f, "{}", self.kind),
-            },
-            StandardValue::Arbitrary(s) => write!(f, "{}", s),
-        }
-    }
-}
-
 impl TailwindBackgroundOrigin {
     /// https://tailwindcss.com/docs/background-origin
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

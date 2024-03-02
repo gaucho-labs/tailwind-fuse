@@ -7,21 +7,6 @@ pub struct TailwindFlexDirection {
 
 crate::macros::keyword_instance!(TailwindFlexDirection => "flex-direction");
 
-impl Display for TailwindFlexDirection {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "row" => write!(f, "flex-row"),
-                "row-reverse" => write!(f, "flex-row-reverse"),
-                "column" => write!(f, "flex-col"),
-                "column-reverse" => write!(f, "flex-col-reverse"),
-                _ => write!(f, "flex-direction-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "flex-direction-"),
-        }
-    }
-}
-
 impl TailwindFlexDirection {
     /// <https://tailwindcss.com/docs/flex-direction>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

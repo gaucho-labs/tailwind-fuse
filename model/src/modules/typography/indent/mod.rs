@@ -7,15 +7,9 @@ pub struct TailwindIndent {
     kind: UnitValue,
 }
 
-impl Display for TailwindIndent {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_class(f, "indent-")
-    }
-}
-
 impl TailwindInstance for TailwindIndent {
-    fn collision_id(&self) -> String {
-        "indent".into()
+    fn collision_id(&self) -> &'static str {
+        "indent"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

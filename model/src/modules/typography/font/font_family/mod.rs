@@ -7,9 +7,3 @@ pub struct TailwindFontFamily {
 }
 
 crate::macros::keyword_instance!(TailwindFontFamily => "font-family");
-
-impl Display for TailwindFontFamily {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "font-{}", self.kind)
-    }
-}

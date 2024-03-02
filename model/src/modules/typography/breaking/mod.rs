@@ -23,21 +23,8 @@ where
     }
 }
 
-impl Display for TailwindBreak {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            WordBreak::Normal => write!(f, "break-normal"),
-            WordBreak::Words => write!(f, "break-words"),
-            WordBreak::Standard(s) => match s.as_str() {
-                "break-all" => write!(f, "break-all"),
-                _ => write!(f, "{}", s),
-            },
-        }
-    }
-}
-
 impl TailwindInstance for TailwindBreak {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "work-break".into()
     }
 

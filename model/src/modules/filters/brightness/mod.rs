@@ -6,19 +6,12 @@ pub struct TailwindBrightness {
     backdrop: Backdrop,
 }
 
-impl Display for TailwindBrightness {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "brightness-{}", self.percent)
-    }
-}
-
 impl TailwindInstance for TailwindBrightness {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-brightness".into()
+            "backdrop-brightness"
         } else {
-            "brightness".into()
+            "brightness"
         }
     }
 

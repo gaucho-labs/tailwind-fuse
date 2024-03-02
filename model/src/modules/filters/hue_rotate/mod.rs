@@ -7,19 +7,12 @@ pub struct TailwindHueRotate {
     backdrop: Backdrop,
 }
 
-impl Display for TailwindHueRotate {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "hue-rotate-{}", self.degree)
-    }
-}
-
 impl TailwindInstance for TailwindHueRotate {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-hue-rotate".into()
+            "backdrop-hue-rotate"
         } else {
-            "hue-rotate".into()
+            "hue-rotate"
         }
     }
 

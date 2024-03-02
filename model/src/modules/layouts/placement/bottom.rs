@@ -5,16 +5,9 @@ pub struct TailwindBottom {
     kind: UnitValue,
 }
 
-impl Display for TailwindBottom {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.kind.write_class(f, "bottom-")
-    }
-}
-
 // TODO: NOT SURE
 impl TailwindInstance for TailwindBottom {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "bottom".into()
     }
 

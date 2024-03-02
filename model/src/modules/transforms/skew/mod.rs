@@ -6,13 +6,6 @@ pub struct TailwindSkew {
     kind: UnitValue,
 }
 
-impl Display for TailwindSkew {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.axis.write_xyn(f, "skew-", &self.kind)
-    }
-}
-
 crate::macros::axisxy_collision!(TailwindSkew => "skew");
 
 impl TailwindSkew {

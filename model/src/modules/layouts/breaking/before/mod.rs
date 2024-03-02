@@ -7,12 +7,6 @@ pub struct TailwindBreakBefore {
 
 crate::macros::keyword_instance!(TailwindBreakBefore => "break-before");
 
-impl Display for TailwindBreakBefore {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "break-before-{}", self.kind)
-    }
-}
-
 impl TailwindBreakBefore {
     /// <https://tailwindcss.com/docs/break-before>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

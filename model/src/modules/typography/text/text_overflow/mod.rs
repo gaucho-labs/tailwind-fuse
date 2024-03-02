@@ -12,19 +12,9 @@ enum TextOverflow {
     Arbitrary(TailwindArbitrary),
 }
 
-impl Display for TailwindTextOverflow {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            TextOverflow::Truncate => write!(f, "truncate"),
-            TextOverflow::Standard(s) => write!(f, "font-overflow-{}", s),
-            TextOverflow::Arbitrary(s) => write!(f, "font-overflow-{}", s.get_class()),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindTextOverflow {
-    fn collision_id(&self) -> String {
-        "text-overflow".into()
+    fn collision_id(&self) -> &'static str {
+        "text-overflow"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

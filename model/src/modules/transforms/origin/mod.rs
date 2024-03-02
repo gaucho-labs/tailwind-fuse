@@ -5,15 +5,9 @@ pub struct TailwindOrigin {
     kind: AnchorPoint,
 }
 
-impl Display for TailwindOrigin {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "origin-{}", self.kind.get_class())
-    }
-}
-
 impl TailwindInstance for TailwindOrigin {
-    fn collision_id(&self) -> String {
-        "transform-origin".into()
+    fn collision_id(&self) -> &'static str {
+        "transform-origin"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

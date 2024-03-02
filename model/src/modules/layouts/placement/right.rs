@@ -5,16 +5,9 @@ pub struct TailwindRight {
     kind: UnitValue,
 }
 
-impl Display for TailwindRight {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_negative(f)?;
-        self.kind.write_class(f, "right-")
-    }
-}
-
 impl TailwindInstance for TailwindRight {
-    fn collision_id(&self) -> String {
-        "right".into()
+    fn collision_id(&self) -> &'static str {
+        "right"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

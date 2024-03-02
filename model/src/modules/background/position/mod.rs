@@ -5,15 +5,9 @@ pub struct TailwindBackgroundPosition {
     kind: AnchorPoint,
 }
 
-impl Display for TailwindBackgroundPosition {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "origin-{}", self.kind.get_class())
-    }
-}
-
 impl TailwindInstance for TailwindBackgroundPosition {
-    fn collision_id(&self) -> String {
-        "origin-".to_string()
+    fn collision_id(&self) -> &'static str {
+        "origin"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -5,14 +5,8 @@ pub struct TailwindDuration {
     ms: NumericValue,
 }
 
-impl Display for TailwindDuration {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "duration-{}", self.ms)
-    }
-}
-
 impl TailwindInstance for TailwindDuration {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "transition-duration".into()
     }
 

@@ -7,17 +7,6 @@ pub struct TailwindResize {
 
 crate::macros::keyword_instance!(TailwindResize => "resize");
 
-impl Display for TailwindResize {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.write_class(f, "resize-", |f, s| match s {
-            "both" => write!(f, "resize"),
-            "horizontal" => write!(f, "resize-x"),
-            "vertical" => write!(f, "resize-y"),
-            _ => Err(std::fmt::Error),
-        })
-    }
-}
-
 impl TailwindResize {
     /// https://tailwindcss.com/docs/user-select
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

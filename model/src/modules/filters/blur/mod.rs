@@ -5,19 +5,13 @@ pub struct TailwindBlur {
     px: NumericValue,
     backdrop: Backdrop,
 }
-impl Display for TailwindBlur {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "blur-{}", self.px)
-    }
-}
 
 impl TailwindInstance for TailwindBlur {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-blur".into()
+            "backdrop-blur"
         } else {
-            "blur".into()
+            "blur"
         }
     }
 

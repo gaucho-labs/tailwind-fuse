@@ -5,15 +5,9 @@ pub struct TailwindTracking {
     kind: StandardValue,
 }
 
-impl Display for TailwindTracking {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "tracking-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindTracking {
-    fn collision_id(&self) -> String {
-        "text-tracking".into()
+    fn collision_id(&self) -> &'static str {
+        "text-tracking"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

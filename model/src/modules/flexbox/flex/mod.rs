@@ -8,16 +8,10 @@ pub struct TailwindFlex {
     kind: NumericValue,
 }
 
-impl Display for TailwindFlex {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "flex-{}", self.kind)
-    }
-}
-
 // TODO: CONFIRM, this is prolly ok?
 impl TailwindInstance for TailwindFlex {
-    fn collision_id(&self) -> String {
-        "base-flex".into()
+    fn collision_id(&self) -> &'static str {
+        "base-flex"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

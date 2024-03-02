@@ -7,15 +7,9 @@ pub struct TailwindColumns {
     kind: Columns,
 }
 
-impl Display for TailwindColumns {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "columns-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindColumns {
-    fn collision_id(&self) -> String {
-        "columns".into()
+    fn collision_id(&self) -> &'static str {
+        "columns"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

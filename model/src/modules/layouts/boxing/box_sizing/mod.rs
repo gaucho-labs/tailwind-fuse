@@ -7,19 +7,6 @@ pub struct TailwindBoxSizing {
 
 crate::macros::keyword_instance!(TailwindBoxSizing => "box-sizing");
 
-impl Display for TailwindBoxSizing {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "border-box" => write!(f, "box-border"),
-                "content-box" => write!(f, "box-content"),
-                _ => write!(f, "box-sizing-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "box-sizing-"),
-        }
-    }
-}
-
 impl TailwindBoxSizing {
     /// <https://tailwindcss.com/docs/box-sizing>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,19 +7,6 @@ pub struct TailwindFontStyle {
 
 crate::macros::keyword_instance!(TailwindFontStyle => "font-style");
 
-impl Display for TailwindFontStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "normal" => write!(f, "not-italic"),
-                "italic" => write!(f, "italic"),
-                _ => write!(f, "font-style-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "font-style-"),
-        }
-    }
-}
-
 impl TailwindFontStyle {
     /// <https://tailwindcss.com/docs/font-style>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

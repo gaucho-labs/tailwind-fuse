@@ -31,30 +31,9 @@ impl BorderKind {
     }
 }
 
-impl Display for BorderKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Border => write!(f, "border"),
-            Self::BorderX => write!(f, "border-x"),
-            Self::BorderY => write!(f, "border-y"),
-            Self::BorderT => write!(f, "border-t"),
-            Self::BorderR => write!(f, "border-r"),
-            Self::BorderB => write!(f, "border-b"),
-            Self::BorderL => write!(f, "border-l"),
-        }
-    }
-}
-
-impl Display for TailwindBorderWidth {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}-[{}]", self.kind, self.width)
-    }
-}
-
-// TODO: CONFIRM
 impl TailwindInstance for TailwindBorderWidth {
-    fn collision_id(&self) -> String {
-        self.kind.to_string()
+    fn collision_id(&self) -> &'static str {
+        self.kind.as_str()
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

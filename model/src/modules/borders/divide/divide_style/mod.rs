@@ -17,15 +17,9 @@ where
     }
 }
 
-impl Display for TailwindDivideStyle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "divide-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindDivideStyle {
-    fn collision_id(&self) -> String {
-        "divide-style".into()
+    fn collision_id(&self) -> &'static str {
+        "divide-style"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

@@ -22,19 +22,10 @@ where
     }
 }
 
-impl Display for TailwindAlign {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            VerticalAlign::Standard(s) => write!(f, "align-{}", s),
-            VerticalAlign::Length(s) => write!(f, "align-[{}]", s),
-        }
-    }
-}
-
 // TODO: CHECK THIS
 impl TailwindInstance for TailwindAlign {
-    fn collision_id(&self) -> String {
-        "vertical-align".into()
+    fn collision_id(&self) -> &'static str {
+        "vertical-align"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

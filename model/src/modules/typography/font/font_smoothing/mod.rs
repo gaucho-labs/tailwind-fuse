@@ -24,19 +24,8 @@ where
     }
 }
 
-impl Display for TailwindFontSmoothing {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            FontSmoothing::Antialias => write!(f, "antialiased"),
-            FontSmoothing::Subpixel => write!(f, "subpixel-antialiased"),
-            FontSmoothing::Standard(s) => write!(f, "font-smoothing-{}", s),
-            FontSmoothing::Length(s) => write!(f, "font-smoothing-[{}]", s),
-        }
-    }
-}
-
 impl TailwindInstance for TailwindFontSmoothing {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         "font-smoothing".into()
     }
 

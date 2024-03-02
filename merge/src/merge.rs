@@ -3,8 +3,6 @@ use std::collections::HashSet;
 use tailwind_ast::AstStyle;
 use tailwind_model::TailwindInstruction;
 
-use crate::val_or_ref::ValOrRef;
-
 #[macro_export]
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
@@ -53,7 +51,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
                 let collision_id = Collision {
                     variants: all_variants.clone(),
-                    collision_id: ValOrRef::Owned(collision_id),
+                    collision_id,
                 };
 
                 if collision_styles.contains(&collision_id) {
@@ -66,10 +64,10 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 let collisions = instance.get_collisions();
                 println!("collisions {:?}", collisions);
 
-                collisions.into_iter().for_each(|collision| {
+                collisions.into_iter().for_each(|collision_id| {
                     let collision = Collision {
                         variants: all_variants.clone(),
-                        collision_id: ValOrRef::Borrowed(collision),
+                        collision_id,
                     };
 
                     collision_styles.insert(collision);
@@ -94,5 +92,5 @@ pub fn tw_merge(class: &str) -> Option<String> {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Collision<'a> {
     variants: Vec<&'a str>,
-    collision_id: ValOrRef<'static, str>,
+    collision_id: &'a str,
 }

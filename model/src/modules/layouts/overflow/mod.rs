@@ -8,21 +8,7 @@ pub struct TailwindOverflow {
     axis: AxisXY,
 }
 
-impl Display for TailwindOverflow {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.axis.write_xyn(f, "overflow", &self.kind)
-    }
-}
-
-impl TailwindInstance for TailwindOverflow {
-    fn collision_id(&self) -> String {
-        self.axis.collision_id("overflow")
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axisxy_collision!(TailwindOverflow => "overflow");
 
 impl TailwindOverflow {
     /// <https://tailwindcss.com/docs/overflow>

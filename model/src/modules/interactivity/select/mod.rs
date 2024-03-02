@@ -7,12 +7,6 @@ pub struct TailwindSelect {
 
 crate::macros::keyword_instance!(TailwindSelect => "user-select");
 
-impl Display for TailwindSelect {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "select-{}", self.kind)
-    }
-}
-
 impl TailwindSelect {
     /// <https://tailwindcss.com/docs/user-select>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

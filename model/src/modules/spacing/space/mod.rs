@@ -1,35 +1,15 @@
+use crate::Axis2D;
+
 use super::*;
 
 #[derive(Clone, Debug)]
 pub struct TailwindSpace {
-    axis: bool,
+    axis: Axis2D,
     negative: Negative,
     size: SpacingSize,
 }
 
-impl Display for TailwindSpace {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.negative.write(f)?;
-        match self.axis {
-            true => write!(f, "space-x-{}", self.size),
-            false => write!(f, "space-y-{}", self.size),
-        }
-    }
-}
-
-impl TailwindInstance for TailwindSpace {
-    fn collision_id(&self) -> String {
-        if self.axis {
-            "space-x".to_string()
-        } else {
-            "space-y".to_string()
-        }
-    }
-
-    fn get_collisions(&self) -> Vec<&'static str> {
-        vec![]
-    }
-}
+crate::axis2d_collision!(TailwindSpace => "space");
 
 impl TailwindSpace {
     /// https://tailwindcss.com/docs/space
@@ -39,20 +19,20 @@ impl TailwindSpace {
         negative: Negative,
     ) -> Result<Box<dyn TailwindInstance>> {
         match pattern {
-            ["x", rest @ ..] => Self::parse_axis(rest, arbitrary, true, negative),
-            ["y", rest @ ..] => Self::parse_axis(rest, arbitrary, false, negative),
+            ["x", rest @ ..] => Self::parse_axis(rest, arbitrary, Axis2D::X, negative),
+            ["y", rest @ ..] => Self::parse_axis(rest, arbitrary, Axis2D::Y, negative),
             _ => syntax_error!("Unknown space instructions: {}", pattern.join("-")),
         }
     }
     fn parse_axis(
         pattern: &[&str],
         arbitrary: &TailwindArbitrary,
-        axis: bool,
+        axis: Axis2D,
         negative: Negative,
     ) -> Result<Box<dyn TailwindInstance>> {
         match pattern {
             [] => Ok(Self::parse_arbitrary(arbitrary, negative, axis)?.boxed()),
-            ["reverse"] => Ok(TailwindSpaceReverse::from(axis).boxed()),
+            ["reverse"] => Ok(TailwindSpaceReverse { axis }.boxed()),
             _ => {
                 let size = SpacingSize::parse(pattern, arbitrary, &Self::check_valid)?;
                 Ok(Self {
@@ -68,7 +48,7 @@ impl TailwindSpace {
     pub fn parse_arbitrary(
         arbitrary: &TailwindArbitrary,
         negative: Negative,
-        axis: bool,
+        axis: Axis2D,
     ) -> Result<Self> {
         let size = SpacingSize::parse_arbitrary(arbitrary)?;
         Ok(Self {

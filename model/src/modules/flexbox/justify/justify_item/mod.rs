@@ -7,12 +7,6 @@ pub struct TailwindJustifyItems {
 
 crate::macros::keyword_instance!(TailwindJustifyItems => "justify-items");
 
-impl Display for TailwindJustifyItems {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "justify-items-{}", self.kind)
-    }
-}
-
 impl TailwindJustifyItems {
     /// <https://tailwindcss.com/docs/justify-items>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

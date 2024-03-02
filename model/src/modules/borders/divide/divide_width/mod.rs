@@ -8,12 +8,6 @@ pub struct TailwindDivideWidth {
     kind: NumericValue,
 }
 
-impl Display for TailwindDivideWidth {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.axis.write_xy(f, "divide-", &self.kind)
-    }
-}
-
 crate::axisxy_collision!(TailwindDivideWidth => "divide-width");
 
 impl TailwindDivideWidth {

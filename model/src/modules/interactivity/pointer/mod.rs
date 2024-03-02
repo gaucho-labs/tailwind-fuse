@@ -7,12 +7,6 @@ pub struct TailwindPointerEvents {
 
 crate::macros::keyword_instance!(TailwindPointerEvents => "pointer-events");
 
-impl Display for TailwindPointerEvents {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "pointer-events-{}", self.kind)
-    }
-}
-
 impl TailwindPointerEvents {
     /// <https://tailwindcss.com/docs/pointer-events>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

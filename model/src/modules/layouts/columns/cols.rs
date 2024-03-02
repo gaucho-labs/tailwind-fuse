@@ -8,17 +8,6 @@ pub enum Columns {
     Arbitrary(TailwindArbitrary),
 }
 
-impl Display for Columns {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Columns(n) => write!(f, "{}", n),
-            Self::Length(n) => write!(f, "{}", n.get_class_arbitrary()),
-            Self::Standard(s) => write!(f, "{}", s),
-            Self::Arbitrary(s) => s.write(f),
-        }
-    }
-}
-
 impl Columns {
     #[inline]
     pub fn parse(input: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

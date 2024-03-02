@@ -11,24 +11,9 @@ enum StrokeWidth {
     Length(LengthUnit),
 }
 
-impl Display for StrokeWidth {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            StrokeWidth::Unit(s) => write!(f, "{}", s),
-            StrokeWidth::Length(s) => write!(f, "{}", s.get_class()),
-        }
-    }
-}
-
-impl Display for TailwindStrokeWidth {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "stroke-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindStrokeWidth {
-    fn collision_id(&self) -> String {
-        "stroke-width".into()
+    fn collision_id(&self) -> &'static str {
+        "stroke-width"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

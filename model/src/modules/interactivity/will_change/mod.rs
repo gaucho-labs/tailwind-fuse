@@ -7,12 +7,6 @@ pub struct TailwindWillChange {
 
 crate::macros::keyword_instance!(TailwindWillChange => "will-change");
 
-impl Display for TailwindWillChange {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "will-change-{}", self.kind)
-    }
-}
-
 impl TailwindWillChange {
     /// <https://tailwindcss.com/docs/will-change>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

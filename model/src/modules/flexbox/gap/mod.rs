@@ -7,16 +7,6 @@ pub struct TailwindGap {
     axis: AxisXY,
 }
 
-impl Display for TailwindGap {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self.axis {
-            AxisXY::N => write!(f, "gap-{}", self.size.get_class_arbitrary()),
-            AxisXY::X => write!(f, "gap-x-{}", self.size.get_class_arbitrary()),
-            AxisXY::Y => write!(f, "gap-y-{}", self.size.get_class_arbitrary()),
-        }
-    }
-}
-
 crate::axisxy_collision!(TailwindGap => "gap");
 
 impl TailwindGap {

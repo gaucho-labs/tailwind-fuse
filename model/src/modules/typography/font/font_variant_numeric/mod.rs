@@ -19,18 +19,18 @@ where
 }
 
 impl TailwindInstance for TailwindFontVariantNumeric {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         match &self.kind {
             StandardValue::Keyword(s) => match s.as_str() {
-                "normal-nums" => "fvn-normal".into(),
-                "ordinal" => "fvn-ordinal".into(),
-                "slashed-zero" => "fvn-slashed-zero".into(),
-                "lining-nums" | "oldstyle-nums" => "fvn-figure".into(),
-                "proportional-nums" | "tabular-nums" => "fvn-spacing".into(),
-                "diagonal-fractions" | "stacked-fractions" => "fvn-fraction".into(),
-                _ => s.clone(),
+                "normal-nums" => "fvn-normal",
+                "ordinal" => "fvn-ordinal",
+                "slashed-zero" => "fvn-slashed-zero",
+                "lining-nums" | "oldstyle-nums" => "fvn-figure",
+                "proportional-nums" | "tabular-nums" => "fvn-spacing",
+                "diagonal-fractions" | "stacked-fractions" => "fvn-fraction",
+                _ => "fvn-other",
             },
-            StandardValue::Arbitrary(_) => self.to_string(),
+            StandardValue::Arbitrary(_) => "fvn-other",
         }
     }
 
@@ -45,23 +45,6 @@ impl TailwindInstance for TailwindFontVariantNumeric {
                 "fvn-fraction",
             ],
             _ => vec!["fvn-normal"],
-        }
-    }
-}
-
-// crate::macros::keyword_instance!(TailwindFontVariantNumeric => "font-variant-numeric");
-
-impl Display for TailwindFontVariantNumeric {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "normal" => write!(f, "normal-nums"),
-                "ordinal" | "slashed-zero" | "lining-nums" | "oldstyle-nums"
-                | "proportional-nums" | "tabular-nums" | "diagonal-fractions"
-                | "stacked-fractions" => write!(f, "{}", s),
-                _ => write!(f, "font-numeric-{}", s),
-            },
-            StandardValue::Arbitrary(s) => write!(f, "font-numeric-{}", s.get_class()),
         }
     }
 }

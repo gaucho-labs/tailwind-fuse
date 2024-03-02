@@ -6,19 +6,12 @@ pub struct TailwindContrast {
     backdrop: Backdrop,
 }
 
-impl Display for TailwindContrast {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "contrast-{}", self.percent)
-    }
-}
-
 impl TailwindInstance for TailwindContrast {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-contrast".into()
+            "backdrop-contrast"
         } else {
-            "contrast".into()
+            "contrast"
         }
     }
 

@@ -6,19 +6,9 @@ pub struct TailwindFontWeight {
     weight: i32,
 }
 
-impl Display for TailwindFontWeight {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let text = match self.weight {
-            100 => "thin",
-            _ => return write!(f, "font-[{}]", self.weight),
-        };
-        write!(f, "font-{}", text)
-    }
-}
-
 impl TailwindInstance for TailwindFontWeight {
-    fn collision_id(&self) -> String {
-        "font-weight".into()
+    fn collision_id(&self) -> &'static str {
+        "font-weight"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

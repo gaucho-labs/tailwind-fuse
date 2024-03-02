@@ -9,12 +9,6 @@ pub struct TailwindContent {
 
 crate::macros::keyword_instance!(TailwindContent => "content");
 
-impl Display for TailwindContent {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.kind.fmt(f)
-    }
-}
-
 impl TailwindContent {
     /// https://tailwindcss.com/docs/align-content
     pub fn adapt(

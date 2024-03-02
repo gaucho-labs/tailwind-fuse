@@ -5,15 +5,9 @@ pub struct TailwindBackgroundImage {
     kind: AnchorPoint,
 }
 
-impl Display for TailwindBackgroundImage {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "bg-gradient-{}", self.kind.get_class())
-    }
-}
-
 impl TailwindInstance for TailwindBackgroundImage {
-    fn collision_id(&self) -> String {
-        "bg-gradient-".to_string()
+    fn collision_id(&self) -> &'static str {
+        "background-gradient"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

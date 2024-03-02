@@ -7,15 +7,9 @@ pub struct TailwindRingWidth {
     kind: NumericValue,
 }
 
-impl Display for TailwindRingWidth {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ring-offset-{}", self.kind)
-    }
-}
-
 impl TailwindInstance for TailwindRingWidth {
-    fn collision_id(&self) -> String {
-        "ring-width".into()
+    fn collision_id(&self) -> &'static str {
+        "ring-width"
     }
 
     fn get_collisions(&self) -> Vec<&'static str> {

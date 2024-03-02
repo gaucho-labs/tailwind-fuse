@@ -35,31 +35,9 @@ impl RoundedKind {
     }
 }
 
-impl Display for RoundedKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Rounded => write!(f, "rounded"),
-            Self::RoundedT => write!(f, "rounded-t"),
-            Self::RoundedR => write!(f, "rounded-r"),
-            Self::RoundedB => write!(f, "rounded-b"),
-            Self::RoundedL => write!(f, "rounded-l"),
-            Self::RoundedTL => write!(f, "rounded-tl"),
-            Self::RoundedTR => write!(f, "rounded-tr"),
-            Self::RoundedBL => write!(f, "rounded-bl"),
-            Self::RoundedBR => write!(f, "rounded-br"),
-        }
-    }
-}
-
-impl Display for TailwindRounded {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}-[{}]", self.kind, self.size)
-    }
-}
-
 impl TailwindInstance for TailwindRounded {
-    fn collision_id(&self) -> String {
-        self.kind.to_string()
+    fn collision_id(&self) -> &'static str {
+        self.kind.as_str()
     }
 
     // TODO: CONFIRM

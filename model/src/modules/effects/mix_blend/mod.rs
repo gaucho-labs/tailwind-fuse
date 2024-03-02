@@ -7,12 +7,6 @@ pub struct TailwindBlend {
 
 crate::macros::keyword_instance!(TailwindBlend => "mix-blend-mode");
 
-impl Display for TailwindBlend {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "mix-blend-{}", self.kind)
-    }
-}
-
 impl TailwindBlend {
     /// <https://tailwindcss.com/docs/mix-blend-mode>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

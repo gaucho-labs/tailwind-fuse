@@ -7,12 +7,6 @@ pub struct TailwindTextAlignment {
 
 crate::macros::keyword_instance!(TailwindTextAlignment => "text-align");
 
-impl Display for TailwindTextAlignment {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "font-align-{}", self.kind)
-    }
-}
-
 impl TailwindTextAlignment {
     /// <https://tailwindcss.com/docs/will-change>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -20,16 +20,6 @@ impl From<i32> for NumericValue {
     }
 }
 
-impl Display for NumericValue {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Number { n, .. } => write!(f, "{}", n.abs()),
-            Self::Keyword(value) => write!(f, "{}", value),
-            Self::Arbitrary(value) => value.write(f),
-        }
-    }
-}
-
 impl From<&str> for NumericValue {
     fn from(s: &str) -> Self {
         Self::Keyword(s.to_string())

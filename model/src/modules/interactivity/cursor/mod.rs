@@ -9,12 +9,6 @@ pub struct TailwindCursor {
 
 crate::macros::keyword_instance!(TailwindCursor => "cursor");
 
-impl Display for TailwindCursor {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "cursor-{}", self.kind)
-    }
-}
-
 impl TailwindCursor {
     /// <https://tailwindcss.com/docs/cursor>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

@@ -7,19 +7,6 @@ pub struct TailwindSnapStop {
 
 crate::macros::keyword_instance!(TailwindSnapStop => "scroll-snap-stop");
 
-impl Display for TailwindSnapStop {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "normal" => write!(f, "snap-normal"),
-                "always" => write!(f, "snap-always"),
-                _ => write!(f, "snap-stop-{}", s),
-            },
-            StandardValue::Arbitrary(s) => s.write_class(f, "snap-stop-"),
-        }
-    }
-}
-
 impl TailwindSnapStop {
     /// <https://tailwindcss.com/docs/scroll-snap-stop>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

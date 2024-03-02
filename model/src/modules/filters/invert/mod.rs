@@ -5,19 +5,13 @@ pub struct TailwindInvert {
     percent: NumericValue,
     backdrop: Backdrop,
 }
-impl Display for TailwindInvert {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.backdrop.write(f)?;
-        write!(f, "invert-{}", self.percent)
-    }
-}
 
 impl TailwindInstance for TailwindInvert {
-    fn collision_id(&self) -> String {
+    fn collision_id(&self) -> &'static str {
         if self.backdrop.0 {
-            "backdrop-invert".to_string()
+            "backdrop-invert"
         } else {
-            "invert".to_string()
+            "invert"
         }
     }
 

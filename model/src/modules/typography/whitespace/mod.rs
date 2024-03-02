@@ -7,12 +7,6 @@ pub struct TailwindWhiteSpace {
 
 crate::macros::keyword_instance!(TailwindWhiteSpace => "white-space");
 
-impl Display for TailwindWhiteSpace {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "white-space-{}", self.kind)
-    }
-}
-
 impl TailwindWhiteSpace {
     /// <https://tailwindcss.com/docs/whitespace>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {

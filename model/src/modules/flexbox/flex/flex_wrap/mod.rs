@@ -7,20 +7,6 @@ pub struct TailwindFlexWrap {
 
 crate::macros::keyword_instance!(TailwindFlexWrap => "flex-wrap");
 
-impl Display for TailwindFlexWrap {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match &self.kind {
-            StandardValue::Keyword(s) => match s.as_str() {
-                "wrap" => write!(f, "flex-wrap"),
-                "wrap-reverse" => write!(f, "flex-wrap-reverse"),
-                "nowrap" => write!(f, "flex-nowrap"),
-                _ => write!(f, "flex-wrap-{}", s),
-            },
-            StandardValue::Arbitrary(s) => write!(f, "flex-wrap-{}", s.get_class()),
-        }
-    }
-}
-
 impl TailwindFlexWrap {
     /// <https://tailwindcss.com/docs/flex-wrap>
     pub fn parse(pattern: &[&str], arbitrary: &TailwindArbitrary) -> Result<Self> {
