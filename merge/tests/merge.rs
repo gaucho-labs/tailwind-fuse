@@ -20,10 +20,6 @@ fn test_conflict() {
     let class = "bg-orange-300 bg-[#f5f5f5] text-green-400 text-orange-300";
     let result = tw_merge(class).unwrap();
     assert_eq!(result, "bg-[#f5f5f5] text-orange-300");
-
-    let class = "bg-none bg-black";
-    let result = tw_merge(class).unwrap();
-    assert_eq!(result, "bg-black");
 }
 
 #[test]

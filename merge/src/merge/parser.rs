@@ -341,6 +341,8 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["mb", ..] => Ok("margin-bottom"),
         ["mx", ..] => Ok("margin-x"),
         ["my", ..] => Ok("margin-y"),
+        ["ms", ..] => Ok("margin-start"),
+        ["me", ..] => Ok("margin-end"),
 
         // https://tailwindcss.com/docs/space
         ["space", "x", "reverse"] => Ok("space-x-reverse"),
@@ -413,7 +415,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["slashed", "zero"] => Ok("fvn-slashed-zero"),
         ["lining", "nums"] | ["oldstyle", "nums"] => Ok("fvn-figure"),
         ["proportional", "nums"] | ["tabular","nums"] => Ok("fvn-spacing"),
-        ["diagonal", "fractions"] | ["stacked","fractions"] => Ok("fvn-fractions"),
+        ["diagonal", "fractions"] | ["stacked","fractions"] => Ok("fvn-fraction"),
 
         // https://tailwindcss.com/docs/letter-spacing
         ["tracking", ..] => Ok("letter-spacing"),
@@ -744,7 +746,8 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["scale", "y", rest] if rest.parse::<usize>().is_ok() => Ok("scale-y"),
         ["scale", "y"] if arbitrary.parse::<usize>().is_ok() => Ok("scale-y"),
         ["scale", rest] if rest.parse::<usize>().is_ok() => Ok("scale"),
-        ["scale"] if arbitrary.parse::<usize>().is_ok() => Ok("scale"),
+        // [1.75] is valid
+        ["scale"] if arbitrary.parse::<f32>().is_ok() => Ok("scale"),
 
         // https://tailwindcss.com/docs/rotate
         ["rotate", rest] if rest.parse::<usize>().is_ok() => Ok("rotate"),
@@ -783,10 +786,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["scroll", "auto"] | ["scroll", "smooth"] => Ok("scroll-behavior"),
 
         // https://tailwindcss.com/docs/scroll-margin
-        ["scroll", rest, ..] if rest.starts_with("m") => Ok("scroll-margin"),
+        ["scroll", rest, ..] if rest.starts_with('m') => Ok("scroll-margin"),
 
         // https://tailwindcss.com/docs/scroll-padding
-        ["scroll", rest, ..] if rest.starts_with("p") => Ok("scroll-padding"),
+        ["scroll", rest, ..] if rest.starts_with('p') => Ok("scroll-padding"),
 
         // https://tailwindcss.com/docs/scroll-snap-align
         ["snap", "start"] | ["snap", "end"] | ["snap", "center"] | ["snap", "align", "none"] => {
@@ -836,10 +839,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 }
 
 fn valid_blend(mode: &[&str]) -> bool {
-    match mode {
-        ["normal"] | ["multiply"] | ["screen"] | ["overlay"] | ["darken"] | ["lighten"] | ["color", "dodge"] | ["color", "burn"] | ["hard", "light"] | ["soft", "light"] | ["difference"] | ["exclusion"] | ["hue"] | ["saturation"] | ["color"] | ["luminosity"] | ["lighter"] => true,
-        _ => false
-    }
+    matches!(mode, ["normal"] | ["multiply"] | ["screen"] | ["overlay"] | ["darken"] | ["lighten"] | ["color", "dodge"] | ["color", "burn"] | ["hard", "light"] | ["soft", "light"] | ["difference"] | ["exclusion"] | ["hue"] | ["saturation"] | ["color"] | ["luminosity"] | ["lighter"])
 }
 
 fn valid_trbl(
@@ -848,10 +848,8 @@ fn valid_trbl(
     success: &'static str,
     error: &'static str,
 ) -> Result<&'static str> {
-    if mode.len() == 1 {
-        if valid_top_right_bottom_left(mode[0]) {
-            return Ok(success);
-        }
+    if mode.len() == 1 && valid_top_right_bottom_left(mode[0]) {
+        return Ok(success);
     }
     if valid_top_right_bottom_left(arbitrary) {
         return Ok(success);
@@ -891,7 +889,7 @@ fn valid_text_size(mode: &str) -> bool {
 // parses 1.5 but not 1.55
 fn parse_single_digit_decimal(input: &str) -> Option<()> {
     if input.len() == 3 {
-        let (l, r) = input.split_once(".")?;
+        let (l, r) = input.split_once('.')?;
         let _ = l.parse::<usize>().ok()?;
         let _ = r.parse::<usize>().ok()?;
         Some(())
@@ -923,6 +921,7 @@ fn is_t_shirt_size(input: &str) -> bool {
 }
 
 
+// TODO: use lazy_static
 const LENGTH_REGEX: OnceCell<Regex> = OnceCell::new();
 
 fn is_valid_length(input: &str) -> bool {
@@ -937,6 +936,7 @@ fn is_valid_length(input: &str) -> bool {
     && !is_valid_color(input)
 }
 
+// TODO: use lazy_static
 const COLOR_REGEX: OnceCell<Regex> = OnceCell::new();
 
 fn is_valid_color(input: &str) -> bool {
@@ -970,5 +970,20 @@ mod test {
 
         let result = parse(&["stroke"], "hsl(350_80%_0%)");
         assert_eq!(result, Ok("stroke"));
+    }
+
+    #[test]
+    fn parse_margin() {
+        let result = parse(&["my", "2"], "");
+        assert_eq!(result, Ok("margin-y"));
+
+        let result = parse(&["m", "2"], "");
+        assert_eq!(result, Ok("margin"));
+
+        let result = parse(&["m"], "2px");
+        assert_eq!(result, Ok("margin"));
+
+        let result = parse(&["my"], "10rem");
+        assert_eq!(result, Ok("margin-y"));
     }
 }
