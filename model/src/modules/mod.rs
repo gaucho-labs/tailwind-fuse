@@ -1,5 +1,6 @@
 #![allow(non_upper_case_globals)]
 #![allow(clippy::enum_variant_names)]
+#![allow(dead_code)]
 mod accessibility;
 mod background;
 mod borders;

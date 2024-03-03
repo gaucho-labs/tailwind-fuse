@@ -1,7 +1,10 @@
 use std::collections::HashSet;
 
 use tailwind_ast::AstStyle;
-use tailwind_model::TailwindInstruction;
+
+use crate::merge::conflict::get_conflicts;
+
+use crate::merge::parser::parse;
 
 #[macro_export]
 macro_rules! tw_merge {
@@ -28,16 +31,17 @@ pub fn tw_merge(class: &str) -> Option<String> {
     let mut collision_styles: HashSet<Collision> = HashSet::new();
 
     for style in styles.into_iter().rev() {
-        let parse = TailwindInstruction::from(style.clone());
-        match parse.get_instance() {
+        let result = parse(
+            style.elements.as_slice(),
+            style.arbitrary.unwrap_or_default(),
+        );
+        match result {
             Err(error) => {
                 #[cfg(debug_assertions)]
-                println!("No Instance found: {parse:?} {error:?}");
+                println!("No Instance found: {style:?} {error:?}");
                 valid_styles.push(style);
             }
-            Ok(instance) => {
-                let collision_id = instance.collision_id();
-
+            Ok(collision_id) => {
                 // hover:md:focus
                 let all_variants: Vec<&str> = {
                     let mut all_variants = style
@@ -49,29 +53,28 @@ pub fn tw_merge(class: &str) -> Option<String> {
                     all_variants
                 };
 
-                let collision_id = Collision {
+                let collision = Collision {
                     variants: all_variants.clone(),
                     collision_id,
                 };
 
-                if collision_styles.contains(&collision_id) {
+                if collision_styles.contains(&collision) {
                     continue;
                 }
 
                 // Add the current collision_id.
-                collision_styles.insert(collision_id);
+                collision_styles.insert(collision);
 
-                let collisions = instance.get_collisions();
-                println!("collisions {:?}", collisions);
+                if let Some(collisions) = get_conflicts(collision_id) {
+                    collisions.into_iter().for_each(|collision_id| {
+                        let collision = Collision {
+                            variants: all_variants.clone(),
+                            collision_id,
+                        };
 
-                collisions.into_iter().for_each(|collision_id| {
-                    let collision = Collision {
-                        variants: all_variants.clone(),
-                        collision_id,
-                    };
-
-                    collision_styles.insert(collision);
-                });
+                        collision_styles.insert(collision);
+                    });
+                }
 
                 println!("pushing style: {}", style);
                 valid_styles.push(style);
