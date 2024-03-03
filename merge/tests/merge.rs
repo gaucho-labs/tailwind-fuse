@@ -50,8 +50,8 @@ fn test_conflict_with_arbitrary_properties() {
     let result = tw_merge(class).unwrap();
     assert_eq!(result, "stroke-[hsl(340_80%_0%)] stroke-[10px] border-2");
 
-    let class = "[paint-order:markers] [paint-order:normal]";
-    let result = tw_merge(class).unwrap();
+    // let class = "[paint-order:markers] [paint-order:normal]";
+    // let result = tw_merge(class).unwrap();
     // assert_eq!(result, "[paint-order:normal]"); todo fix! cancels each other out!
 
     let class = "[paint-order:markers] [--my-var:2rem] [paint-order:normal] [--my-var:4px]";

@@ -1,5 +1,3 @@
-use std::cell::OnceCell;
-
 use regex_lite::Regex;
 
 pub type Result<T> = std::result::Result<T, &'static str>;
@@ -921,32 +919,19 @@ fn is_t_shirt_size(input: &str) -> bool {
 }
 
 
-// TODO: use lazy_static
-const LENGTH_REGEX: OnceCell<Regex> = OnceCell::new();
+// Define LENGTH_REGEX using lazy_static
+lazy_static::lazy_static! {
+    static ref LENGTH_REGEX: Regex = Regex::new(r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$").unwrap();
+    static ref COLOR_REGEX: Regex = Regex::new(r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$").unwrap();
+}
 
 fn is_valid_length(input: &str) -> bool {
-    let length = LENGTH_REGEX;
-    let re = length.get_or_init(|| {
-        let regex = r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$";
-        Regex::new(regex).unwrap()
-    });
-
-    re.is_match(input) 
-    // necessary to filter out hsl(0 0% 0%)
+    LENGTH_REGEX.is_match(input)
     && !is_valid_color(input)
 }
 
-// TODO: use lazy_static
-const COLOR_REGEX: OnceCell<Regex> = OnceCell::new();
-
 fn is_valid_color(input: &str) -> bool {
-    let color = COLOR_REGEX;
-    let re = color.get_or_init(|| {
-        let regex = r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$";
-        Regex::new(regex).unwrap()
-    });
-
-    re.is_match(input)
+    COLOR_REGEX.is_match(input)
 }
 
 #[cfg(test)]

@@ -37,6 +37,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "lazy_static"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
+
+[[package]]
 name = "lru"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -141,6 +147,7 @@ dependencies = [
 name = "tw-merge"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
  "lru",
  "regex-lite",
  "tailwind-ast",
