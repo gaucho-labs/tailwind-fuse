@@ -394,7 +394,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/font-size
         ["text", rest] if valid_text_size(rest) => Ok("font-size"),
-        ["text"] if valid_text_size(arbitrary) => Ok("font-size"),
+        ["text"] if is_arbitrary_len(arbitrary) => Ok("font-size"),
 
         // https://tailwindcss.com/docs/text-color
         ["text", ..] => Ok("text-color"),
@@ -523,12 +523,14 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["bg", "top"] => Ok("background-position"),
 
         // https://tailwindcss.com/docs/background-size
-        // TODO: implement arbitrary and custom values?
+        // TODO: custom values?
         ["bg", "auto"] | ["bg", "cover"] | ["bg", "contain"] => Ok("background-size"),
+        ["bg"] if is_arbitrary_size(arbitrary) => Ok("background-size"),
 
         // https://tailwindcss.com/docs/background-image
         // TODO: implement arbitrary and custom values?
         ["bg", "none"] | ["bg", "gradient", "to", ..] => Ok("background-image"),
+        ["bg"] if is_arbitrary_bg_image(arbitrary) => Ok("background-image"),
 
         // https://tailwindcss.com/docs/background-blend-mode
         // TODO: plus-lighter not valid
@@ -804,12 +806,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         }
 
         // https://tailwindcss.com/docs/touch-action
-        ["touch", "auto"] | ["touch", "none"] 
-        | ["touch", "pan", "x"] | ["touch", "pan", "left"] | ["touch", "pan", "right"]
-        | ["touch", "pan", "y"] | ["touch", "pan", "up"] | ["touch", "pan", "down"]
-        | ["touch", "pinch", "zoom"] | ["touch", "manipulation"] => {
-            Ok("touch-action")
-        }
+        ["touch", "auto"] | ["touch", "none"]  | ["touch", "manipulation"] => Ok("touch"),
+        ["touch", "pan", "x"] | ["touch", "pan", "left"] | ["touch", "pan", "right"] => Ok("touch-x"),
+        ["touch", "pan", "y"] | ["touch", "pan", "up"] | ["touch", "pan", "down"] => Ok("touch-y"),
+        ["touch", "pinch", "zoom"] => Ok("touch-pz"),
 
         // https://tailwindcss.com/docs/user-select
         ["select", "none"] | ["select", "text"] | ["select", "all"] | ["select", "auto"] => Ok("user-select"),
@@ -923,17 +923,56 @@ fn is_t_shirt_size(input: &str) -> bool {
 
 
 lazy_static::lazy_static! {
+    static ref ARBITRARY_VALUE_REGEX: Regex = Regex::new(r"^(?:([a-z-]+):)?(.+)$").unwrap();
     static ref LENGTH_REGEX: Regex = Regex::new(r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$").unwrap();
     static ref COLOR_REGEX: Regex = Regex::new(r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$").unwrap();
+    static ref IMAGE_REGEX: Regex = Regex::new(r"^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$").unwrap();
 }
 
 fn is_valid_length(input: &str) -> bool {
-    LENGTH_REGEX.is_match(input)
-    && !is_valid_color(input)
+    LENGTH_REGEX.is_match(input) && !is_valid_color(input)
 }
 
 fn is_valid_color(input: &str) -> bool {
     COLOR_REGEX.is_match(input)
+}
+
+fn is_arbitrary_len(input: &str) -> bool {
+    is_valid_arbitrary_value(input, &|label| label == "length", &is_valid_length)
+}
+
+fn is_arbitrary_bg_image(input: &str) -> bool {
+    is_valid_arbitrary_value(input, &|label| label == "image" || label == "url", &|string| IMAGE_REGEX.is_match(string))
+}
+
+fn is_arbitrary_size(input: &str) -> bool {
+    is_valid_arbitrary_value(input, &|label| label == "length" || label == "size" || label == "percentage", &|_| false)
+}
+
+fn is_valid_arbitrary_value(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> bool {
+    fn exec(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> Option<()> {
+        let captures = ARBITRARY_VALUE_REGEX.captures(input)?;
+
+        let captured_label = captures.get(1).map(|m| m.as_str());
+        if let Some(actual) = captured_label {
+            if label(actual) {
+                return Some(())
+            } else {
+                return None
+            }
+        }
+
+        // Otherwise test the arbitrary value.
+        let value = captures.get(2).expect("pattern should have three capture groups").as_str();
+        if func(value) {
+            Some(())
+        } else {
+            None
+        }
+    }
+
+
+    exec(input, label, func).is_some() 
 }
 
 #[cfg(test)]
@@ -984,5 +1023,29 @@ mod test {
 
         let result = parse(&["inset"], "10px");
         assert_eq!(result, Ok("inset"));
+    }
+
+    #[test]
+    fn parse_len() {
+        assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
+        let result = parse(&["text"],"length:theme(someScale.someValue)");
+        assert_eq!(result, Ok("font-size"));
+
+        assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
+        let result = parse(&["text"],"calc(theme(fontSize.4xl)/1.125)");
+        assert_eq!(result, Ok("font-size"));
+    }
+
+    #[test]
+    fn parse_text_color() {
+        assert!(!is_arbitrary_len("color:0"), "shouldn't be a length");
+        let result = parse(&["text"], "color:0");
+        assert_eq!(result, Ok("text-color"));
+    }
+
+    #[test]
+    fn parse_margin_arb() {
+        let result = parse(&["m"], "length:var(--c)");
+        assert_eq!(result, Ok("margin"));
     }
 }
