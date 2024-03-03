@@ -919,7 +919,6 @@ fn is_t_shirt_size(input: &str) -> bool {
 }
 
 
-// Define LENGTH_REGEX using lazy_static
 lazy_static::lazy_static! {
     static ref LENGTH_REGEX: Regex = Regex::new(r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$").unwrap();
     static ref COLOR_REGEX: Regex = Regex::new(r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$").unwrap();
