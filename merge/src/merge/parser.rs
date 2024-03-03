@@ -140,6 +140,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         // https://tailwindcss.com/docs/top-right-bottom-left
         ["inset", "x", rest @ ..] => valid_trbl(rest, arbitrary, "inset-x", "Invalid inset-x"),
         ["inset", "y", rest @ ..] => valid_trbl(rest, arbitrary, "inset-y", "Invalid inset-y"),
+        ["inset", rest @ ..] => valid_trbl(rest, arbitrary, "inset", "Invalid inset"),
         ["top", rest @ ..] => valid_trbl(rest, arbitrary, "top", "Invalid top"),
         ["right", rest @ ..] => valid_trbl(rest, arbitrary, "right", "Invalid right"),
         ["bottom", rest @ ..] => valid_trbl(rest, arbitrary, "bottom", "Invalid bottom"),
@@ -849,7 +850,7 @@ fn valid_trbl(
     if mode.len() == 1 && valid_top_right_bottom_left(mode[0]) {
         return Ok(success);
     }
-    if valid_top_right_bottom_left(arbitrary) {
+    if is_valid_length(arbitrary) {
         return Ok(success);
     }
 
@@ -857,11 +858,10 @@ fn valid_trbl(
 }
 
 fn valid_top_right_bottom_left(mode: &str) -> bool {
-    parse_fraction(mode).is_some()
-        || mode == "auto"
-        || mode == "px"
-        || mode == "full"
-        || parse_single_digit_decimal(mode).is_some()
+    mode == "auto"
+    || mode == "full"
+    || parse_single_digit_decimal(mode).is_some()
+    || parse_fraction(mode).is_some()
 }
 
 fn valid_break_after(mode: &str) -> bool {
@@ -886,7 +886,10 @@ fn valid_text_size(mode: &str) -> bool {
 
 // parses 1.5 but not 1.55
 fn parse_single_digit_decimal(input: &str) -> Option<()> {
-    if input.len() == 3 {
+    if input.len() == 1 {
+        let _ = input.parse::<usize>().ok()?;
+        Some(())
+    } else if input.len() == 3 {
         let (l, r) = input.split_once('.')?;
         let _ = l.parse::<usize>().ok()?;
         let _ = r.parse::<usize>().ok()?;
@@ -969,5 +972,17 @@ mod test {
 
         let result = parse(&["my"], "10rem");
         assert_eq!(result, Ok("margin-y"));
+    }
+
+    #[test]
+    fn parse_inset() {
+        let result = parse(&["inset", "auto"], "");
+        assert_eq!(result, Ok("inset"));
+
+        let result = parse(&["inset", "0"], "");
+        assert_eq!(result, Ok("inset"));
+
+        let result = parse(&["inset"], "10px");
+        assert_eq!(result, Ok("inset"));
     }
 }
