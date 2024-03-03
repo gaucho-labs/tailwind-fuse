@@ -1,3 +1,7 @@
+use std::cell::OnceCell;
+
+use regex_lite::Regex;
+
 pub type Result<T> = std::result::Result<T, &'static str>;
 
 pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
@@ -47,23 +51,23 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/display
         ["block"]
-        | ["inline-block"]
+        | ["inline", "block"]
         | ["inline"]
         | ["flex"]
-        | ["inline-flex"]
+        | ["inline","flex"]
         | ["table"]
-        | ["inline-table"]
-        | ["table-caption"]
-        | ["table-cell"]
-        | ["table-column"]
-        | ["table-column-group"]
-        | ["table-footer-group"]
-        | ["table-header-group"]
-        | ["table-row-group"]
-        | ["table-row"]
-        | ["flow-root"]
+        | ["inline","table"]
+        | ["table","caption"]
+        | ["table","cell"]
+        | ["table","column"]
+        | ["table","column","group"]
+        | ["table","footer","group"]
+        | ["table","header","group"]
+        | ["table","row","group"]
+        | ["table","row"]
+        | ["flow","root"]
         | ["grid"]
-        | ["inline-grid"]
+        | ["inline","grid"]
         | ["contents"]
         | ["hidden"]
             if arbitrary.is_empty() =>
@@ -110,16 +114,16 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["overflow", "clip"]
         | ["overflow", "visible"]
         | ["overflow", "scroll"]
-        | ["overflow-x", "auto"]
-        | ["overflow-y", "auto"]
-        | ["overflow-x", "hidden"]
-        | ["overflow-y", "hidden"]
-        | ["overflow-x", "clip"]
-        | ["overflow-y", "clip"]
-        | ["overflow-x", "visible"]
-        | ["overflow-y", "visible"]
-        | ["overflow-x", "scroll"]
-        | ["overflow-y", "scroll"] => Ok("overflow"),
+        | ["overflow", "x", "auto"]
+        | ["overflow", "y", "auto"]
+        | ["overflow","x", "hidden"]
+        | ["overflow","y", "hidden"]
+        | ["overflow", "x", "clip"]
+        | ["overflow", "y","clip"]
+        | ["overflow","x", "visible"]
+        | ["overflow", "y", "visible"]
+        | ["overflow","x", "scroll"]
+        | ["overflow","y", "scroll"] => Ok("overflow"),
 
         // https://tailwindcss.com/docs/overscroll-behavior
         ["overscroll", "auto"]
@@ -160,7 +164,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         },
 
         // https://tailwindcss.com/docs/flex-basis
-        ["basis", "full"] => Ok("flex-basis"),
+        ["basis", "full" | "auto" | "px" ] => Ok("flex-basis"),
         ["basis", rest] => {
             if parse_fraction_or_usize(rest) {
                 Ok("flex-basis")
@@ -255,7 +259,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["justify", "between"]
         | ["justify", "around"]
         | ["justify", "evenly"]
-        | ["justify-content"] => Ok("justify-content"),
+        | ["justify", "stretch"] => Ok("justify-content"),
         
         // https://tailwindcss.com/docs/justify-items
         ["justify", "items", "start"]
@@ -404,12 +408,12 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["font", ..] => Ok("font-weight"),
 
         // https://tailwindcss.com/docs/font-variant-numeric
-        ["normal-nums"] => Ok("fvn-normal"),
+        ["normal", "nums"] => Ok("fvn-normal"),
         ["ordinal"] => Ok("fvn-ordinal"),
-        ["slashed-zero"] => Ok("fvn-slashed-zero"),
-        ["lining-nums"] | ["oldstyle-nums"] => Ok("fvn-figure"),
-        ["proportional-nums"] | ["tabular-nums"] => Ok("fvn-spacing"),
-        ["diagonal-fractions"] | ["stacked-fractions"] => Ok("fvn-fractions"),
+        ["slashed", "zero"] => Ok("fvn-slashed-zero"),
+        ["lining", "nums"] | ["oldstyle", "nums"] => Ok("fvn-figure"),
+        ["proportional", "nums"] | ["tabular","nums"] => Ok("fvn-spacing"),
+        ["diagonal", "fractions"] | ["stacked","fractions"] => Ok("fvn-fractions"),
 
         // https://tailwindcss.com/docs/letter-spacing
         ["tracking", ..] => Ok("letter-spacing"),
@@ -468,8 +472,8 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["whitespace", "normal"]
         | ["whitespace", "nowrap"]
         | ["whitespace", "pre"]
-        | ["whitespace", "pre-line"]
-        | ["whitespace", "pre-wrap"]
+        | ["whitespace", "pre", "line"]
+        | ["whitespace", "pre", "wrap"]
         | ["whitespace", "break", "spaces"] => Ok("whitespace"),
 
         // https://tailwindcss.com/docs/word-break
@@ -499,7 +503,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/background-repeat
         ["bg", "repeat"]
-        | ["bg", "no-repeat"]
+        | ["bg", "no","repeat"]
         | ["bg", "repeat", "x"]
         | ["bg", "repeat", "y"]
         | ["bg", "repeat", "round"]
@@ -816,7 +820,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/stroke-width
         ["stroke", rest] if rest.parse::<usize>().is_ok() => Ok("stroke-width"),
-        ["stroke"] if arbitrary.parse::<usize>().is_ok() => Ok("stroke-width"),
+        ["stroke"] if is_valid_length(arbitrary) => Ok("stroke-width"),
 
         // https://tailwindcss.com/docs/stroke
         ["stroke", ..] => Ok("stroke"),
@@ -916,4 +920,55 @@ fn is_t_shirt_size(input: &str) -> bool {
         || input.ends_with("md")
         || input.ends_with("lg")
         || input.ends_with("xl")
+}
+
+
+const LENGTH_REGEX: OnceCell<Regex> = OnceCell::new();
+
+fn is_valid_length(input: &str) -> bool {
+    let length = LENGTH_REGEX;
+    let re = length.get_or_init(|| {
+        let regex = r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$";
+        Regex::new(regex).unwrap()
+    });
+
+    re.is_match(input) 
+    // necessary to filter out hsl(0 0% 0%)
+    && !is_valid_color(input)
+}
+
+const COLOR_REGEX: OnceCell<Regex> = OnceCell::new();
+
+fn is_valid_color(input: &str) -> bool {
+    let color = COLOR_REGEX;
+    let re = color.get_or_init(|| {
+        let regex = r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$";
+        Regex::new(regex).unwrap()
+    });
+
+    re.is_match(input)
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test] 
+    fn test_len() {
+        assert!(is_valid_length("10px"));
+        assert!(is_valid_length("10%"));
+        assert!(is_valid_length("100rem"));
+
+        assert!(!is_valid_length("10"), "needs unit");
+        assert!(!is_valid_length("hsl(350_80%_0%)"), "no color");
+    }
+
+    #[test]
+    fn parse_stroke() {
+        let result = parse(&["stroke"], "10px");
+        assert_eq!(result, Ok("stroke-width"));
+
+        let result = parse(&["stroke"], "hsl(350_80%_0%)");
+        assert_eq!(result, Ok("stroke"));
+    }
 }
