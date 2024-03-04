@@ -435,7 +435,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["list", ..] => Ok("list-style-type"),
 
         // https://tailwindcss.com/docs/text-decoration
-        ["underline"] | ["overline"] | ["line-through"] | ["no-underline"] => Ok("text-decoration"),
+        ["underline"] | ["overline"] | ["line", "through"] | ["no", "underline"] => Ok("text-decoration"),
 
         // https://tailwindcss.com/docs/text-decoration-style
         ["solid"] | ["double"] | ["dotted"] | ["dashed"] | ["wavy"] => Ok("text-decoration-style"),

@@ -1,12 +1,11 @@
 use nom::{
     branch::alt,
-    bytes::complete::{tag, take_till1},
-    character::complete::{alphanumeric1, char, multispace1},
-    combinator::opt,
-    error::Error,
-    multi::{many0, separated_list0},
+    bytes::complete::{tag, take_till1, take_while1},
+    character::complete::char,
+    combinator::{map, opt},
+    multi::many0,
     sequence::{delimited, tuple},
-    Err, IResult,
+    IResult,
 };
 
 /// `not-variant:pseudo::-ast-element-[arbitrary]`
@@ -18,18 +17,11 @@ pub struct AstStyle<'a> {
     /// Is a negative style
     pub negative: bool,
     /// `hover:`, `focus:`, etc.
-    pub variants: Vec<ASTVariant<'a>>,
+    pub variants: Vec<&'a str>,
     /// parts of style separated by `-`
     pub elements: Vec<&'a str>,
     /// Is a arbitrary value
     pub arbitrary: Option<&'a str>,
-}
-
-/// `-[.+]`
-#[derive(Clone, Debug, PartialEq)]
-pub struct AstArbitrary<'a> {
-    /// The arbitrary value text
-    pub arbitrary: &'a str,
 }
 
 /// `ast-elements`
@@ -43,32 +35,41 @@ pub struct AstElements<'a> {
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct AstImportant {}
 
-/// `(not-)?variant:pseudo::`
+// hover, focus, aria-checked
+//
+// data attributes:
+// data-[size=large]
+//
+// arbitrary
+// [&:nth-child(3)]-)?variant:pseudo::
 #[derive(Clone, Debug, PartialEq)]
-pub struct ASTVariant<'a> {
-    /// `not-`
-    pub not: bool,
-    /// `::`
-    pub pseudo: bool,
-    /// `name-space`
-    pub names: Vec<&'a str>,
+pub enum ASTVariant<'a> {
+    Normal(&'a str),
+    DataAttribute(&'a str),
+    ArbitraryAttribute(&'a str),
 }
 
 //
 // Parsing
 //
 
-pub fn parse_tailwind(class: &str) -> Result<Vec<AstStyle<'_>>, Err<Error<&str>>> {
-    let styles = many0(tuple((multispace1, AstStyle::parse)));
-    let mut styles = tuple((AstStyle::parse, styles));
-    match styles(class.trim()) {
-        Ok((string, (first, mut rest))) => {
-            rest.insert(0, (string, first));
-            let result = rest.into_iter().map(|(_, style)| style).collect();
-            Ok(result)
-        }
-        Err(e) => Err(e),
-    }
+type Error<'a> = nom::error::Error<&'a str>;
+
+pub fn parse_tailwind(class: &str) -> Vec<Result<AstStyle, &str>> {
+    class
+        .split_whitespace()
+        .map(|c| {
+            // Attempt to parse each class segment individually.
+            match parse_class(c) {
+                Ok((rest, Ok(style))) if rest.is_empty() => Ok(style),
+                _ => Err(c),
+            }
+        })
+        .collect()
+}
+
+fn parse_class(input: &str) -> IResult<&str, Result<AstStyle, Error>> {
+    map(AstStyle::parse, Ok)(input)
 }
 
 impl<'a> AstStyle<'a> {
@@ -80,7 +81,7 @@ impl<'a> AstStyle<'a> {
             opt(char('!')),
             opt(char('-')),
             opt(AstElements::parse),
-            opt(AstArbitrary::parse),
+            opt(parse_arbitrary),
         ))(input)?;
 
         let source = &input[..input.len() - rest.len()];
@@ -91,9 +92,9 @@ impl<'a> AstStyle<'a> {
                 source,
                 important: important.is_some(),
                 negative: negative.is_some(),
-                variants,
+                variants: variants.into_iter().map(ASTVariant::into_str).collect(),
                 elements: elements.unwrap_or_default().elements,
-                arbitrary: arbitrary.map(|s| s.arbitrary),
+                arbitrary,
             },
         ))
     }
@@ -124,101 +125,101 @@ impl<'a> AstElements<'a> {
 }
 
 impl<'a> ASTVariant<'a> {
-    /// `(not-)?variant:pseudo::`
-    ///
-    /// ## Reference
-    /// -
+    pub fn into_str(self) -> &'a str {
+        match self {
+            Self::Normal(v) => v,
+            Self::DataAttribute(v) => v,
+            Self::ArbitraryAttribute(v) => v,
+        }
+    }
+
     #[inline]
     pub fn parse(input: &'a str) -> IResult<&'a str, Self> {
-        let (rest, (mut v, s)) = tuple((Self::parse_one, alt((tag("::"), tag(":")))))(input)?;
-        if s == "::" {
-            v.pseudo = true
-        } else {
-            v.pseudo = Self::check_pseudo(&v.names.iter().map(<_>::as_ref).collect::<Vec<_>>());
-        }
+        let (rest, (v, _)) = tuple((Self::parse_one, tag(":")))(input)?;
         Ok((rest, v))
     }
-    /// `(not-)?(ALPHA)(-ALPHA)*`
-    ///
-    /// eg:
-    /// - `not-focus`
-    /// - `not-last-child`
+
     #[inline]
     fn parse_one(input: &'a str) -> IResult<&'a str, Self> {
-        let not = opt(tuple((tag("not"), tag("-"))));
-        let vs = separated_list0(tag("-"), alphanumeric1);
-        let (rest, (not, names)) = tuple((not, vs))(input)?;
-        Ok((
-            rest,
-            Self {
-                not: not.is_some(),
-                pseudo: false,
-                names,
-            },
-        ))
+        alt((
+            Self::parse_arbitrary_attribute_variant,
+            Self::parse_data_attribute_variant,
+            Self::parse_normal_variant,
+        ))(input)
     }
-    /// https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements#index
+
+    // https://tailwindcss.com/docs/hover-focus-and-other-states#using-arbitrary-variants
     #[inline]
-    fn check_pseudo(names: &[&str]) -> bool {
-        matches!(
-            names,
-            ["after"]
-                | ["before"]
-                | ["backdrop"]
-                | ["marker"]
-                | ["placeholder"]
-                | ["selection"]
-                | ["first", "line"]
-                | ["first", "litter"]
-                | ["first", "selector", "button"]
-                | ["target", "text"]
-        )
+    fn parse_normal_variant(input: &str) -> IResult<&str, ASTVariant> {
+        map(
+            take_while1(|c: char| c.is_alphanumeric() || c == '-'),
+            ASTVariant::Normal,
+        )(input)
+
+        // map(alphanumeric1, ASTVariant::Normal)(input)
+    }
+
+    // https://tailwindcss.com/docs/hover-focus-and-other-states#data-attributes
+    #[inline]
+    fn parse_data_attribute_variant(input: &str) -> IResult<&str, ASTVariant> {
+        println!("INPUT DATA: {input}");
+        map(
+            delimited(tag("data-["), take_till1(|c| c == ']'), tag("]")),
+            ASTVariant::DataAttribute,
+        )(input)
+    }
+
+    // https://tailwindcss.com/docs/hover-focus-and-other-states#using-arbitrary-variants
+    #[inline]
+    fn parse_arbitrary_attribute_variant(input: &str) -> IResult<&str, ASTVariant> {
+        map(
+            delimited(tag("["), take_till1(|c| c == ']'), tag("]")),
+            |_| ASTVariant::ArbitraryAttribute(input),
+        )(input)
     }
 }
 
-impl<'a> AstArbitrary<'a> {
-    /// `-[ANY+]`
-    #[inline]
-    pub fn parse(input: &'a str) -> IResult<&'a str, Self> {
-        let pair = delimited(char('['), take_till1(|c| c == ']'), char(']'));
-        let (rest, (_, arbitrary)) = tuple((char('-'), pair))(input)?;
-        Ok((rest, Self { arbitrary }))
-    }
+#[inline]
+pub fn parse_arbitrary(input: &str) -> IResult<&str, &str> {
+    let pair = delimited(char('['), take_till1(|c| c == ']'), char(']'));
+    let (rest, (_, arbitrary)) = tuple((char('-'), pair))(input)?;
+    Ok((rest, arbitrary))
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+
     #[test]
     fn basic_parse() {
         let class = "flex items-center justify-between";
         let result = parse_tailwind(class);
-        let expected = Ok(vec![
-            AstStyle {
+        let expected = vec![
+            Ok(AstStyle {
                 source: "flex",
                 important: false,
                 negative: false,
                 variants: vec![],
                 elements: vec!["flex"],
                 arbitrary: None,
-            },
-            AstStyle {
+            }),
+            Ok(AstStyle {
                 source: "items-center",
                 important: false,
                 negative: false,
                 variants: vec![],
                 elements: vec!["items", "center"],
                 arbitrary: None,
-            },
-            AstStyle {
+            }),
+            Ok(AstStyle {
                 source: "justify-between",
                 important: false,
                 negative: false,
                 variants: vec![],
                 elements: vec!["justify", "between"],
                 arbitrary: None,
-            },
-        ]);
+            }),
+        ];
 
         assert_eq!(result, expected)
     }
@@ -227,14 +228,14 @@ mod test {
     fn parse_with_negative() {
         let class = "-my-2";
         let result = parse_tailwind(class);
-        let expected = Ok(vec![AstStyle {
+        let expected = vec![Ok(AstStyle {
             source: "-my-2",
             important: false,
             negative: true,
             variants: vec![],
             elements: vec!["my", "2"],
             arbitrary: None,
-        }]);
+        })];
         assert_eq!(result, expected)
     }
 
@@ -242,21 +243,104 @@ mod test {
     fn test_with_important() {
         let class = "!bg-blue-500";
         let result = parse_tailwind(class);
-        let expected = Ok(vec![AstStyle {
+        let expected = vec![Ok(AstStyle {
             source: "!bg-blue-500",
             important: true,
             negative: false,
             variants: vec![],
             elements: vec!["bg", "blue", "500"],
             arbitrary: None,
-        }]);
+        })];
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn multiple_variants() {
+        let class = "hover:md:flex";
+        let result = parse_tailwind(class);
+        let expected = vec![Ok(AstStyle {
+            source: "hover:md:flex",
+            important: false,
+            negative: false,
+            variants: vec!["hover", "md"],
+            elements: vec!["flex"],
+            arbitrary: None,
+        })];
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn aria_attributes() {
+        let class = "aria-checked:true";
+        let result = parse_tailwind(class);
+        let expected = vec![Ok(AstStyle {
+            source: "aria-checked:true",
+            important: false,
+            negative: false,
+            variants: vec!["aria-checked"],
+            elements: vec!["true"],
+            arbitrary: None,
+        })];
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn arbitrary_variants() {
+        let class = "[&:nth-child(3)]:underline";
+        let result = parse_tailwind(class);
+        let expected = vec![Ok(AstStyle {
+            source: "[&:nth-child(3)]:underline",
+            important: false,
+            negative: false,
+            variants: vec!["&:nth-child(3)"],
+            elements: vec!["underline"],
+            arbitrary: None,
+        })];
+        assert_eq!(result, expected)
+    }
+
+    #[test]
+    fn test_stuff() {
+        let class = "data-[open]:flex-col data-[close]:flex-row";
+        let result = parse_tailwind(class);
+
+        let expected = vec![
+            Ok(AstStyle {
+                source: "data-[open]:flex-col",
+                important: false,
+                negative: false,
+                variants: vec!["data-[open]"],
+                elements: vec!["flex", "col"],
+                arbitrary: None,
+            }),
+            Ok(AstStyle {
+                source: "data-[close]:flex-row",
+                important: false,
+                negative: false,
+                variants: vec!["data-[close]"],
+                elements: vec!["flex", "row"],
+                arbitrary: None,
+            }),
+        ];
+
         assert_eq!(result, expected)
     }
 
     #[test]
     fn non_tailwind() {
-        let class = "not_any_tailwind123123!s12312314141";
+        let class = "data-[key=value flex";
         let result = parse_tailwind(class);
-        println!("{:?}", result);
+        let expected = vec![
+            Err("data-[key=value"),
+            Ok(AstStyle {
+                source: "flex",
+                important: false,
+                negative: false,
+                variants: vec![],
+                elements: vec!["flex"],
+                arbitrary: None,
+            }),
+        ];
+        assert_eq!(result, expected)
     }
 }

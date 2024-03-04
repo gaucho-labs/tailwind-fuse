@@ -14,15 +14,38 @@ macro_rules! tw_merge {
     }};
 }
 
-pub fn tw_merge(class: &str) -> Option<String> {
-    let styles: Vec<AstStyle> = ast::parse_tailwind(class).ok()?;
+// pub fn tw_merge_override(
+//     class: &str,
+//     override_styles: impl Fn(ParsedTailwindStyle) -> TailwindCollision,
+// ) -> Option<String> {
+//     None
+// }
 
-    let mut valid_styles: Vec<AstStyle> = vec![];
+// struct ParsedTailwindStyle<'a> {
+//     parts: &'a [&'a str],
+//     arbitrary: Option<&'a str>,
+// }
+
+// #[derive(Debug, Clone)]
+// struct TailwindCollision<'a> {
+//     collision_id: &'a str,
+//     collisions: Vec<&'a str>,
+// }
+
+pub fn tw_merge(class: &str) -> Option<String> {
+    let styles: Vec<Result<AstStyle, &str>> = ast::parse_tailwind(class);
+
+    let mut valid_styles: Vec<Result<AstStyle, &str>> = vec![];
     let mut collision_styles: HashSet<Collision> = HashSet::new();
 
     // println!("styles: {styles:?}");
 
     for style in styles.into_iter().rev() {
+        let style = match style {
+            Ok(style) => style,
+            Err(_) => continue,
+        };
+
         let elements = style.elements.as_slice();
         let result = parse(elements, style.arbitrary.unwrap_or_default());
 
@@ -30,17 +53,13 @@ pub fn tw_merge(class: &str) -> Option<String> {
             Err(error) => {
                 #[cfg(debug_assertions)]
                 println!("No Instance found: {style:?} {error:?}");
-                valid_styles.push(style);
+                valid_styles.push(Ok(style));
             }
             Ok(collision_id) => {
                 // println!("collision_id: {collision_id} {style:?}");
                 // hover:md:focus
                 let all_variants: Vec<&str> = {
-                    let mut all_variants = style
-                        .variants
-                        .iter()
-                        .flat_map(|v| v.names.iter().cloned())
-                        .collect::<Vec<_>>();
+                    let mut all_variants = style.variants.iter().cloned().collect::<Vec<_>>();
                     all_variants.sort();
                     all_variants
                 };
@@ -72,7 +91,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 }
 
                 // println!("pushing style: {}", style);
-                valid_styles.push(style);
+                valid_styles.push(Ok(style));
             }
         }
     }
@@ -81,7 +100,10 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
     let result = valid_styles
         .into_iter()
-        .map(|s| s.source)
+        .map(|s| match s {
+            Ok(style) => style.source,
+            Err(s) => s,
+        })
         .collect::<Vec<_>>()
         .join(" ");
 
