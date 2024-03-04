@@ -57,48 +57,48 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "h-[16cqmax]");
 
-    let class = "z-20; z-[99]";
+    let class = "z-20 z-[99]";
     let result = tw_merge(class);
     assert_eq!(result, "z-[99]");
 
-    let class = "my-[2px]; m-[10rem]";
+    let class = "my-[2px] m-[10rem]";
     let result = tw_merge(class);
     assert_eq!(result, "m-[10rem]");
 
-    let class = "cursor-pointer; cursor-[grab]";
+    let class = "cursor-pointer cursor-[grab]";
     let result = tw_merge(class);
     assert_eq!(result, "cursor-[grab]");
 
-    let class = "m-[2px]; m-[calc(100%-var(--arbitrary))]";
+    let class = "m-[2px] m-[calc(100%-var(--arbitrary))]";
     let result = tw_merge(class);
     assert_eq!("m-[calc(100%-var(--arbitrary))]", result);
 
-    let class = "m-[2px]; m-[length:var(--mystery-var)]";
+    let class = "m-[2px] m-[length:var(--mystery-var)]";
     let result = tw_merge(class);
     assert_eq!(result, "m-[length:var(--mystery-var)]");
 
-    let class = "opacity-10; opacity-[0.025]";
+    let class = "opacity-10 opacity-[0.025]";
     let result = tw_merge(class);
     assert_eq!(result, "opacity-[0.025]");
 
-    let class = "scale-75; scale-[1.7]";
+    let class = "scale-75 scale-[1.7]";
     let result = tw_merge(class);
     assert_eq!("scale-[1.7]", result);
 
-    let class = "brightness-90; brightness-[1.75]";
+    let class = "brightness-90 brightness-[1.75]";
     let result = tw_merge(class);
     assert_eq!("brightness-[1.75]", result);
 
     // Handling of value `0`
-    let class = "min-h-[0.5px]; min-h-[0]";
+    let class = "min-h-[0.5px] min-h-[0]";
     let result = tw_merge(class);
     assert_eq!("min-h-[0]", result);
 
-    let class = "text-[0.5px]; text-[color:0]";
+    let class = "text-[0.5px] text-[color:0]";
     let result = tw_merge(class);
     assert_eq!(result, "text-[0.5px] text-[color:0]");
 
-    let class = "text-[0.5px]; text-[--my-0]";
+    let class = "text-[0.5px] text-[--my-0]";
     let result = tw_merge(class);
     assert_eq!(result, "text-[0.5px] text-[--my-0]");
 
@@ -110,7 +110,7 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "focus:hover:m-[length:var(--c)]");
 
-    let class = "border-b; border-[color:rgb(var(--color-gray-500-rgb)/50%))]";
+    let class = "border-b border-[color:rgb(var(--color-gray-500-rgb)/50%))]";
     let result = tw_merge(class);
     assert_eq!(
         result,
@@ -128,11 +128,11 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "border-b border-some-coloooor");
 
-    let class = "grid-rows-[1fr,auto]; grid-rows-2";
+    let class = "grid-rows-[1fr,auto] grid-rows-2";
     let result = tw_merge(class);
     assert_eq!(result, "grid-rows-2");
 
-    let class = "grid-rows-[repeat(20,minmax(0,1fr))]; grid-rows-3";
+    let class = "grid-rows-[repeat(20,minmax(0,1fr))] grid-rows-3";
     let result = tw_merge(class);
     assert_eq!(result, "grid-rows-3");
 
