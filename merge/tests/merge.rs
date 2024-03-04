@@ -344,11 +344,10 @@ fn basic_arbitrary_variants() {
         tw_merge("[&>*]:underline [&>*]:line-through [&_div]:line-through"),
         "[&>*]:line-through [&_div]:line-through"
     );
-    // TODO: FIX
-    // assert_eq!(
-    //     tw_merge("supports-[display:grid]:flex supports-[display:grid]:grid"),
-    //     "supports-[display:grid]:grid"
-    // );
+    assert_eq!(
+        tw_merge("supports-[display:grid]:flex supports-[display:grid]:grid"),
+        "supports-[display:grid]:grid"
+    );
 }
 
 #[test]
@@ -398,7 +397,7 @@ fn multiple_arbitrary_variants() {
         tw_merge("[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"),
         "[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"
     );
-    // Does order matter?
+    // What is this test even doing?
     // assert_eq!(tw_merge("hover:dark:[&>*]:focus:disabled:[&_div]:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
     assert_eq!(tw_merge("hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
 }

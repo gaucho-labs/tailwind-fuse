@@ -31,10 +31,6 @@ pub struct AstElements<'a> {
     pub elements: Vec<&'a str>,
 }
 
-/// `!`
-#[derive(Copy, Clone, Debug, PartialEq)]
-pub struct AstImportant {}
-
 // hover, focus, aria-checked
 //
 // data attributes:
@@ -160,9 +156,11 @@ impl<'a> ASTVariant<'a> {
     }
 
     // https://tailwindcss.com/docs/hover-focus-and-other-states#data-attributes
+    // https://tailwindcss.com/docs/hover-focus-and-other-states#supports-rules
     #[inline]
     fn parse_data_attribute_variant(input: &str) -> IResult<&str, ASTVariant> {
-        let mut parser = delimited(tag("data-["), take_till1(|c| c == ']'), tag("]"));
+        let tag_prefix = alt((tag("data-"), tag("supports-")));
+        let mut parser = delimited(tag_prefix, take_till1(|c| c == ']'), tag("]"));
         let (rest, _) = parser(input)?;
         let entire_variant = &input[..input.len() - rest.len()];
         Ok((rest, ASTVariant::DataAttribute(entire_variant)))
