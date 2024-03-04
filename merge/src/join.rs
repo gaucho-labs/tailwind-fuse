@@ -1,5 +1,14 @@
 #[macro_export]
 macro_rules! tw_join {
+     ($item:expr) => {{
+        use $crate::MaybeToTailwindClass;
+        let tailwind_class = $item.to_tailwind_class();
+        if let Some(class) = tailwind_class {
+            class.trim().into()
+        } else {
+            String::new()
+        }
+    }};
     ($($item:expr),+ $(,)?) => {{
         use $crate::MaybeToTailwindClass;
         let mut result = String::new();
