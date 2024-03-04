@@ -95,7 +95,7 @@ impl<'a> AstElements<'a> {
     pub fn parse(input: &'a str) -> IResult<&'a str, Self> {
         let (rest, (first, other)) = tuple((Self::parse_head, many0(Self::parse_rest)))(input)?;
         let mut out = vec![first];
-        out.extend(other.into_iter());
+        out.extend(other);
         Ok((rest, Self { elements: out }))
     }
     #[inline]
