@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use tailwind_ast::AstStyle;
+use ast::AstStyle;
 
 use crate::merge::conflict::get_conflicts;
 
@@ -19,7 +19,7 @@ macro_rules! tw_merge {
 }
 
 pub fn tw_merge(class: &str) -> Option<String> {
-    let styles: Vec<AstStyle> = parse_classes(class)?;
+    let styles: Vec<AstStyle> = ast::parse_tailwind(class).ok()?;
 
     let mut valid_styles: Vec<AstStyle> = vec![];
     let mut collision_styles: HashSet<Collision> = HashSet::new();
@@ -27,8 +27,8 @@ pub fn tw_merge(class: &str) -> Option<String> {
     // println!("styles: {styles:?}");
 
     for style in styles.into_iter().rev() {
-        let elements = remove_last_semicolon(style.elements.as_slice());
-        let result = parse(elements.as_slice(), style.arbitrary.unwrap_or_default());
+        let elements = style.elements.as_slice();
+        let result = parse(elements, style.arbitrary.unwrap_or_default());
 
         match result {
             Err(error) => {
@@ -37,7 +37,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 valid_styles.push(style);
             }
             Ok(collision_id) => {
-                // println!("collision_id: {collision_id}");
+                // println!("collision_id: {collision_id} {style:?}");
                 // hover:md:focus
                 let all_variants: Vec<&str> = {
                     let mut all_variants = style
@@ -73,50 +73,25 @@ pub fn tw_merge(class: &str) -> Option<String> {
                     });
                 }
 
-                println!("pushing style: {}", style);
+                // println!("pushing style: {}", style);
                 valid_styles.push(style);
             }
         }
     }
 
-    let mut result = valid_styles
+    valid_styles.reverse();
+
+    let result = valid_styles
         .into_iter()
-        .map(|s| s.to_string())
-        .collect::<Vec<_>>();
+        .map(|s| s.source)
+        .collect::<Vec<_>>()
+        .join(" ");
 
-    result.reverse();
-
-    Some(result.join(" "))
+    Some(result)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Collision<'a> {
     variants: Vec<&'a str>,
     collision_id: &'a str,
-}
-
-// Consider usage of semi-colon
-fn parse_classes(class: &str) -> Option<Vec<AstStyle>> {
-    let classes = class.split(';').map(str::trim).filter(|c| !c.is_empty());
-
-    let mut styles = Vec::new();
-    for class in classes {
-        match tailwind_ast::parse_tailwind(class) {
-            Ok(parsed_styles) => styles.extend(parsed_styles),
-            Err(_) => return None,
-        }
-    }
-
-    Some(styles)
-}
-
-fn remove_last_semicolon<'a>(elements: &'a [&'a str]) -> Vec<&'a str> {
-    let mut elements = elements.to_vec();
-
-    if let Some(last) = elements.last_mut() {
-        if last.ends_with(';') {
-            *last = &last[..last.len() - 1];
-        }
-    }
-    elements
 }

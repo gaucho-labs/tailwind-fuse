@@ -243,15 +243,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwind-ast"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac41127bfd988693b7beaa0a49de45bd452ebeb3bafec2387a4de25bdca6420e"
-dependencies = [
- "nom",
-]
-
-[[package]]
 name = "tailwind_utils"
 version = "0.1.0"
 dependencies = [
@@ -274,12 +265,12 @@ dependencies = [
 name = "tw-merge"
 version = "0.1.0"
 dependencies = [
+ "ast",
  "divan",
  "fastrand",
  "lazy_static",
  "lru",
  "regex-lite",
- "tailwind-ast",
 ]
 
 [[package]]
