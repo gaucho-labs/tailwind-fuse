@@ -50,6 +50,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
                 };
 
                 let collision = Collision {
+                    important: style.important,
                     variants: all_variants.clone(),
                     collision_id,
                 };
@@ -65,6 +66,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
                     // println!("COLLISIONS {collisions:?}");
                     collisions.into_iter().for_each(|collision_id| {
                         let collision = Collision {
+                            important: style.important,
                             variants: all_variants.clone(),
                             collision_id,
                         };
@@ -92,6 +94,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Collision<'a> {
+    important: bool,
     variants: Vec<&'a str>,
     collision_id: &'a str,
 }

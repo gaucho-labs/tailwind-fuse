@@ -41,7 +41,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
             }
         }
         // https://tailwindcss.com/docs/box-decoration-break
-        ["box", "decoration", "clone"] | ["box", "decoration", "slice"] => {
+        ["box", "decoration", "clone" | "slice"] => {
             Ok("box-decoration-break")
         }
         // https://tailwindcss.com/docs/box-sizing
@@ -869,8 +869,10 @@ fn valid_trbl(
 }
 
 fn valid_top_right_bottom_left(mode: &str) -> bool {
+
     mode == "auto"
     || mode == "full"
+    || mode == "px"
     || parse_single_digit_decimal(mode).is_some()
     || parse_fraction(mode).is_some()
 }
