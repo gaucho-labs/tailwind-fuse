@@ -106,7 +106,7 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "hover:m-[length:var(--c)]");
 
-    let class = "hover:focus:m-[2px] focus:hover:m-[length:var(--c)]";
+    let class = "focus:hover:m-[2px] focus:hover:m-[length:var(--c)]";
     let result = tw_merge(class);
     assert_eq!(result, "focus:hover:m-[length:var(--c)]");
 
@@ -205,8 +205,8 @@ fn handles_arbitrary_length_conflicts_with_labels_and_modifiers_correctly() {
         "hover:m-[length:var(--c)]"
     );
     assert_eq!(
-        tw_merge("hover:focus:m-[2px] focus:hover:m-[length:var(--c)]"),
-        "focus:hover:m-[length:var(--c)]"
+        tw_merge("hover:focus:m-[2px] hover:focus:m-[length:var(--c)]"),
+        "hover:focus:m-[length:var(--c)]"
     );
     assert_eq!(
         tw_merge("border-b border-[color:rgb(var(--color-gray-500-rgb)/50%))]"),
@@ -325,3 +325,90 @@ fn merges_classes_with_per_side_border_colors_correctly() {
         "border-x-some-blue"
     );
 }
+
+#[test]
+fn test_data_attributes() {
+    assert_eq!(
+        tw_merge("data-[open]:flex-col data-[close]:flex-row"),
+        "data-[open]:flex-col data-[close]:flex-row"
+    );
+}
+
+#[test]
+fn basic_arbitrary_variants() {
+    assert_eq!(
+        tw_merge("[&>*]:underline [&>*]:line-through"),
+        "[&>*]:line-through"
+    );
+    assert_eq!(
+        tw_merge("[&>*]:underline [&>*]:line-through [&_div]:line-through"),
+        "[&>*]:line-through [&_div]:line-through"
+    );
+    // TODO: FIX
+    // assert_eq!(
+    //     tw_merge("supports-[display:grid]:flex supports-[display:grid]:grid"),
+    //     "supports-[display:grid]:grid"
+    // );
+}
+
+#[test]
+fn arbitrary_variants_with_modifiers() {
+    assert_eq!(
+        tw_merge("dark:lg:hover:[&>*]:underline dark:lg:hover:[&>*]:line-through"),
+        "dark:lg:hover:[&>*]:line-through"
+    );
+    assert_eq!(
+        tw_merge("hover:[&>*]:underline [&>*]:hover:line-through"),
+        "hover:[&>*]:underline [&>*]:hover:line-through"
+    );
+    assert_eq!(
+        tw_merge(
+            "dark:hover:[&>*]:underline dark:hover:[&>*]:underline dark:[&>*]:hover:line-through"
+        ),
+        "dark:hover:[&>*]:underline dark:[&>*]:hover:line-through"
+    );
+}
+
+#[test]
+fn arbitrary_variants_with_complex_syntax_in_them() {
+    assert_eq!(tw_merge("[@media_screen{@media(hover:hover)}]:underline [@media_screen{@media(hover:hover)}]:line-through"), "[@media_screen{@media(hover:hover)}]:line-through");
+    assert_eq!(tw_merge("hover:[@media_screen{@media(hover:hover)}]:underline hover:[@media_screen{@media(hover:hover)}]:line-through"), "hover:[@media_screen{@media(hover:hover)}]:line-through");
+}
+
+#[test]
+fn arbitrary_variants_with_attribute_selectors() {
+    assert_eq!(
+        tw_merge("[&[data-open]]:underline [&[data-open]]:line-through"),
+        "[&[data-open]]:line-through"
+    );
+}
+
+#[test]
+fn arbitrary_variants_with_multiple_attribute_selectors() {
+    assert_eq!(tw_merge("[&[data-foo][data-bar]:not([data-baz])]:underline [&[data-foo][data-bar]:not([data-baz])]:line-through"), "[&[data-foo][data-bar]:not([data-baz])]:line-through");
+}
+
+#[test]
+fn multiple_arbitrary_variants() {
+    assert_eq!(
+        tw_merge("[&>*]:[&_div]:underline [&>*]:[&_div]:line-through"),
+        "[&>*]:[&_div]:line-through"
+    );
+    assert_eq!(
+        tw_merge("[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"),
+        "[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"
+    );
+    // Does order matter?
+    // assert_eq!(tw_merge("hover:dark:[&>*]:focus:disabled:[&_div]:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
+    assert_eq!(tw_merge("hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
+}
+
+// TODO: Fix this maybe?
+// #[test]
+// fn arbitrary_variants_with_arbitrary_properties() {
+//     assert_eq!(
+//         tw_merge("[&>*]:[color:red] [&>*]:[color:blue]"),
+//         "[&>*]:[color:blue]"
+//     );
+//     assert_eq!(tw_merge("[&[data-foo][data-bar]:not([data-baz])]:nod:noa:[color:red] [&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]"), "[&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]");
+// }

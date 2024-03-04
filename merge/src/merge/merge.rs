@@ -14,24 +14,6 @@ macro_rules! tw_merge {
     }};
 }
 
-// pub fn tw_merge_override(
-//     class: &str,
-//     override_styles: impl Fn(ParsedTailwindStyle) -> TailwindCollision,
-// ) -> Option<String> {
-//     None
-// }
-
-// struct ParsedTailwindStyle<'a> {
-//     parts: &'a [&'a str],
-//     arbitrary: Option<&'a str>,
-// }
-
-// #[derive(Debug, Clone)]
-// struct TailwindCollision<'a> {
-//     collision_id: &'a str,
-//     collisions: Vec<&'a str>,
-// }
-
 pub fn tw_merge(class: &str) -> Option<String> {
     let styles: Vec<Result<AstStyle, &str>> = ast::parse_tailwind(class);
 
@@ -58,11 +40,7 @@ pub fn tw_merge(class: &str) -> Option<String> {
             Ok(collision_id) => {
                 // println!("collision_id: {collision_id} {style:?}");
                 // hover:md:focus
-                let all_variants: Vec<&str> = {
-                    let mut all_variants = style.variants.iter().cloned().collect::<Vec<_>>();
-                    all_variants.sort();
-                    all_variants
-                };
+                let all_variants: Vec<&str> = style.variants.clone();
 
                 let collision = Collision {
                     important: style.important,
