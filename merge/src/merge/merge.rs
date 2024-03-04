@@ -10,11 +10,7 @@ use crate::merge::parser::parse;
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
         let joined = $crate::tw_join!($($item),+);
-        if let Some(result) = $crate::merge::tw_merge(joined.as_str()) {
-            result
-        } else {
-            joined
-        }
+        $crate::merge::tw_merge(joined.as_str()).unwrap_or(joined)
     }};
 }
 
