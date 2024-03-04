@@ -126,7 +126,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         // https://tailwindcss.com/docs/overscroll-behavior
         ["overscroll", "auto"]
         | ["overscroll", "contain"]
-        | ["overscroll" | "none"]
+        | ["overscroll", "none"]
         | ["overscroll", "y", "auto"]
         | ["overscroll", "y", "contain"]
         | ["overscroll", "y", "none"]
@@ -149,7 +149,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["end", rest @ ..] => valid_trbl(rest, arbitrary, "end", "Invalid end"),
 
         // https://tailwindcss.com/docs/visibility
-        ["visible"] | ["invisible"] | ["collapse"] => Ok("visibility"),
+        ["visible" | "invisible" | "collapse"] => Ok("visibility"),
 
         // https://tailwindcss.com/docs/z-index
         ["z", "auto"] => Ok("z-index"),
@@ -377,20 +377,13 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["font", "sans"] | ["font", "serif"] | ["font", "mono"] => Ok("font-family"),
 
         // https://tailwindcss.com/docs/text-align
-        ["text", "left"]
-        | ["text", "center"]
-        | ["text", "right"]
-        | ["text", "justify"]
-        | ["text", "start"]
-        | ["text", "end"] => Ok("text-align"),
+        ["text", "left" | "center" | "right" | "justify" | "start" | "end"] => Ok("text-align"),
 
         // https://tailwindcss.com/docs/text-overflow
-        ["text", "ellipsis"] | ["text", "clip"] => Ok("text-overflow"),
+        ["text", "ellipsis" | "clip"] => Ok("text-overflow"),
 
         // https://tailwindcss.com/docs/text-wrap
-        ["text", "wrap"] | ["text", "nowrap"] | ["text", "balance"] | ["text", "pretty"] => {
-            Ok("text-wrap")
-        }
+        ["text", "wrap" | "nowrap" | "balance" | "pretty"] => Ok("text-wrap"),
 
         // https://tailwindcss.com/docs/font-size
         ["text", rest] if valid_text_size(rest) => Ok("font-size"),
@@ -458,7 +451,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["underline", "offset", ..] => Ok("text-underline-offset"),
 
         // https://tailwindcss.com/docs/text-transform
-        ["uppercase"] | ["lowercase"] | ["capitalize"] | ["normal-case"] => Ok("text-transform"),
+        ["uppercase" | "lowercase" | "capitalize" | "normal-case"] => Ok("text-transform"),
 
         // https://tailwindcss.com/docs/text-overflow
         ["truncate"] => Ok("text-overflow"),
@@ -478,7 +471,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["whitespace", "break", "spaces"] => Ok("whitespace"),
 
         // https://tailwindcss.com/docs/word-break
-        ["break", "normal"] | ["break", "words"] | ["break", "all"] | ["break", "keep"] => {
+        ["break", "normal" | "words" | "all" | "keep"] => {
             Ok("word-break")
         }
 
@@ -493,23 +486,17 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["bg", "fixed"] | ["bg", "local"] | ["bg", "scroll"] => Ok("background-attachment"),
 
         // https://tailwindcss.com/docs/background-clip
-        ["bg", "clip", "border"]
-        | ["bg", "clip", "padding"]
-        | ["bg", "clip", "content"]
-        | ["bg", "clip", "text"] => Ok("background-clip"),
+        ["bg", "clip", "border" | "padding" | "content" | "text"] => Ok("background-clip"),
 
         // https://tailwindcss.com/docs/background-origin
-        ["bg", "origin", "border"] | ["bg", "origin", "padding"] | ["bg", "origin", "content"] => {
+        ["bg", "origin", "border" | "padding" | "content"] => {
             Ok("background-origin")
         }
 
         // https://tailwindcss.com/docs/background-repeat
         ["bg", "repeat"]
         | ["bg", "no","repeat"]
-        | ["bg", "repeat", "x"]
-        | ["bg", "repeat", "y"]
-        | ["bg", "repeat", "round"]
-        | ["bg", "repeat", "space"] => Ok("background-repeat"),
+        | ["bg", "repeat", "x" | "y" | "round" | "space"] => Ok("background-repeat"),
 
         // https://tailwindcss.com/docs/background-position
         // TODO: Integrate arbitrary value? (e.g. bg-[center_top_1rem])
@@ -583,15 +570,11 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["border"] if arbitrary.is_empty() => Ok("border-w"),
 
         // https://tailwindcss.com/docs/border-style
-        ["border", "solid"]
-        | ["border", "dashed"]
-        | ["border", "dotted"]
-        | ["border", "double"]
-        | ["border", "hidden"]
-        | ["border", "none"] => Ok("border-style"),
-
+        ["border", "solid" | "dashed" | "dotted" | "double" | "hidden" | "none"] => {
+            Ok("border-style")
+        }
         // https://tailwindcss.com/docs/border-collapse
-        ["border", "collapse"] | ["border", "separate"] => Ok("border-collapse"),
+        ["border", "collapse" | "separate"] => Ok("border-collapse"),
 
         // https://tailwindcss.com/docs/border-spacing
         ["border", "spacing", "x", ..] => Ok("border-spacing-x"),
@@ -626,11 +609,8 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["divide", ..] => Ok("divide-color"),
 
         // https://tailwindcss.com/docs/outline-style
-        ["outline", "none"]
         | ["outline"]
-        | ["outline", "dashed"]
-        | ["outline", "dotted"]
-        | ["outline", "double"]
+        | ["outline", "none" | "solid" | "dashed" | "dotted" | "double"] 
         // necessary for "outline"
             if arbitrary.is_empty() =>
         {
@@ -812,18 +792,18 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["snap", "normal"] | ["snap", "always"] => Ok("scroll-snap-stop"),
 
         // https://tailwindcss.com/docs/scroll-snap-type
-        ["snap", "none"] | ["snap", "x"] | ["snap", "y"] | ["snap", "both"] | ["snap", "mandatory"] | ["snap", "proximity"] => {
+        ["snap", "none" | "x" | "y" | "both" | "mandatory" | "proximity"] => {
             Ok("scroll-snap-type")
         }
 
         // https://tailwindcss.com/docs/touch-action
-        ["touch", "auto"] | ["touch", "none"]  | ["touch", "manipulation"] => Ok("touch"),
-        ["touch", "pan", "x"] | ["touch", "pan", "left"] | ["touch", "pan", "right"] => Ok("touch-x"),
-        ["touch", "pan", "y"] | ["touch", "pan", "up"] | ["touch", "pan", "down"] => Ok("touch-y"),
+        ["touch", "auto" | "none" | "manipulation"] => Ok("touch"),
+        ["touch", "pan", "x" | "left" | "right"] => Ok("touch-x"),
+        ["touch", "pan", "y"| "up"| "down"] => Ok("touch-y"),
         ["touch", "pinch", "zoom"] => Ok("touch-pz"),
 
         // https://tailwindcss.com/docs/user-select
-        ["select", "none"] | ["select", "text"] | ["select", "all"] | ["select", "auto"] => Ok("user-select"),
+        ["select" , "none" | "text" | "all" | "auto"] => Ok("user-select"),
 
         // https://tailwindcss.com/docs/will-change
         ["will", "change", ..] => Ok("will-change"),
