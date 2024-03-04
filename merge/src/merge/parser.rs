@@ -45,7 +45,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
             Ok("box-decoration-break")
         }
         // https://tailwindcss.com/docs/box-sizing
-        ["box", "border"] | ["box" | "content"] => Ok("box-sizing"),
+        ["box", "border"] | ["box", "content"] => Ok("box-sizing"),
 
         // https://tailwindcss.com/docs/display
         ["block"]
@@ -487,6 +487,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/content
         ["content", "none"] => Ok("content"),
+        ["content"] if is_arbitrary_value(arbitrary) => Ok("content"),
 
         // https://tailwindcss.com/docs/background-attachment
         ["bg", "fixed"] | ["bg", "local"] | ["bg", "scroll"] => Ok("background-attachment"),
@@ -935,6 +936,10 @@ fn is_valid_length(input: &str) -> bool {
 
 fn is_valid_color(input: &str) -> bool {
     COLOR_REGEX.is_match(input)
+}
+
+fn is_arbitrary_value(input: &str) -> bool {
+    ARBITRARY_VALUE_REGEX.is_match(input)
 }
 
 fn is_arbitrary_len(input: &str) -> bool {

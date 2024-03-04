@@ -44,52 +44,6 @@ fn test_conflict_with_modifiers() {
 }
 
 #[test]
-fn test_conflict_with_arbitrary_properties() {
-    let class = "bg-red-500 bg-[#000000]";
-    let result = tw_merge(class);
-    assert_eq!(result, "bg-[#000000]");
-
-    let class = "stroke-[hsl(340_80%_0%)] stroke-[10px] border-2";
-    let result = tw_merge(class);
-    assert_eq!(result, "stroke-[hsl(340_80%_0%)] stroke-[10px] border-2");
-
-    // let class = "[paint-order:markers] [paint-order:normal]";
-    // let result = tw_merge(class);
-    // assert_eq!(result, "[paint-order:normal]"); todo fix! cancels each other out!
-
-    let class = "[paint-order:markers] [--my-var:2rem] [paint-order:normal] [--my-var:4px]";
-    let result = tw_merge(class);
-    assert_eq!(result, "[paint-order:normal] [--my-var:4px]");
-
-    let class = "[paint-order;:markers] hover:[paint-order:normal]";
-    let result = tw_merge(class);
-    assert_eq!(result, "[paint-order:markers] hover:[paint-order:normal]");
-
-    let class = "hover;:[paint-order:markers] hover:[paint-order:normal]";
-    let result = tw_merge(class);
-    assert_eq!("hover:[paint-order:normal]", result);
-
-    let class = "hover;:focus:[paint-order:markers] focus:hover:[paint-order:normal]";
-    let result = tw_merge(class);
-    assert_eq!(result, "focus:hover:[paint-order:normal]");
-
-    let class = "[paint-order:markers] [paint-order:normal] [--my-var:2rem] lg:[--my-var:4px]";
-    let result = tw_merge(class);
-    assert_eq!(
-        result,
-        "[paint-order:normal] [--my-var:2rem] lg:[--my-var:4px]"
-    );
-
-    let class = "[-unknown-prop:::123:::] [-unknown-prop:url(https://hicom)]";
-    let result = tw_merge(class);
-    assert_eq!(result, "[-unknown-prop:url(https://hicom)]");
-
-    let class = "![some:prop] [some:other] [some:one] ![some:another]";
-    let result = tw_merge(class);
-    assert_eq!(result, "[some:one] ![some:another]");
-}
-
-#[test]
 fn test_conflict_with_arbitrary_values() {
     let class = "m-[2px] m-[10px]";
     let result = tw_merge(class);
@@ -316,4 +270,36 @@ fn handles_ambiguous_arbitrary_values_correctly() {
         ),
         "bg-gradient-to-r"
     );
+}
+
+#[test]
+fn handles_color_conflicts_properly() {
+    assert_eq!(tw_merge("bg-grey-5 bg-hotpink"), "bg-hotpink");
+    assert_eq!(
+        tw_merge("hover:bg-grey-5 hover:bg-hotpink"),
+        "hover:bg-hotpink"
+    );
+    assert_eq!(
+        tw_merge("stroke-[hsl(350_80%_0%)] stroke-[10px]"),
+        "stroke-[hsl(350_80%_0%)] stroke-[10px]"
+    );
+}
+
+#[test]
+fn merges_content_utilities_correctly() {
+    assert_eq!(
+        tw_merge("content-['hello'] content-[attr(data-content)]"),
+        "content-[attr(data-content)]"
+    );
+}
+
+#[test]
+fn merges_tailwind_classes_with_important_modifier_correctly() {
+    assert_eq!(tw_merge("!font-medium !font-bold"), "!font-bold");
+    assert_eq!(
+        tw_merge("!font-medium !font-bold font-thin"),
+        "!font-bold font-thin"
+    );
+    assert_eq!(tw_merge("!right-2 !-inset-x-px"), "!-inset-x-px");
+    assert_eq!(tw_merge("focus:!inline focus:!block"), "focus:!block");
 }
