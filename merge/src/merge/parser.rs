@@ -849,7 +849,26 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 }
 
 fn valid_blend(mode: &[&str]) -> bool {
-    matches!(mode, ["normal"] | ["multiply"] | ["screen"] | ["overlay"] | ["darken"] | ["lighten"] | ["color", "dodge"] | ["color", "burn"] | ["hard", "light"] | ["soft", "light"] | ["difference"] | ["exclusion"] | ["hue"] | ["saturation"] | ["color"] | ["luminosity"] | ["lighter"])
+    matches!(
+        mode,
+        ["normal"]
+            | ["multiply"]
+            | ["screen"]
+            | ["overlay"]
+            | ["darken"]
+            | ["lighten"]
+            | ["color", "dodge"]
+            | ["color", "burn"]
+            | ["hard", "light"]
+            | ["soft", "light"]
+            | ["difference"]
+            | ["exclusion"]
+            | ["hue"]
+            | ["saturation"]
+            | ["color"]
+            | ["luminosity"]
+            | ["lighter"]
+    )
 }
 
 fn valid_trbl(
@@ -869,12 +888,11 @@ fn valid_trbl(
 }
 
 fn valid_top_right_bottom_left(mode: &str) -> bool {
-
     mode == "auto"
-    || mode == "full"
-    || mode == "px"
-    || parse_single_digit_decimal(mode).is_some()
-    || parse_fraction(mode).is_some()
+        || mode == "full"
+        || mode == "px"
+        || parse_single_digit_decimal(mode).is_some()
+        || parse_fraction(mode).is_some()
 }
 
 fn valid_break_after(mode: &str) -> bool {
@@ -927,13 +945,12 @@ fn parse_fraction(input: &str) -> Option<(usize, usize)> {
 }
 
 fn is_t_shirt_size(input: &str) -> bool {
-        input.ends_with("xs")
+    input.ends_with("xs")
         || input.ends_with("sm")
         || input.ends_with("md")
         || input.ends_with("lg")
         || input.ends_with("xl")
 }
-
 
 lazy_static::lazy_static! {
     static ref ARBITRARY_VALUE_REGEX: Regex = Regex::new(r"^(?:([a-z-]+):)?(.+)$").unwrap();
@@ -959,28 +976,47 @@ fn is_arbitrary_len(input: &str) -> bool {
 }
 
 fn is_arbitrary_bg_image(input: &str) -> bool {
-    is_valid_arbitrary_value(input, &|label| label == "image" || label == "url", &|string| IMAGE_REGEX.is_match(string))
+    is_valid_arbitrary_value(
+        input,
+        &|label| label == "image" || label == "url",
+        &|string| IMAGE_REGEX.is_match(string),
+    )
 }
 
 fn is_arbitrary_size(input: &str) -> bool {
-    is_valid_arbitrary_value(input, &|label| label == "length" || label == "size" || label == "percentage", &|_| false)
+    is_valid_arbitrary_value(
+        input,
+        &|label| label == "length" || label == "size" || label == "percentage",
+        &|_| false,
+    )
 }
 
-fn is_valid_arbitrary_value(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> bool {
-    fn exec(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> Option<()> {
+fn is_valid_arbitrary_value(
+    input: &str,
+    label: &'static impl Fn(&str) -> bool,
+    func: &'static impl Fn(&str) -> bool,
+) -> bool {
+    fn exec(
+        input: &str,
+        label: &'static impl Fn(&str) -> bool,
+        func: &'static impl Fn(&str) -> bool,
+    ) -> Option<()> {
         let captures = ARBITRARY_VALUE_REGEX.captures(input)?;
 
         let captured_label = captures.get(1).map(|m| m.as_str());
         if let Some(actual) = captured_label {
             if label(actual) {
-                return Some(())
+                return Some(());
             } else {
-                return None
+                return None;
             }
         }
 
         // Otherwise test the arbitrary value.
-        let value = captures.get(2).expect("pattern should have three capture groups").as_str();
+        let value = captures
+            .get(2)
+            .expect("pattern should have three capture groups")
+            .as_str();
         if func(value) {
             Some(())
         } else {
@@ -988,15 +1024,14 @@ fn is_valid_arbitrary_value(input: &str, label: &'static impl Fn(&str) -> bool, 
         }
     }
 
-
-    exec(input, label, func).is_some() 
+    exec(input, label, func).is_some()
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
 
-    #[test] 
+    #[test]
     fn test_len() {
         assert!(is_valid_length("10px"));
         assert!(is_valid_length("10%"));
@@ -1045,11 +1080,11 @@ mod test {
     #[test]
     fn parse_len() {
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"],"length:theme(someScale.someValue)");
+        let result = parse(&["text"], "length:theme(someScale.someValue)");
         assert_eq!(result, Ok("font-size"));
 
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"],"calc(theme(fontSize.4xl)/1.125)");
+        let result = parse(&["text"], "calc(theme(fontSize.4xl)/1.125)");
         assert_eq!(result, Ok("font-size"));
     }
 
@@ -1068,7 +1103,9 @@ mod test {
 
     #[test]
     fn parse_border_color_arb() {
-        assert!(!is_arbitrary_len("color:rgb(var(--color-gray-500-rgb)/50%)"));
+        assert!(!is_arbitrary_len(
+            "color:rgb(var(--color-gray-500-rgb)/50%)"
+        ));
         let result = parse(&["border"], "color:rgb(var(--color-gray-500-rgb)/50%)");
         assert_eq!(result, Ok("border-color"));
 
@@ -1078,6 +1115,4 @@ mod test {
         let result = parse(&["border", "b"], "");
         assert_eq!(result, Ok("border-w-b"));
     }
-
-    
 }
