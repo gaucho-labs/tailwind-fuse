@@ -8,7 +8,6 @@ use nom::{
     IResult,
 };
 
-/// `not-variant:pseudo::-ast-element-[arbitrary]`
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct AstStyle<'a> {
     pub source: &'a str,
@@ -24,24 +23,20 @@ pub struct AstStyle<'a> {
     pub arbitrary: Option<&'a str>,
 }
 
-/// `ast-elements`
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct AstElements<'a> {
     /// `name-space`
     pub elements: Vec<&'a str>,
 }
 
-// hover, focus, aria-checked
-//
-// data attributes:
-// data-[size=large]
-//
-// arbitrary
-// [&:nth-child(3)]-)?variant:pseudo::
 #[derive(Clone, Debug, PartialEq)]
 pub enum ASTVariant<'a> {
+    // hover, focus, aria-checked
     Normal(&'a str),
+    // data-[size=large]
+    // supports-[display: grid]
     DataAttribute(&'a str),
+    // [&:nth-child(3)]
     ArbitraryAttribute(&'a str),
 }
 
@@ -58,10 +53,7 @@ pub fn parse_tailwind(class: &str) -> Vec<Result<AstStyle, &str>> {
             // Attempt to parse each class segment individually.
             match parse_class(c) {
                 Ok((rest, Ok(style))) if rest.is_empty() => Ok(style),
-                _ => {
-                    // println!("rest: {rest:?}");
-                    Err(c)
-                }
+                _ => Err(c),
             }
         })
         .collect()
@@ -72,7 +64,6 @@ fn parse_class(input: &str) -> IResult<&str, Result<AstStyle, Error>> {
 }
 
 impl<'a> AstStyle<'a> {
-    /// `v:v::-?a-a-a-[A]`
     #[inline]
     pub fn parse(input: &'a str) -> IResult<&'a str, Self> {
         let (rest, (variants, important, negative, elements, arbitrary)) = tuple((
@@ -100,7 +91,6 @@ impl<'a> AstStyle<'a> {
 }
 
 impl<'a> AstElements<'a> {
-    /// `a(-a)*`
     #[inline]
     pub fn parse(input: &'a str) -> IResult<&'a str, Self> {
         let (rest, (first, other)) = tuple((Self::parse_head, many0(Self::parse_rest)))(input)?;
@@ -180,7 +170,6 @@ impl<'a> ASTVariant<'a> {
 fn parse_arbitrary(input: &str) -> IResult<&str, &str> {
     let parser = delimited(tag("["), take_until_unbalanced('[', ']'), tag("]"));
     let (rest, (_, arbitrary)) = tuple((opt(char('-')), parser))(input)?;
-    // println!("arbitrary: {arbitrary:?} input {input:?}");
     Ok((rest, arbitrary))
 }
 
