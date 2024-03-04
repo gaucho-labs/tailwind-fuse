@@ -15,9 +15,9 @@ const LENS: &[usize] = &[10, 20, 40, 60, 80];
 )]
 fn tailwind_merge(bencher: Bencher, len: usize) {
     bencher
-        // .counter(CharsCount::new(len))
+        .counter(divan::counter::CharsCount::new(len))
         .with_inputs(|| generate_random_classes(len))
-        // .input_counter(BytesCount::of_str)
+        .input_counter(divan::counter::BytesCount::of_str)
         .bench_values(|class| tw_merge(class.as_str()));
 }
 
