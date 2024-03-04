@@ -1,9 +1,5 @@
 use tw_merge::*;
 
-fn tw_merge(class: &str) -> String {
-    tw_merge::merge::tw_merge(class).unwrap()
-}
-
 #[test]
 fn test_tw_merge() {
     let classes = tw_merge!("bg-red-500", "bg-blue-500", "text-green-500");

@@ -4,7 +4,7 @@ use lru::LruCache;
 
 #[derive(Debug, Clone)]
 pub struct MergeCache {
-    cache: LruCache<String, Option<String>>,
+    cache: LruCache<String, String>,
 }
 
 impl MergeCache {
@@ -18,11 +18,11 @@ impl MergeCache {
 impl MergeCache {
     pub fn merge(&mut self, class: String) -> String {
         if let Some(value) = self.cache.get_mut(&class) {
-            value.as_ref().cloned().unwrap_or(class)
+            value.clone()
         } else {
-            let merged = crate::merge::tw_merge(&class);
+            let merged = crate::merge::tw_merge(class.as_str());
             self.cache.put(class.clone(), merged.clone());
-            merged.unwrap_or(class)
+            merged
         }
     }
 }

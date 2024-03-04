@@ -10,11 +10,11 @@ use crate::merge::parser::parse;
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
         let joined = $crate::tw_join!($($item),+);
-        $crate::merge::tw_merge(joined.as_str()).unwrap_or(joined)
+        $crate::tw_merge(joined.as_str())
     }};
 }
 
-pub fn tw_merge(class: &str) -> Option<String> {
+pub fn tw_merge(class: &str) -> String {
     let styles: Vec<Result<AstStyle, &str>> = ast::parse_tailwind(class);
 
     let mut valid_styles: Vec<Result<AstStyle, &str>> = vec![];
@@ -76,16 +76,14 @@ pub fn tw_merge(class: &str) -> Option<String> {
 
     valid_styles.reverse();
 
-    let result = valid_styles
+    valid_styles
         .into_iter()
         .map(|s| match s {
             Ok(style) => style.source,
             Err(s) => s,
         })
         .collect::<Vec<_>>()
-        .join(" ");
-
-    Some(result)
+        .join(" ")
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
