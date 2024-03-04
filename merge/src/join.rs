@@ -37,7 +37,8 @@ fn test_option() {
         Some("ring").filter(|_| false),
         None::<String>,
         "bg-white",
-        Some(" ")
+        Some(" "),
+        "italic text-green-500"
     );
-    assert_eq!(classes, "text-sm font-bold bg-white");
+    assert_eq!(classes, "text-sm font-bold bg-white italic text-green-500");
 }

@@ -27,12 +27,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "css-color"
-version = "0.2.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42aaeae719fd78ce501d77c6cdf01f7e96f26bcd5617a4903a1c2b97e388543a"
-
-[[package]]
 name = "hashbrown"
 version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -41,6 +35,12 @@ dependencies = [
  "ahash",
  "allocator-api2",
 ]
+
+[[package]]
+name = "lazy_static"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lru"
@@ -98,6 +98,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "regex-lite"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30b661b2f27137bdbc16f00eda72866a92bb28af1753ffbd56744fb6e2e9cd8e"
+
+[[package]]
 name = "syn"
 version = "1.0.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -129,13 +135,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwind-model"
-version = "0.1.0"
-dependencies = [
- "tailwind-ast",
-]
-
-[[package]]
 name = "tailwind_utils"
 version = "0.1.0"
 dependencies = [
@@ -148,10 +147,10 @@ dependencies = [
 name = "tw-merge"
 version = "0.1.0"
 dependencies = [
- "css-color",
+ "lazy_static",
  "lru",
+ "regex-lite",
  "tailwind-ast",
- "tailwind-model",
 ]
 
 [[package]]

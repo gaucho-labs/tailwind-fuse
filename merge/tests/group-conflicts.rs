@@ -1,5 +1,8 @@
-use tw_merge::merge::tw_merge;
 use tw_merge::*;
+
+fn tw_merge(class: &str) -> String {
+    tw_merge::merge::tw_merge(class).unwrap()
+}
 
 #[test]
 fn test_tw_merge_mixed_blend() {
@@ -57,64 +60,125 @@ fn test_gap_narrowing() {
 #[test]
 fn merges_classes_from_same_group_correctly() {
     let class = "overflow-x-auto overflow-x-hidden";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "overflow-x-hidden");
 
     let class = "basis-full basis-auto";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "basis-auto");
 
     let class = "w-full w-fit";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "w-fit");
 
     let class = "overflow-x-auto overflow-x-hidden overflow-x-scroll";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "overflow-x-scroll");
 
     let class = "overflow-x-auto hover:overflow-x-hidden overflow-x-scroll";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "hover:overflow-x-hidden overflow-x-scroll");
 
     let class = "overflow-x-auto hover:overflow-x-hidden hover:overflow-x-auto overflow-x-scroll";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "hover:overflow-x-auto overflow-x-scroll");
 
     let class = "col-span-1 col-span-full";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "col-span-full");
 }
 
 #[test]
 fn merges_classes_from_font_variant_numeric_section_correctly() {
     let class = "lining-nums tabular-nums diagonal-fractions";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "lining-nums tabular-nums diagonal-fractions");
 
     let class = "normal-nums tabular-nums diagonal-fractions";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "tabular-nums diagonal-fractions");
 
     let class = "tabular-nums diagonal-fractions normal-nums";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "normal-nums");
 
     let class = "tabular-nums proportional-nums";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "proportional-nums");
 }
 
 #[test]
 fn handles_color_conflicts_properly() {
     let class = "bg-grey-5 bg-hotpink";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "bg-hotpink");
 
     let class = "hover:bg-grey-5 hover:bg-hotpink";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "hover:bg-hotpink");
 
     let class = "stroke-[hsl(350_80%_0%)] stroke-[10px]";
-    let result = tw_merge(class).unwrap();
+    let result = tw_merge(class);
     assert_eq!(result, "stroke-[hsl(350_80%_0%)] stroke-[10px]");
+}
+
+#[test]
+fn handles_conflicts_across_class_groups_correctly() {
+    assert_eq!(tw_merge("inset-1 inset-x-1"), "inset-1 inset-x-1");
+    assert_eq!(tw_merge("inset-x-1 inset-1"), "inset-1");
+    assert_eq!(tw_merge("inset-x-1 left-1 inset-1"), "inset-1");
+    assert_eq!(tw_merge("inset-x-1 inset-1 left-1"), "inset-1 left-1");
+    assert_eq!(tw_merge("inset-x-1 right-1 inset-1"), "inset-1");
+    assert_eq!(tw_merge("inset-x-1 right-1 inset-x-1"), "inset-x-1");
+    assert_eq!(
+        tw_merge("inset-x-1 right-1 inset-y-1"),
+        "inset-x-1 right-1 inset-y-1"
+    );
+    assert_eq!(
+        tw_merge("right-1 inset-x-1 inset-y-1"),
+        "inset-x-1 inset-y-1"
+    );
+    assert_eq!(
+        tw_merge("inset-x-1 hover:left-1 inset-1"),
+        "hover:left-1 inset-1"
+    );
+}
+
+#[test]
+fn ring_and_shadow_classes_do_not_create_conflict() {
+    assert_eq!(tw_merge("ring shadow"), "ring shadow");
+    assert_eq!(tw_merge("ring-2 shadow-md"), "ring-2 shadow-md");
+    assert_eq!(tw_merge("shadow ring"), "shadow ring");
+    assert_eq!(tw_merge("shadow-md ring-2"), "shadow-md ring-2");
+}
+
+#[test]
+fn touch_classes_do_create_conflicts_correctly() {
+    assert_eq!(tw_merge("touch-pan-x touch-pan-right"), "touch-pan-right");
+    assert_eq!(tw_merge("touch-none touch-pan-x"), "touch-pan-x");
+    assert_eq!(tw_merge("touch-pan-x touch-none"), "touch-none");
+    assert_eq!(
+        tw_merge("touch-pan-x touch-pan-y touch-pinch-zoom"),
+        "touch-pan-x touch-pan-y touch-pinch-zoom"
+    );
+    assert_eq!(
+        tw_merge("touch-manipulation touch-pan-x touch-pan-y touch-pinch-zoom"),
+        "touch-pan-x touch-pan-y touch-pinch-zoom"
+    );
+    assert_eq!(
+        tw_merge("touch-pan-x touch-pan-y touch-pinch-zoom touch-auto"),
+        "touch-auto"
+    );
+}
+
+#[test]
+fn line_clamp_classes_do_create_conflicts_correctly() {
+    assert_eq!(
+        tw_merge("overflow-auto inline line-clamp-1"),
+        "line-clamp-1"
+    );
+    assert_eq!(
+        tw_merge("line-clamp-1 overflow-auto inline"),
+        "line-clamp-1 overflow-auto inline"
+    );
 }
