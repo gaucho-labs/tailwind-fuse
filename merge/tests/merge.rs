@@ -303,3 +303,25 @@ fn merges_tailwind_classes_with_important_modifier_correctly() {
     assert_eq!(tw_merge("!right-2 !-inset-x-px"), "!-inset-x-px");
     assert_eq!(tw_merge("focus:!inline focus:!block"), "focus:!block");
 }
+
+#[test]
+fn merges_classes_with_per_side_border_colors_correctly() {
+    assert_eq!(
+        tw_merge("border-t-some-blue border-t-other-blue"),
+        "border-t-other-blue"
+    );
+    assert_eq!(
+        tw_merge("border-t-some-blue border-some-blue"),
+        "border-some-blue"
+    );
+
+    assert_eq!(
+        tw_merge("border-t-some-blue border-y-some-blue"),
+        "border-y-some-blue"
+    );
+
+    assert_eq!(
+        tw_merge("border-l-some-blue border-x-some-blue"),
+        "border-x-some-blue"
+    );
+}

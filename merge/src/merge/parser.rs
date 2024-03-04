@@ -524,12 +524,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["bg", "top"] => Ok("background-position"),
 
         // https://tailwindcss.com/docs/background-size
-        // TODO: custom values?
         ["bg", "auto"] | ["bg", "cover"] | ["bg", "contain"] => Ok("background-size"),
         ["bg"] if is_arbitrary_size(arbitrary) => Ok("background-size"),
 
         // https://tailwindcss.com/docs/background-image
-        // TODO: implement arbitrary and custom values?
         ["bg", "none"] | ["bg", "gradient", "to", ..] => Ok("background-image"),
         ["bg"] if is_arbitrary_bg_image(arbitrary) => Ok("background-image"),
 
@@ -568,16 +566,21 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["rounded", ..] => Ok("rounded"),
 
         // https://tailwindcss.com/docs/border-width
-        // TODO: need to parse and make sure integer. 
-        // Border color can be applied to a side.
-        ["border", "t", ..] => Ok("border-w-t"),
-        ["border", "r", ..] => Ok("border-w-r"),
-        ["border", "b", ..] => Ok("border-w-b"),
-        ["border", "l", ..] => Ok("border-w-l"),
-        ["border", "s", ..] => Ok("border-w-s"),
-        ["border", "e", ..] => Ok("border-w-e"),
-        ["border", rest] if rest.parse::<usize>().is_ok() => Ok("border-w"),
-        ["border"] if arbitrary.parse::<usize>().is_ok() => Ok("border-w"),
+        ["border", "x", rest] if is_valid_length(rest) => Ok("border-w-x"),
+        ["border", "x"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-x"),
+        ["border", "y", rest] if is_valid_length(rest) => Ok("border-w-y"),
+        ["border", "y"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-y"),
+        ["border", "t", rest] if is_valid_length(rest) => Ok("border-w-t"),
+        ["border", "t"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-t"),
+        ["border", "r", rest] if arbitrary.is_empty() ||is_valid_length(rest) => Ok("border-w-r"),
+        ["border", "r"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-r"),
+        ["border", "b", rest] if arbitrary.is_empty() ||is_valid_length(rest) => Ok("border-w-b"),
+        ["border", "b"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-b"),
+        ["border", "l", rest] if is_valid_length(rest) => Ok("border-w-l"),
+        ["border", "l"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-l"),
+        ["border", "s", rest] if is_valid_length(rest) => Ok("border-w-s"),
+        ["border", "s"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-s"),
+        ["border"] if arbitrary.is_empty() => Ok("border-w"),
 
         // https://tailwindcss.com/docs/border-style
         ["border", "solid"]
@@ -596,7 +599,14 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["border", "spacing", ..] => Ok("border-spacing"),
 
         // https://tailwindcss.com/docs/border-color
-        // TODO: handle sides.
+        ["border", "t", ..] => Ok("border-color-t"),
+        ["border", "r", ..] => Ok("border-color-r"),
+        ["border", "b", ..] => Ok("border-color-b"),
+        ["border", "l", ..] => Ok("border-color-l"),
+        ["border", "s", ..] => Ok("border-color-s"),
+        ["border", "e", ..] => Ok("border-color-e"),
+        ["border", "x", ..] => Ok("border-color-x"),
+        ["border", "y", ..] => Ok("border-color-y"),
         ["border", ..] => Ok("border-color"),
 
         // https://tailwindcss.com/docs/divide-style
@@ -1053,4 +1063,19 @@ mod test {
         let result = parse(&["m"], "length:var(--c)");
         assert_eq!(result, Ok("margin"));
     }
+
+    #[test]
+    fn parse_border_color_arb() {
+        assert!(!is_arbitrary_len("color:rgb(var(--color-gray-500-rgb)/50%)"));
+        let result = parse(&["border"], "color:rgb(var(--color-gray-500-rgb)/50%)");
+        assert_eq!(result, Ok("border-color"));
+
+        let result = parse(&["border", "some", "color"], "");
+        assert_eq!(result, Ok("border-color"));
+
+        let result = parse(&["border", "b"], "");
+        assert_eq!(result, Ok("border-w-b"));
+    }
+
+    
 }
