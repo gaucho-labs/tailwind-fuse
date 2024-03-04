@@ -10,3 +10,11 @@ tailwind-ast = "=0.4.1"
 lru = "0.12.3"
 regex-lite = "0.1.5"
 lazy_static = "1.4.0"
+
+[dev-dependencies]
+divan = "0.1.14"
+fastrand = "2"
+
+[[bench]]
+name = "merge"
+harness = false
