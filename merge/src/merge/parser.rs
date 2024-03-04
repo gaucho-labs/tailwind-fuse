@@ -41,7 +41,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
             }
         }
         // https://tailwindcss.com/docs/box-decoration-break
-        ["box", "decoration", "clone"] | ["box", "decoration", "slice"] => {
+        ["box", "decoration", "clone" | "slice"] => {
             Ok("box-decoration-break")
         }
         // https://tailwindcss.com/docs/box-sizing
@@ -126,7 +126,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         // https://tailwindcss.com/docs/overscroll-behavior
         ["overscroll", "auto"]
         | ["overscroll", "contain"]
-        | ["overscroll" | "none"]
+        | ["overscroll", "none"]
         | ["overscroll", "y", "auto"]
         | ["overscroll", "y", "contain"]
         | ["overscroll", "y", "none"]
@@ -149,7 +149,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["end", rest @ ..] => valid_trbl(rest, arbitrary, "end", "Invalid end"),
 
         // https://tailwindcss.com/docs/visibility
-        ["visible"] | ["invisible"] | ["collapse"] => Ok("visibility"),
+        ["visible" | "invisible" | "collapse"] => Ok("visibility"),
 
         // https://tailwindcss.com/docs/z-index
         ["z", "auto"] => Ok("z-index"),
@@ -377,20 +377,13 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["font", "sans"] | ["font", "serif"] | ["font", "mono"] => Ok("font-family"),
 
         // https://tailwindcss.com/docs/text-align
-        ["text", "left"]
-        | ["text", "center"]
-        | ["text", "right"]
-        | ["text", "justify"]
-        | ["text", "start"]
-        | ["text", "end"] => Ok("text-align"),
+        ["text", "left" | "center" | "right" | "justify" | "start" | "end"] => Ok("text-align"),
 
         // https://tailwindcss.com/docs/text-overflow
-        ["text", "ellipsis"] | ["text", "clip"] => Ok("text-overflow"),
+        ["text", "ellipsis" | "clip"] => Ok("text-overflow"),
 
         // https://tailwindcss.com/docs/text-wrap
-        ["text", "wrap"] | ["text", "nowrap"] | ["text", "balance"] | ["text", "pretty"] => {
-            Ok("text-wrap")
-        }
+        ["text", "wrap" | "nowrap" | "balance" | "pretty"] => Ok("text-wrap"),
 
         // https://tailwindcss.com/docs/font-size
         ["text", rest] if valid_text_size(rest) => Ok("font-size"),
@@ -435,7 +428,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["list", ..] => Ok("list-style-type"),
 
         // https://tailwindcss.com/docs/text-decoration
-        ["underline"] | ["overline"] | ["line-through"] | ["no-underline"] => Ok("text-decoration"),
+        ["underline"] | ["overline"] | ["line", "through"] | ["no", "underline"] => Ok("text-decoration"),
 
         // https://tailwindcss.com/docs/text-decoration-style
         ["solid"] | ["double"] | ["dotted"] | ["dashed"] | ["wavy"] => Ok("text-decoration-style"),
@@ -458,7 +451,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["underline", "offset", ..] => Ok("text-underline-offset"),
 
         // https://tailwindcss.com/docs/text-transform
-        ["uppercase"] | ["lowercase"] | ["capitalize"] | ["normal-case"] => Ok("text-transform"),
+        ["uppercase" | "lowercase" | "capitalize" | "normal-case"] => Ok("text-transform"),
 
         // https://tailwindcss.com/docs/text-overflow
         ["truncate"] => Ok("text-overflow"),
@@ -478,7 +471,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["whitespace", "break", "spaces"] => Ok("whitespace"),
 
         // https://tailwindcss.com/docs/word-break
-        ["break", "normal"] | ["break", "words"] | ["break", "all"] | ["break", "keep"] => {
+        ["break", "normal" | "words" | "all" | "keep"] => {
             Ok("word-break")
         }
 
@@ -493,23 +486,17 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["bg", "fixed"] | ["bg", "local"] | ["bg", "scroll"] => Ok("background-attachment"),
 
         // https://tailwindcss.com/docs/background-clip
-        ["bg", "clip", "border"]
-        | ["bg", "clip", "padding"]
-        | ["bg", "clip", "content"]
-        | ["bg", "clip", "text"] => Ok("background-clip"),
+        ["bg", "clip", "border" | "padding" | "content" | "text"] => Ok("background-clip"),
 
         // https://tailwindcss.com/docs/background-origin
-        ["bg", "origin", "border"] | ["bg", "origin", "padding"] | ["bg", "origin", "content"] => {
+        ["bg", "origin", "border" | "padding" | "content"] => {
             Ok("background-origin")
         }
 
         // https://tailwindcss.com/docs/background-repeat
         ["bg", "repeat"]
         | ["bg", "no","repeat"]
-        | ["bg", "repeat", "x"]
-        | ["bg", "repeat", "y"]
-        | ["bg", "repeat", "round"]
-        | ["bg", "repeat", "space"] => Ok("background-repeat"),
+        | ["bg", "repeat", "x" | "y" | "round" | "space"] => Ok("background-repeat"),
 
         // https://tailwindcss.com/docs/background-position
         // TODO: Integrate arbitrary value? (e.g. bg-[center_top_1rem])
@@ -583,15 +570,11 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["border"] if arbitrary.is_empty() => Ok("border-w"),
 
         // https://tailwindcss.com/docs/border-style
-        ["border", "solid"]
-        | ["border", "dashed"]
-        | ["border", "dotted"]
-        | ["border", "double"]
-        | ["border", "hidden"]
-        | ["border", "none"] => Ok("border-style"),
-
+        ["border", "solid" | "dashed" | "dotted" | "double" | "hidden" | "none"] => {
+            Ok("border-style")
+        }
         // https://tailwindcss.com/docs/border-collapse
-        ["border", "collapse"] | ["border", "separate"] => Ok("border-collapse"),
+        ["border", "collapse" | "separate"] => Ok("border-collapse"),
 
         // https://tailwindcss.com/docs/border-spacing
         ["border", "spacing", "x", ..] => Ok("border-spacing-x"),
@@ -626,11 +609,8 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["divide", ..] => Ok("divide-color"),
 
         // https://tailwindcss.com/docs/outline-style
-        ["outline", "none"]
         | ["outline"]
-        | ["outline", "dashed"]
-        | ["outline", "dotted"]
-        | ["outline", "double"]
+        | ["outline", "none" | "solid" | "dashed" | "dotted" | "double"] 
         // necessary for "outline"
             if arbitrary.is_empty() =>
         {
@@ -812,18 +792,18 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["snap", "normal"] | ["snap", "always"] => Ok("scroll-snap-stop"),
 
         // https://tailwindcss.com/docs/scroll-snap-type
-        ["snap", "none"] | ["snap", "x"] | ["snap", "y"] | ["snap", "both"] | ["snap", "mandatory"] | ["snap", "proximity"] => {
+        ["snap", "none" | "x" | "y" | "both" | "mandatory" | "proximity"] => {
             Ok("scroll-snap-type")
         }
 
         // https://tailwindcss.com/docs/touch-action
-        ["touch", "auto"] | ["touch", "none"]  | ["touch", "manipulation"] => Ok("touch"),
-        ["touch", "pan", "x"] | ["touch", "pan", "left"] | ["touch", "pan", "right"] => Ok("touch-x"),
-        ["touch", "pan", "y"] | ["touch", "pan", "up"] | ["touch", "pan", "down"] => Ok("touch-y"),
+        ["touch", "auto" | "none" | "manipulation"] => Ok("touch"),
+        ["touch", "pan", "x" | "left" | "right"] => Ok("touch-x"),
+        ["touch", "pan", "y"| "up"| "down"] => Ok("touch-y"),
         ["touch", "pinch", "zoom"] => Ok("touch-pz"),
 
         // https://tailwindcss.com/docs/user-select
-        ["select", "none"] | ["select", "text"] | ["select", "all"] | ["select", "auto"] => Ok("user-select"),
+        ["select" , "none" | "text" | "all" | "auto"] => Ok("user-select"),
 
         // https://tailwindcss.com/docs/will-change
         ["will", "change", ..] => Ok("will-change"),
@@ -849,7 +829,26 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 }
 
 fn valid_blend(mode: &[&str]) -> bool {
-    matches!(mode, ["normal"] | ["multiply"] | ["screen"] | ["overlay"] | ["darken"] | ["lighten"] | ["color", "dodge"] | ["color", "burn"] | ["hard", "light"] | ["soft", "light"] | ["difference"] | ["exclusion"] | ["hue"] | ["saturation"] | ["color"] | ["luminosity"] | ["lighter"])
+    matches!(
+        mode,
+        ["normal"]
+            | ["multiply"]
+            | ["screen"]
+            | ["overlay"]
+            | ["darken"]
+            | ["lighten"]
+            | ["color", "dodge"]
+            | ["color", "burn"]
+            | ["hard", "light"]
+            | ["soft", "light"]
+            | ["difference"]
+            | ["exclusion"]
+            | ["hue"]
+            | ["saturation"]
+            | ["color"]
+            | ["luminosity"]
+            | ["lighter"]
+    )
 }
 
 fn valid_trbl(
@@ -870,9 +869,10 @@ fn valid_trbl(
 
 fn valid_top_right_bottom_left(mode: &str) -> bool {
     mode == "auto"
-    || mode == "full"
-    || parse_single_digit_decimal(mode).is_some()
-    || parse_fraction(mode).is_some()
+        || mode == "full"
+        || mode == "px"
+        || parse_single_digit_decimal(mode).is_some()
+        || parse_fraction(mode).is_some()
 }
 
 fn valid_break_after(mode: &str) -> bool {
@@ -925,13 +925,12 @@ fn parse_fraction(input: &str) -> Option<(usize, usize)> {
 }
 
 fn is_t_shirt_size(input: &str) -> bool {
-        input.ends_with("xs")
+    input.ends_with("xs")
         || input.ends_with("sm")
         || input.ends_with("md")
         || input.ends_with("lg")
         || input.ends_with("xl")
 }
-
 
 lazy_static::lazy_static! {
     static ref ARBITRARY_VALUE_REGEX: Regex = Regex::new(r"^(?:([a-z-]+):)?(.+)$").unwrap();
@@ -957,28 +956,47 @@ fn is_arbitrary_len(input: &str) -> bool {
 }
 
 fn is_arbitrary_bg_image(input: &str) -> bool {
-    is_valid_arbitrary_value(input, &|label| label == "image" || label == "url", &|string| IMAGE_REGEX.is_match(string))
+    is_valid_arbitrary_value(
+        input,
+        &|label| label == "image" || label == "url",
+        &|string| IMAGE_REGEX.is_match(string),
+    )
 }
 
 fn is_arbitrary_size(input: &str) -> bool {
-    is_valid_arbitrary_value(input, &|label| label == "length" || label == "size" || label == "percentage", &|_| false)
+    is_valid_arbitrary_value(
+        input,
+        &|label| label == "length" || label == "size" || label == "percentage",
+        &|_| false,
+    )
 }
 
-fn is_valid_arbitrary_value(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> bool {
-    fn exec(input: &str, label: &'static impl Fn(&str) -> bool, func: &'static impl Fn(&str) -> bool) -> Option<()> {
+fn is_valid_arbitrary_value(
+    input: &str,
+    label: &'static impl Fn(&str) -> bool,
+    func: &'static impl Fn(&str) -> bool,
+) -> bool {
+    fn exec(
+        input: &str,
+        label: &'static impl Fn(&str) -> bool,
+        func: &'static impl Fn(&str) -> bool,
+    ) -> Option<()> {
         let captures = ARBITRARY_VALUE_REGEX.captures(input)?;
 
         let captured_label = captures.get(1).map(|m| m.as_str());
         if let Some(actual) = captured_label {
             if label(actual) {
-                return Some(())
+                return Some(());
             } else {
-                return None
+                return None;
             }
         }
 
         // Otherwise test the arbitrary value.
-        let value = captures.get(2).expect("pattern should have three capture groups").as_str();
+        let value = captures
+            .get(2)
+            .expect("pattern should have three capture groups")
+            .as_str();
         if func(value) {
             Some(())
         } else {
@@ -986,15 +1004,14 @@ fn is_valid_arbitrary_value(input: &str, label: &'static impl Fn(&str) -> bool, 
         }
     }
 
-
-    exec(input, label, func).is_some() 
+    exec(input, label, func).is_some()
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
 
-    #[test] 
+    #[test]
     fn test_len() {
         assert!(is_valid_length("10px"));
         assert!(is_valid_length("10%"));
@@ -1043,11 +1060,11 @@ mod test {
     #[test]
     fn parse_len() {
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"],"length:theme(someScale.someValue)");
+        let result = parse(&["text"], "length:theme(someScale.someValue)");
         assert_eq!(result, Ok("font-size"));
 
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"],"calc(theme(fontSize.4xl)/1.125)");
+        let result = parse(&["text"], "calc(theme(fontSize.4xl)/1.125)");
         assert_eq!(result, Ok("font-size"));
     }
 
@@ -1066,7 +1083,9 @@ mod test {
 
     #[test]
     fn parse_border_color_arb() {
-        assert!(!is_arbitrary_len("color:rgb(var(--color-gray-500-rgb)/50%)"));
+        assert!(!is_arbitrary_len(
+            "color:rgb(var(--color-gray-500-rgb)/50%)"
+        ));
         let result = parse(&["border"], "color:rgb(var(--color-gray-500-rgb)/50%)");
         assert_eq!(result, Ok("border-color"));
 
@@ -1076,6 +1095,4 @@ mod test {
         let result = parse(&["border", "b"], "");
         assert_eq!(result, Ok("border-w-b"));
     }
-
-    
 }

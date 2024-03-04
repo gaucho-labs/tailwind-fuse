@@ -1,8 +1,9 @@
 pub mod cache;
-pub mod join;
+mod join;
 
-pub mod merge;
-mod val_or_ref;
+mod merge;
+
+pub use merge::*;
 
 pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;

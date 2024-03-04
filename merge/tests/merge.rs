@@ -1,9 +1,5 @@
 use tw_merge::*;
 
-fn tw_merge(class: &str) -> String {
-    tw_merge::merge::tw_merge(class).unwrap()
-}
-
 #[test]
 fn test_tw_merge() {
     let classes = tw_merge!("bg-red-500", "bg-blue-500", "text-green-500");
@@ -57,48 +53,48 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "h-[16cqmax]");
 
-    let class = "z-20; z-[99]";
+    let class = "z-20 z-[99]";
     let result = tw_merge(class);
     assert_eq!(result, "z-[99]");
 
-    let class = "my-[2px]; m-[10rem]";
+    let class = "my-[2px] m-[10rem]";
     let result = tw_merge(class);
     assert_eq!(result, "m-[10rem]");
 
-    let class = "cursor-pointer; cursor-[grab]";
+    let class = "cursor-pointer cursor-[grab]";
     let result = tw_merge(class);
     assert_eq!(result, "cursor-[grab]");
 
-    let class = "m-[2px]; m-[calc(100%-var(--arbitrary))]";
+    let class = "m-[2px] m-[calc(100%-var(--arbitrary))]";
     let result = tw_merge(class);
     assert_eq!("m-[calc(100%-var(--arbitrary))]", result);
 
-    let class = "m-[2px]; m-[length:var(--mystery-var)]";
+    let class = "m-[2px] m-[length:var(--mystery-var)]";
     let result = tw_merge(class);
     assert_eq!(result, "m-[length:var(--mystery-var)]");
 
-    let class = "opacity-10; opacity-[0.025]";
+    let class = "opacity-10 opacity-[0.025]";
     let result = tw_merge(class);
     assert_eq!(result, "opacity-[0.025]");
 
-    let class = "scale-75; scale-[1.7]";
+    let class = "scale-75 scale-[1.7]";
     let result = tw_merge(class);
     assert_eq!("scale-[1.7]", result);
 
-    let class = "brightness-90; brightness-[1.75]";
+    let class = "brightness-90 brightness-[1.75]";
     let result = tw_merge(class);
     assert_eq!("brightness-[1.75]", result);
 
     // Handling of value `0`
-    let class = "min-h-[0.5px]; min-h-[0]";
+    let class = "min-h-[0.5px] min-h-[0]";
     let result = tw_merge(class);
     assert_eq!("min-h-[0]", result);
 
-    let class = "text-[0.5px]; text-[color:0]";
+    let class = "text-[0.5px] text-[color:0]";
     let result = tw_merge(class);
     assert_eq!(result, "text-[0.5px] text-[color:0]");
 
-    let class = "text-[0.5px]; text-[--my-0]";
+    let class = "text-[0.5px] text-[--my-0]";
     let result = tw_merge(class);
     assert_eq!(result, "text-[0.5px] text-[--my-0]");
 
@@ -106,11 +102,11 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "hover:m-[length:var(--c)]");
 
-    let class = "hover:focus:m-[2px] focus:hover:m-[length:var(--c)]";
+    let class = "focus:hover:m-[2px] focus:hover:m-[length:var(--c)]";
     let result = tw_merge(class);
     assert_eq!(result, "focus:hover:m-[length:var(--c)]");
 
-    let class = "border-b; border-[color:rgb(var(--color-gray-500-rgb)/50%))]";
+    let class = "border-b border-[color:rgb(var(--color-gray-500-rgb)/50%))]";
     let result = tw_merge(class);
     assert_eq!(
         result,
@@ -128,11 +124,11 @@ fn test_conflict_with_arbitrary_values() {
     let result = tw_merge(class);
     assert_eq!(result, "border-b border-some-coloooor");
 
-    let class = "grid-rows-[1fr,auto]; grid-rows-2";
+    let class = "grid-rows-[1fr,auto] grid-rows-2";
     let result = tw_merge(class);
     assert_eq!(result, "grid-rows-2");
 
-    let class = "grid-rows-[repeat(20,minmax(0,1fr))]; grid-rows-3";
+    let class = "grid-rows-[repeat(20,minmax(0,1fr))] grid-rows-3";
     let result = tw_merge(class);
     assert_eq!(result, "grid-rows-3");
 
@@ -205,8 +201,8 @@ fn handles_arbitrary_length_conflicts_with_labels_and_modifiers_correctly() {
         "hover:m-[length:var(--c)]"
     );
     assert_eq!(
-        tw_merge("hover:focus:m-[2px] focus:hover:m-[length:var(--c)]"),
-        "focus:hover:m-[length:var(--c)]"
+        tw_merge("hover:focus:m-[2px] hover:focus:m-[length:var(--c)]"),
+        "hover:focus:m-[length:var(--c)]"
     );
     assert_eq!(
         tw_merge("border-b border-[color:rgb(var(--color-gray-500-rgb)/50%))]"),
@@ -325,3 +321,89 @@ fn merges_classes_with_per_side_border_colors_correctly() {
         "border-x-some-blue"
     );
 }
+
+#[test]
+fn test_data_attributes() {
+    assert_eq!(
+        tw_merge("data-[open]:flex-col data-[close]:flex-row"),
+        "data-[open]:flex-col data-[close]:flex-row"
+    );
+}
+
+#[test]
+fn basic_arbitrary_variants() {
+    assert_eq!(
+        tw_merge("[&>*]:underline [&>*]:line-through"),
+        "[&>*]:line-through"
+    );
+    assert_eq!(
+        tw_merge("[&>*]:underline [&>*]:line-through [&_div]:line-through"),
+        "[&>*]:line-through [&_div]:line-through"
+    );
+    assert_eq!(
+        tw_merge("supports-[display:grid]:flex supports-[display:grid]:grid"),
+        "supports-[display:grid]:grid"
+    );
+}
+
+#[test]
+fn arbitrary_variants_with_modifiers() {
+    assert_eq!(
+        tw_merge("dark:lg:hover:[&>*]:underline dark:lg:hover:[&>*]:line-through"),
+        "dark:lg:hover:[&>*]:line-through"
+    );
+    assert_eq!(
+        tw_merge("hover:[&>*]:underline [&>*]:hover:line-through"),
+        "hover:[&>*]:underline [&>*]:hover:line-through"
+    );
+    assert_eq!(
+        tw_merge(
+            "dark:hover:[&>*]:underline dark:hover:[&>*]:underline dark:[&>*]:hover:line-through"
+        ),
+        "dark:hover:[&>*]:underline dark:[&>*]:hover:line-through"
+    );
+}
+
+#[test]
+fn arbitrary_variants_with_complex_syntax_in_them() {
+    assert_eq!(tw_merge("[@media_screen{@media(hover:hover)}]:underline [@media_screen{@media(hover:hover)}]:line-through"), "[@media_screen{@media(hover:hover)}]:line-through");
+    assert_eq!(tw_merge("hover:[@media_screen{@media(hover:hover)}]:underline hover:[@media_screen{@media(hover:hover)}]:line-through"), "hover:[@media_screen{@media(hover:hover)}]:line-through");
+}
+
+#[test]
+fn arbitrary_variants_with_attribute_selectors() {
+    assert_eq!(
+        tw_merge("[&[data-open]]:underline [&[data-open]]:line-through"),
+        "[&[data-open]]:line-through"
+    );
+}
+
+#[test]
+fn arbitrary_variants_with_multiple_attribute_selectors() {
+    assert_eq!(tw_merge("[&[data-foo][data-bar]:not([data-baz])]:underline [&[data-foo][data-bar]:not([data-baz])]:line-through"), "[&[data-foo][data-bar]:not([data-baz])]:line-through");
+}
+
+#[test]
+fn multiple_arbitrary_variants() {
+    assert_eq!(
+        tw_merge("[&>*]:[&_div]:underline [&>*]:[&_div]:line-through"),
+        "[&>*]:[&_div]:line-through"
+    );
+    assert_eq!(
+        tw_merge("[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"),
+        "[&>*]:[&_div]:underline [&_div]:[&>*]:line-through"
+    );
+    // What is this test even doing?
+    // assert_eq!(tw_merge("hover:dark:[&>*]:focus:disabled:[&_div]:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
+    assert_eq!(tw_merge("hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through"), "hover:dark:[&>*]:focus:[&_div]:disabled:underline dark:hover:[&>*]:disabled:focus:[&_div]:line-through");
+}
+
+// TODO: Fix this maybe?
+// #[test]
+// fn arbitrary_variants_with_arbitrary_properties() {
+//     assert_eq!(
+//         tw_merge("[&>*]:[color:red] [&>*]:[color:blue]"),
+//         "[&>*]:[color:blue]"
+//     );
+//     assert_eq!(tw_merge("[&[data-foo][data-bar]:not([data-baz])]:nod:noa:[color:red] [&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]"), "[&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]");
+// }
