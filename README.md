@@ -89,14 +89,14 @@ You can now use the `Btn` struct to generate tailwind classes, using builder syn
 
 #### Struct Syntax
 ```rust
-    let button = Btn {
-        size: Default::default(),
-        color: Default::default(),
-    };
-    // h-9 px-4 py-2 bg-blue-500 text-blue-100
-    button.to_class();
-    // h-9 px-4 py-2 text-blue-100 bg-green-50
-    button.with_class("bg-green-500");
+let button = Btn {
+    size: Default::default(),
+    color: Default::default(),
+};
+// h-9 px-4 py-2 bg-blue-500 text-blue-100
+button.to_class();
+// h-9 px-4 py-2 text-blue-100 bg-green-500
+button.with_class("bg-green-500");
 
 ```
 
@@ -111,7 +111,7 @@ let class = Btn::variant()
     .color(BtnColor::Red)
     .to_class();
 
-// h-8 px-3 bg-red-500 text-red-100 bg-green-500
+// h-8 px-3 text-red-100 bg-green-500
 let class = Btn::variant()
     .size(BtnSize::Sm)
     .color(BtnColor::Red)
