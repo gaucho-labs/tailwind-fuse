@@ -1,4 +1,4 @@
-use darling::{ast, FromDeriveInput, FromVariant};
+use darling::{ast, util::Flag, FromDeriveInput, FromVariant};
 
 // used to get enum data.
 #[derive(Debug, FromDeriveInput)]
@@ -12,8 +12,9 @@ pub struct TwVariantContainer {
 
 // For each enum option
 #[derive(Debug, FromVariant)]
-#[darling(supports(unit), attributes(tw))]
+#[darling(supports(unit), attributes(tw, default))]
 pub struct TwVariantOption {
     pub ident: syn::Ident,
     pub class: String,
+    pub default: Flag,
 }

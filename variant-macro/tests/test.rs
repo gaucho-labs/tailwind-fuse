@@ -1,10 +1,9 @@
 use tw_utils::ToTailwindClass;
 use tw_variant_macro::*;
 
-// // #[derive(TailwindVariant)]
-#[derive(TwVariant)]
+#[derive(TwVariant, Debug, PartialEq)]
 enum BtnColor {
-    #[tw(class = "bg-blue-500 text-blue-100")]
+    #[tw(default, class = "bg-blue-500 text-blue-100")]
     Default,
     #[tw(class = "bg-red-500 text-red-100")]
     Red,
@@ -18,6 +17,8 @@ fn btn_color() {
         BtnColor::Default.with_class("text-lg"),
         "bg-blue-500 text-blue-100 text-lg"
     );
+
+    assert_eq!(BtnColor::default(), BtnColor::Default);
 }
 
 #[test]
