@@ -5,15 +5,9 @@ pub type Result<T> = std::result::Result<T, &'static str>;
 pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
     match classes {
         // https://tailwindcss.com/docs/aspect-ratio
-        ["aspect", rest @ ..] => {
-            let result = match rest {
-                ["auto"] | ["square"] | ["video"] => Some("aspect"),
-                [n] => parse_fraction(n).map(|_| "aspect"),
-                [] => parse_fraction(arbitrary).map(|_| "aspect"),
-                _ => None,
-            };
-            result.ok_or("Invalid aspect ratio")
-        }
+        ["aspect", "auto" | "square" | "video"] => Ok("aspect"),
+        ["aspect", n] if parse_fraction(n).is_some() => Ok("aspect"),
+        ["aspect"] if parse_fraction(arbitrary).is_some() => Ok("aspect"), 
         // https://tailwindcss.com/docs/container
         ["container"] => Ok("container"),
 
