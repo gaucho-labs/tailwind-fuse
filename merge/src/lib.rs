@@ -5,6 +5,26 @@ mod merge;
 
 pub use merge::*;
 
+pub trait TailwindClassMerger {
+    fn merge_classes(&self, class: String) -> String;
+}
+
+pub struct DefaultTailwindClassMerge;
+
+impl TailwindClassMerger for DefaultTailwindClassMerge {
+    fn merge_classes(&self, class: String) -> String {
+        tw_merge(class.as_str())
+    }
+}
+
+pub struct NoopTailwindClassMerge;
+
+impl TailwindClassMerger for NoopTailwindClassMerge {
+    fn merge_classes(&self, class: String) -> String {
+        class
+    }
+}
+
 pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;
 }
