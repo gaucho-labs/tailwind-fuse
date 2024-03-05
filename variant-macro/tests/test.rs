@@ -46,7 +46,7 @@ enum BtnSize {
     Default,
     #[tw(class = "h-8 rounded-md px-3 text-xs")]
     Sm,
-    #[tw(class = "h-10 rounded-md px-8")]
+    #[tw(class = "h-10 rounded-lg px-8")]
     Lg,
 }
 
@@ -110,6 +110,11 @@ fn test_class_builder() {
             .color(BtnColor::Red)
             .with_class("flex"),
         "h-8 rounded-md px-3 text-xs bg-red-500 text-red-100 flex"
+    );
+
+    assert_eq!(
+        Btn::variant().size(BtnSize::Lg).to_class(),
+        "h-10 rounded-lg px-8 bg-blue-500 text-blue-100"
     );
 
     assert_eq!(
