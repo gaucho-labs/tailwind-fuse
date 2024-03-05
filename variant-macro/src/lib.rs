@@ -34,13 +34,25 @@ pub fn variant(input: TokenStream) -> TokenStream {
         }
     });
 
-    if variants.iter().filter(|v| v.default.is_present()).count() > 1 {
-        return syn::Error::new_spanned(input, "Only one variant can be marked as default")
+    let defaults = variants
+        .iter()
+        .filter(|v| v.default.is_present())
+        .collect::<Vec<_>>();
+
+    if defaults.len() > 1 {
+        let error = format!(
+            "Only one variant can be marked as default: {:?}",
+            defaults
+                .iter()
+                .map(|v| v.ident.to_string())
+                .collect::<Vec<_>>()
+        );
+        return syn::Error::new_spanned(input, error)
             .to_compile_error()
             .into();
     }
 
-    let default_variant = variants.iter().find(|v| v.default.is_present()).map(|v| {
+    let default_variant = defaults.into_iter().next().map(|v| {
         let variant_ident = &v.ident;
         quote! {
             impl Default for #enum_ident {
