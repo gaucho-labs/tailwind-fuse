@@ -1,5 +1,5 @@
-pub(crate) fn get_conflicts(conflict_id: &str) -> Option<Vec<&'static str>> {
-    match conflict_id {
+pub(crate) fn get_collisions(collision_id: &str) -> Option<Vec<&'static str>> {
+    match collision_id {
         "overflow" => Some(vec!["overflow-x", "overflow-y"]),
         "overscroll" => Some(vec!["overscroll-x", "overscroll-y"]),
         "inset" => Some(vec![

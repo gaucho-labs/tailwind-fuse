@@ -1,14 +1,10 @@
 mod conflict;
+mod merge_impl;
 mod parser;
 
-use std::collections::HashSet;
+pub use merge_impl::tw_merge_with_options;
 
-use ast::AstStyle;
-
-use crate::merge::conflict::get_conflicts;
-
-use crate::merge::parser::parse;
-
+/// Merges all the tailwind classes, resolving conflicts.
 #[macro_export]
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
@@ -17,76 +13,82 @@ macro_rules! tw_merge {
     }};
 }
 
+/// Merges all the tailwind classes, resolving conflicts.
 pub fn tw_merge(class: &str) -> String {
-    let styles: Vec<Result<AstStyle, &str>> = ast::parse_tailwind(class);
-
-    let mut valid_styles: Vec<Result<AstStyle, &str>> = vec![];
-    let mut collision_styles: HashSet<Collision> = HashSet::new();
-
-    for style in styles.into_iter().rev() {
-        let style = match style {
-            Ok(style) => style,
-            Err(_) => continue,
-        };
-
-        let elements = style.elements.as_slice();
-        let result = parse(elements, style.arbitrary.unwrap_or_default());
-
-        match result {
-            Err(error) => {
-                #[cfg(debug_assertions)]
-                println!("No Instance found: {style:?} {error:?}");
-                valid_styles.push(Ok(style));
-            }
-            Ok(collision_id) => {
-                // hover:md:focus
-                let all_variants: Vec<&str> = style.variants.clone();
-
-                let collision = Collision {
-                    important: style.important,
-                    variants: all_variants.clone(),
-                    collision_id,
-                };
-
-                if collision_styles.contains(&collision) {
-                    continue;
-                }
-
-                // Add the current collision_id.
-                collision_styles.insert(collision);
-
-                if let Some(collisions) = get_conflicts(collision_id) {
-                    collisions.into_iter().for_each(|collision_id| {
-                        let collision = Collision {
-                            important: style.important,
-                            variants: all_variants.clone(),
-                            collision_id,
-                        };
-
-                        collision_styles.insert(collision);
-                    });
-                }
-
-                valid_styles.push(Ok(style));
-            }
-        }
-    }
-
-    valid_styles.reverse();
-
-    valid_styles
-        .into_iter()
-        .map(|s| match s {
-            Ok(style) => style.source,
-            Err(s) => s,
-        })
-        .collect::<Vec<_>>()
-        .join(" ")
+    tw_merge_with_options(
+        Default::default(),
+        noop_collision_id_fn,
+        noop_collision_fn,
+        class,
+    )
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct Collision<'a> {
-    important: bool,
-    variants: Vec<&'a str>,
-    collision_id: &'a str,
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct MergeOptions {
+    /// Custom prefix for modifiers in Tailwind classes
+    /// Default is empty string
+    /// https://tailwindcss.com/docs/configuration#prefix
+    pub prefix: &'static str,
+    /// Custom separator for modifiers in Tailwind classes
+    /// Default is `:`
+    /// https://tailwindcss.com/docs/configuration#separator
+    pub separator: &'static str,
+}
+
+impl Default for MergeOptions {
+    fn default() -> Self {
+        DEFAULT_OPTIONS
+    }
+}
+
+const DEFAULT_OPTIONS: MergeOptions = MergeOptions {
+    prefix: "",
+    separator: ":",
+};
+
+impl From<MergeOptions> for ast::AstParseOptions<'static> {
+    fn from(options: MergeOptions) -> Self {
+        ast::AstParseOptions {
+            prefix: options.prefix,
+            separator: options.separator,
+        }
+    }
+}
+
+/// Return a conflict id for given tailwind instruction.
+pub trait CollisionIdFn {
+    /// elements: parts of the tailwind class separated by `-`
+    /// arbitrary: the arbitrary value at the end of the tailwind class
+    fn apply(&self, elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str>;
+}
+
+impl<F> CollisionIdFn for F
+where
+    F: Fn(&[&str], Option<&str>) -> Option<&'static str>,
+{
+    fn apply(&self, elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str> {
+        self(elements, arbitrary)
+    }
+}
+
+/// Return list of collision ids for given collision id.
+pub trait GetCollisionsFn {
+    fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>>;
+}
+
+impl<F> GetCollisionsFn for F
+where
+    F: Fn(&str) -> Option<Vec<&'static str>>,
+{
+    fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>> {
+        self(collision_id)
+    }
+}
+
+fn noop_collision_id_fn(_: &[&str], _: Option<&str>) -> Option<&'static str> {
+    None
+}
+
+fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
+    None
 }
