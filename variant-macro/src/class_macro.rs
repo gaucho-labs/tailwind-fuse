@@ -29,7 +29,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
             let ident = merger.as_ident();
             quote! {#ident}
         } else {
-            quote! {tw_merge::DefaultTailwindClassMerge}
+            quote! {DefaultTailwindClassMerge}
         }
     };
 
@@ -61,14 +61,13 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl tw_utils::ToTailwindClass for #builder_ident{
+            impl ToTailwindClass for #builder_ident{
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_merge::{ MaybeToTailwindClass, TailwindClassMerger };
-                    let class = tw_merge::tw_join!(#base_class, #(#optional_builder_fields),*, class.as_ref());
+                    let class = tw_join!(#base_class, #(#optional_builder_fields),*, class.as_ref());
                     #merger.merge_classes(class)
                 }
             }
@@ -84,14 +83,13 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl tw_utils::ToTailwindClass for #struct_ident {
+            impl ToTailwindClass for #struct_ident {
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    use tw_merge::{ MaybeToTailwindClass, TailwindClassMerger };
-                    let class = tw_merge::tw_join!(#base_class, #(#field_class_calls),*, class.as_ref());
+                    let class = tw_join!(#base_class, #(#field_class_calls),*, class.as_ref());
                     #merger.merge_classes(class)
                 }
             }

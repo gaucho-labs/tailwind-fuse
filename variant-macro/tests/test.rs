@@ -1,4 +1,4 @@
-use tw_merge::NoopTailwindClassMerge;
+use tw_merge::*;
 use tw_utils::ToTailwindClass;
 use tw_variant_macro::*;
 

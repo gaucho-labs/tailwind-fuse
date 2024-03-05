@@ -632,6 +632,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/ring-offset-color
         ["ring", "offset", ..] => Ok("ring-offset-color"),
+        ["ring", ..] => Ok("ring-color"),
 
 
         // https://tailwindcss.com/docs/box-shadow
@@ -763,7 +764,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["caret", ..] => Ok("caret-color"),
 
         // https://tailwindcss.com/docs/pointer-events
-        ["pointer", "none"] | ["pointer", "auto"] => Ok("pointer-events"),
+        ["pointer", "events",  "none" | "auto"] => Ok("pointer-events"),
 
         // https://tailwindcss.com/docs/resize
         ["resize", "none"] | ["resize", "y"] | ["resize", "x"] | ["resize"] => Ok("resize"),

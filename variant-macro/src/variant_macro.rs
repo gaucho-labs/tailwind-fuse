@@ -68,16 +68,15 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
     });
 
     let gen = quote! {
-        impl tw_utils::ToTailwindClass for #enum_ident {
+        impl ToTailwindClass for #enum_ident {
             fn to_class(&self) -> String {
                 self.with_class("")
             }
             fn with_class(&self, class: impl AsRef<str>) -> String {
-                use tw_merge::MaybeToTailwindClass;
                 let variant_class = match self {
                     #( #to_class_cases )*
                 };
-                tw_merge::tw_join!(#base_class, variant_class, class.as_ref())
+                tw_join!(#base_class, variant_class, class.as_ref())
             }
         }
 
