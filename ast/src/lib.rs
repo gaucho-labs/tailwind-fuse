@@ -1,6 +1,6 @@
-mod parse;
+mod parser;
 
-pub use parse::parse_tailwind;
+pub use parser::parse_tailwind;
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct AstStyle<'a> {

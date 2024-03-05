@@ -222,6 +222,26 @@ mod test {
     }
 
     #[test]
+    fn test_with_options() {
+        let class = "dark|hover|tw-flex";
+        let options = AstParseOptions {
+            prefix: "tw-",
+            separator: "|",
+        };
+        let result = super::parse_tailwind(class, options);
+        let expected = vec![Ok(AstStyle {
+            source: "dark|hover|tw-flex",
+            important: false,
+            negative: false,
+            variants: vec!["dark", "hover"],
+            elements: vec!["flex"],
+            arbitrary: None,
+        })];
+
+        assert_eq!(result, expected)
+    }
+
+    #[test]
     fn parse_with_negative() {
         let class = "-my-2";
         let result = parse_tailwind(class);

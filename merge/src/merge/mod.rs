@@ -4,6 +4,7 @@ mod parser;
 
 pub use merge_impl::tw_merge_with_options;
 
+/// Merges all the tailwind classes, resolving conflicts.
 #[macro_export]
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
@@ -12,7 +13,7 @@ macro_rules! tw_merge {
     }};
 }
 
-/// Merges
+/// Merges all the tailwind classes, resolving conflicts.
 pub fn tw_merge(class: &str) -> String {
     tw_merge_with_options(
         Default::default(),
