@@ -38,6 +38,7 @@ pub fn tw_merge_with_options(
             Err(error) => {
                 #[cfg(debug_assertions)]
                 println!("No Instance found: {style:?} {error:?}");
+                let _ = error;
                 valid_styles.push(Ok(style));
             }
             Ok(collision_id) => {
