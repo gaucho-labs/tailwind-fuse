@@ -118,3 +118,19 @@ let class = Btn::variant()
     .with_class("bg-green-500");
 
 ```
+
+#### VSCode Intellisense
+
+You can enable autocompletion inside `#[tw()]` using the steps below:
+
+1. [Install the "Tailwind CSS IntelliSense" Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+
+2. Add the following to your [`settings.json`](https://code.visualstudio.com/docs/getstarted/settings):
+
+```json
+{
+  "tailwindCSS.experimental.classRegex": [
+    ["#[tw\\\\([^\\]]*class\\s*=\\s*\"([^\"]*)\"\\)]", "\"([^\"]*)\""]
+  ]
+}
+```
