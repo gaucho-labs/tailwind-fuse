@@ -1,3 +1,4 @@
+use tw_merge::NoopTailwindClassMerge;
 use tw_utils::ToTailwindClass;
 use tw_variant_macro::*;
 
@@ -73,6 +74,24 @@ fn test_btn() {
         "h-9 px-4 py-2 bg-blue-500 text-red-500",
         "color conflict"
     );
+}
+
+#[test]
+fn test_btn_no_merge() {
+    #[derive(TwClass, Default)]
+    #[tw(merger = NoopTailwindClassMerge)]
+    struct Btn {
+        size: BtnSize,
+        color: BtnColor,
+    }
+
+    let button = Btn::default();
+
+    assert_eq!(button.to_class(), "h-9 px-4 py-2 bg-blue-500 text-blue-100");
+    assert_eq!(
+        button.with_class("h-10"),
+        "h-9 px-4 py-2 bg-blue-500 text-blue-100 h-10"
+    )
 }
 
 #[test]

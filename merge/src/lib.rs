@@ -5,10 +5,12 @@ mod merge;
 
 pub use merge::*;
 
+/// Used to merge tailwind classes
 pub trait TailwindClassMerger {
     fn merge_classes(&self, class: String) -> String;
 }
 
+/// Will merge tailwind classes and handle conflicts using [`tw_merge`]
 pub struct DefaultTailwindClassMerge;
 
 impl TailwindClassMerger for DefaultTailwindClassMerge {
@@ -17,6 +19,7 @@ impl TailwindClassMerger for DefaultTailwindClassMerge {
     }
 }
 
+/// Will not merge tailwind classes
 pub struct NoopTailwindClassMerge;
 
 impl TailwindClassMerger for NoopTailwindClassMerge {
@@ -25,6 +28,8 @@ impl TailwindClassMerger for NoopTailwindClassMerge {
     }
 }
 
+/// Used to extract a &str from a type
+/// Implement this trait for your type to use it with the [`tw_join!`] macro
 pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;
 }
