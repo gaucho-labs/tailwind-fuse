@@ -29,50 +29,56 @@ cargo add tailwind-utils
 ```rust
 use tailwind_utils::*;
 
-let class_a = "flex items-center";
-let class_b = "justify-center";
+// No conflict resolution
 // "flex items-center justify-center"
-let joined_class = tailwind_utils::tw_join!(class_a, class_b);
+let joined_class = tw_join!("flex items-center", "justify-center");
 
-let class_a = "py-2 px-4";
-let class_b = "p-4"
-// "p-4"
-let merged_class = tailwind_utils::tw_merge!(class_a, class_b);
+// Conflict resolution
+// Right most class takes precedence
+// p-4
+let merged_class = tw_merge!("py-2 px-4", "p-4");
+
+// Refinements are permitted
+// p-4 py-2
+let merged_class = tw_merge!("p-4", "py-2");
+
 ```
 
 ### Tailwind Variants
 
-Each `TailwindVariant` must have a default variant, denoted by the `#[default]` attribute.
+Useful for building component libraries based on tailwind.
+
+Each `TwClass` represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a `TwVariant` enum. Each `TwVariant` must have a default variant.
 
 ```rust
 use tailwind_utils::*;
 
 // Your Component Type
-#[derive(TailwindClass)]
+#[derive(TwClass)]
+// Optional base class
+#[tw(class = "flex")]
 struct Btn {
     size: BtnSize,
     color: BtnColor,
 }
 
 // Variant for size
-#[derive(TailwindVariant)]
+#[derive(TwVariant)]
 enum BtnSize {
-    #[default]
-    #[class("h-9 px-4 py-2")]
+    #[tw(default, class = "h-9 px-4 py-2")]
     Default,
-    #[class("h-8 rounded-md px-3 text-xs")]
+    #[tw(class = "h-8 px-3")]
     Sm,
-    #[class("h-10 rounded-md px-8")]
+    #[tw(class = "h-10 px-8")]
     Lg,
 }
 
 // Variant for color
-#[derive(TailwindVariant)]
+#[derive(TwVariant)]
 enum BtnColor {
-    #[default]
-    #[class("bg-blue-500 text-white")]
+    #[tw(default, class = "bg-blue-500 text-blue-100")]
     Default,
-    #[class("bg-red-500 text-white")]
+    #[tw(class = "bg-red-500 text-red-100")]
     Red,
 }
 
@@ -80,33 +86,35 @@ enum BtnColor {
 
 You can now use the `Btn` struct to generate tailwind classes, using builder syntax, or using the struct directly
 
-You access the builder using the `variants` method.
 
 #### Struct Syntax
 ```rust
-#[test]
-fn test_btn() {
     let button = Btn {
         size: Default::default(),
         color: Default::default(),
     };
-    assert_eq!(button.to_class(), "h-9 px-4 py-2 bg-blue-500 text-white")
-}
+    // h-9 px-4 py-2 bg-blue-500 text-blue-100
+    button.to_class();
+    // h-9 px-4 py-2 text-blue-100 bg-green-50
+    button.with_class("bg-green-500");
 
 ```
 
 #### Builder Syntax
-Every variant that is not provided will be replaced with the default variant.
+You access the builder using the `variants` method. Every variant that is not provided will be replaced with the default variant.
 
 ```rust
-#[test]
-fn test_class_builder() {
-    assert_eq!(
-        Btn::variant()
-            .size(BtnSize::Sm)
-            .color(BtnColor::Red)
-            .to_class(),
-        "h-8 rounded-md px-3 text-xs bg-red-500 text-white"
-    );
-}
+
+// h-8 px-3 bg-red-500 text-red-100
+let class = Btn::variant()
+    .size(BtnSize::Sm)
+    .color(BtnColor::Red)
+    .to_class();
+
+// h-8 px-3 bg-red-500 text-red-100 bg-green-500
+let class = Btn::variant()
+    .size(BtnSize::Sm)
+    .color(BtnColor::Red)
+    .with_class("bg-green-500");
+
 ```
