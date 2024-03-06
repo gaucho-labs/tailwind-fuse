@@ -24,7 +24,7 @@ cargo add tailwind-fuse
 
 ## Usage
 
-### Tailwind Merge
+### Tailwind Fuse
 
 You can use `tw_join!` to join tailwind classes, and `tw_merge!` to merge tailwind classes handling conflicts.
 
