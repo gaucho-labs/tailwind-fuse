@@ -38,10 +38,10 @@ enum ASTVariant<'a> {
 #[derive(Clone, Debug, PartialEq)]
 pub struct AstParseOptions<'a> {
     /// Custom prefix for modifiers in Tailwind classes
-    /// https://tailwindcss.com/docs/configuration#prefix
+    /// <https://tailwindcss.com/docs/configuration#prefix>
     pub prefix: &'a str,
     /// Custom separator for modifiers in Tailwind classes
-    /// https://tailwindcss.com/docs/configuration#separator
+    /// <https://tailwindcss.com/docs/configuration#separator>
     pub separator: &'a str,
 }
 

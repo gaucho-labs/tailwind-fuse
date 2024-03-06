@@ -4,7 +4,7 @@ mod class_macro;
 mod model;
 mod variant_macro;
 
-#[proc_macro_derive(TwVariant, attributes(tw, default))]
+#[proc_macro_derive(TwVariant, attributes(tw))]
 pub fn variant(input: TokenStream) -> TokenStream {
     variant_macro::variant_impl(input)
 }

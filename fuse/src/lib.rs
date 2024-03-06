@@ -6,11 +6,11 @@ pub use merge::*;
 
 /// Used to Fuse Tailwind Classes together.
 pub trait TailwindFuse {
-    // strings are not guaranteed to be single class or free of whitespace.
+    /// Strings are not guaranteed to be single class nor free of whitespace.
     fn fuse_classes(&self, class: &[&str]) -> String;
 }
 
-/// Will merge tailwind classes and handle conflicts using [`tw_merge`]
+/// Will merge tailwind classes and handle conflicts using [`tw_merge()`]
 pub struct TailwindMerge;
 
 impl TailwindFuse for TailwindMerge {
@@ -39,6 +39,7 @@ impl TailwindFuse for TaiwindJoin {
 }
 
 /// Used to extract a &str from a type
+///
 /// Implement this trait for your type to use it with the [`tw_join!`] and [`tw_merge!`] macros
 pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;

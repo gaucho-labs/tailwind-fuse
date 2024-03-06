@@ -6,8 +6,11 @@ mod validators;
 pub use merge_impl::tw_merge_with_options;
 
 /// Merges all the tailwind classes, resolving conflicts.
+///
 /// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+///
 /// If you DON'T want to handle conflicts use [`crate::tw_join!`].
+///
 /// If you want a custom type to be used with this macro, implement the [`crate::MaybeToTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_merge {
@@ -32,15 +35,20 @@ pub fn tw_merge_slice(class: &[&str]) -> String {
     )
 }
 
+/// Configuration for merging tailwind classes.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct MergeOptions {
     /// Custom prefix for modifiers in Tailwind classes
+    ///
     /// Default is empty string
-    /// https://tailwindcss.com/docs/configuration#prefix
+    ///
+    /// <https://tailwindcss.com/docs/configuration#prefix>
     pub prefix: &'static str,
     /// Custom separator for modifiers in Tailwind classes
+    ///
     /// Default is `:`
-    /// https://tailwindcss.com/docs/configuration#separator
+    ///
+    /// <https://tailwindcss.com/docs/configuration#separator>
     pub separator: &'static str,
 }
 
@@ -64,10 +72,15 @@ impl From<MergeOptions> for tw_ast::AstParseOptions<'static> {
     }
 }
 
-/// Return a conflict id for given tailwind instruction.
+/// Return a ConflictId for a given Tailwind Class.
 pub trait CollisionIdFn {
-    /// elements: parts of the tailwind class separated by `-`
+    /// elements: parts of the tailwind class separated by `-`.
+    ///
+    /// (e.g. `bg-red-500` would be `["bg", "red", "500"]`)
+    ///
     /// arbitrary: the arbitrary value at the end of the tailwind class
+    ///
+    /// <https://tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values>
     fn apply(&self, elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str>;
 }
 
@@ -80,7 +93,8 @@ where
     }
 }
 
-/// Return list of collision ids for given collision id.
+/// Return list of CollisionIds that collide with the given CollisionId.
+/// (e.g. "flex-row" should probably collide with "flex-col")
 pub trait GetCollisionsFn {
     fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>>;
 }

@@ -1,6 +1,9 @@
 /// Joins the given classes into a single string.
+///
 /// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+///
 /// If you want to handle conflicts use [`crate::tw_merge!`].
+///
 /// If you want a custom type to be used with this macro, implement the [`crate::MaybeToTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_join {
