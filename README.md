@@ -2,9 +2,9 @@
 
 Two main utils are included in this crate:
 
-1. Tailwind Fuse: Fuse multiple tailwind classes, with optional conflict resolution.
+1. Fuse: Fuse multiple tailwind classes, with optional conflict resolution.
     > Inspired by [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
-2. Tailwind Variants: Compose type-safe variant classes
+2. Variants: Compose type-safe variant classes
     > Inspired by [Class Variance Authority](https://github.com/joe-bell/cva)
 
 
@@ -22,9 +22,7 @@ cargo add tailwind-fuse --features variants
 cargo add tailwind-fuse
 ```
 
-## Usage
-
-### Tailwind Fuse
+## Usage: Fuse
 
 You can use `tw_join!` to join tailwind classes, and `tw_merge!` to merge tailwind classes handling conflicts.
 
@@ -59,7 +57,7 @@ let merged_class = tw_merge!("p-4", "py-2");
 
 ```
 
-### Tailwind Variants
+## Usage: Variants
 
 Useful for building components with first class support for tailwind. By default, conflicts are merged using `tw_merge`.
 
@@ -108,7 +106,7 @@ enum BtnColor {
 You can now use the `Btn` struct to generate tailwind classes, using builder syntax, or using the struct directly
 
 
-#### Struct Syntax
+### Struct Syntax
 ```rust
 let button = Btn {
     size: BtnSize::Default,
@@ -122,7 +120,7 @@ button.with_class("bg-green-500");
 
 ```
 
-#### Builder Syntax
+### Builder Syntax
 You access the builder using the `variants` method. Every variant that is not provided will be replaced with the default variant.
 
 ```rust
