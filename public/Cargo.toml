@@ -16,3 +16,4 @@ tw-utils = { path = "../utils", optional = true }
 
 [features]
 variant = ["tw-variant-macro", "tw-utils"]
+debug = ["tw-merge/debug"]

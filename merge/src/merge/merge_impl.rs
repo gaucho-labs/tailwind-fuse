@@ -36,7 +36,7 @@ pub fn tw_merge_with_options(
 
         match result {
             Err(error) => {
-                #[cfg(debug_assertions)]
+                #[cfg(debug)]
                 println!("No Instance found: {style:?} {error:?}");
                 let _ = error;
                 valid_styles.push(Ok(style));
