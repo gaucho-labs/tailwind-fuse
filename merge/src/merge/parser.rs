@@ -935,9 +935,8 @@ fn is_valid_color(input: &str) -> bool {
     validators::color::parse(input).is_ok()
 }
 
-// TODO: This is a slight hack. 
 fn is_arbitrary_value(input: &str) -> bool {
-    validators::arbitrary::parse(input).is_ok() || (!input.is_empty())
+    validators::arbitrary::parse(input).is_ok() 
 }
 
 fn is_arbitrary_len(input: &str) -> bool {
