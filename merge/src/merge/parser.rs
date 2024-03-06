@@ -940,29 +940,29 @@ fn is_arbitrary_value(input: &str) -> bool {
 }
 
 fn is_arbitrary_len(input: &str) -> bool {
-    is_valid_arbitrary_value(input, &|label| label == "length", &is_valid_length)
+    is_valid_arbitrary_value(input, |label| label == "length", is_valid_length)
 }
 
 fn is_arbitrary_bg_image(input: &str) -> bool {
     is_valid_arbitrary_value(
         input,
-        &|label| label == "image" || label == "url",
-        &|string| validators::image::parse(string).is_ok(),
+        |label| label == "image" || label == "url",
+        |string| validators::image::parse(string).is_ok(),
     )
 }
 
 fn is_arbitrary_size(input: &str) -> bool {
     is_valid_arbitrary_value(
         input,
-        &|label| label == "length" || label == "size" || label == "percentage",
-        &|_| false,
+        |label| label == "length" || label == "size" || label == "percentage",
+        |_| false,
     )
 }
 
 fn is_valid_arbitrary_value(
     input: &str,
-    label: &'static impl Fn(&str) -> bool,
-    func: &'static impl Fn(&str) -> bool,
+    label: impl Fn(&str) -> bool,
+    func:  impl Fn(&str) -> bool,
 ) -> bool {
     match validators::arbitrary::parse(input).ok() {
         Some((_, (Some(captured_label), _))) => {
