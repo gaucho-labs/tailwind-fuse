@@ -68,7 +68,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
     });
 
     let gen = quote! {
-        impl ToTailwindClass for #enum_ident {
+        impl IntoTailwindClass for #enum_ident {
             fn to_class(&self) -> String {
                 self.with_class("")
             }

@@ -11,7 +11,7 @@ pub use merge_impl::tw_merge_with_options;
 ///
 /// If you DON'T want to handle conflicts use [`crate::tw_join!`].
 ///
-/// If you want a custom type to be used with this macro, implement the [`crate::MaybeToTailwindClass`] trait.
+/// If you want a custom type to be used with this macro, implement the [`crate::MaybeIntoTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
@@ -94,7 +94,10 @@ where
 }
 
 /// Return list of CollisionIds that collide with the given CollisionId.
-/// (e.g. "flex-row" should probably collide with "flex-col")
+///
+/// The list does not need to contain the given CollisionId.
+///
+/// e.g. "flex-row" should probably collide with "flex-col"
 pub trait GetCollisionsFn {
     fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>>;
 }

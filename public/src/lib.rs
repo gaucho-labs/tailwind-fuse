@@ -1,4 +1,5 @@
-pub use tw_fuse::*;
+#![forbid(missing_docs)]
+#![doc = include_str!("../../README.md")]
 
 /// Derives a class for use with Tailwind CSS in Rust components.
 ///
@@ -7,9 +8,9 @@ pub use tw_fuse::*;
 /// Defaults to using [`crate::tw_merge()`] to resolve conflicts.
 ///
 /// Resolves conflicts using the following merge order:
-/// - TwClass base class
-/// - TwVariant base class
-/// - TwVariant enum variant class
+/// - [`TwClass`] base class
+/// - [`TwVariant`] base class
+/// - [`TwVariant`] enum variant class
 /// - Override class with `with_class`
 ///
 /// # Example
@@ -84,5 +85,9 @@ pub use tw_variant_macro::TwClass;
 #[cfg(feature = "variant")]
 pub use tw_variant_macro::TwVariant;
 
+/// A trait to convert a type into a Tailwind class.
+/// Implemented automatically for usages of [`TwClass`] and [`TwVariant`].
 #[cfg(feature = "variant")]
-pub use tw_utils::*;
+pub use tw_utils::IntoTailwindClass;
+
+pub use tw_fuse::*;

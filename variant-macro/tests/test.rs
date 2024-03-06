@@ -1,5 +1,5 @@
 use tw_fuse::*;
-use tw_utils::ToTailwindClass;
+use tw_utils::IntoTailwindClass;
 use tw_variant_macro::*;
 
 #[derive(TwVariant, Debug, PartialEq)]

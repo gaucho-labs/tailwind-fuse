@@ -71,7 +71,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl ToTailwindClass for #builder_ident {
+            impl IntoTailwindClass for #builder_ident {
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }
@@ -110,7 +110,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         });
 
         quote! {
-            impl ToTailwindClass for #struct_ident {
+            impl IntoTailwindClass for #struct_ident {
                 fn to_class(&self) -> String {
                     self.with_class("")
                 }

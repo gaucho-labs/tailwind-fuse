@@ -4,11 +4,11 @@
 ///
 /// If you want to handle conflicts use [`crate::tw_merge!`].
 ///
-/// If you want a custom type to be used with this macro, implement the [`crate::MaybeToTailwindClass`] trait.
+/// If you want a custom type to be used with this macro, implement the [`crate::MaybeIntoTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_join {
      ($item:expr) => {{
-        use $crate::MaybeToTailwindClass;
+        use $crate::MaybeIntoTailwindClass;
         let tailwind_class = $item.to_tailwind_class();
         if let Some(class) = tailwind_class {
             class.trim().into()
@@ -17,7 +17,7 @@ macro_rules! tw_join {
         }
     }};
     ($($item:expr),+ $(,)?) => {{
-        use $crate::MaybeToTailwindClass;
+        use $crate::MaybeIntoTailwindClass;
         let mut result = String::new();
         $(
             // Long lived expressions.
