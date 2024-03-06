@@ -33,6 +33,19 @@ use tailwind_merge::*;
 // "flex items-center justify-center"
 let joined_class = tw_join!("flex items-center", "justify-center");
 
+// You can use Option to handle conditional rendering
+// You can pass in &str, String, Option<String>, or Option<&str>
+// "text-sm font-bold"
+let classes = tw_join!(
+    "text-sm",
+    Some("font-bold"),
+    None::<String>,
+    Some("ring").filter(|_| true),
+    Some(" "),
+    "".to_string(),
+);
+
+
 // Conflict resolution
 // Right most class takes precedence
 // p-4
@@ -46,9 +59,15 @@ let merged_class = tw_merge!("p-4", "py-2");
 
 ### Tailwind Variants
 
-Useful for building component libraries based on tailwind.
+Useful for building components with first class support for tailwind. By default, conflicts are merged using `tw_merge`.
 
-Each `TwClass` represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a `TwVariant` enum. Each `TwVariant` must have a default variant.
+Each `TwClass` represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a `TwVariant`, which must be an enum with a default case.
+
+The merge order is, where the last class takes preferences:
+1. TwClass base class
+2. TwVariant base class
+3. TwVariant enum variant class
+4. Override class `with_class`
 
 ```rust
 use tailwind_merge::*;
@@ -95,6 +114,7 @@ let button = Btn {
 };
 // h-9 px-4 py-2 bg-blue-500 text-blue-100
 button.to_class();
+// Conflicts are resolved.
 // h-9 px-4 py-2 text-blue-100 bg-green-500
 button.with_class("bg-green-500");
 
