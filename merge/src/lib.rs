@@ -1,4 +1,3 @@
-pub mod cache;
 mod join;
 
 mod merge;

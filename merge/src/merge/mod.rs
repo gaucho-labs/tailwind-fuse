@@ -1,6 +1,7 @@
 mod conflict;
 mod merge_impl;
 mod parser;
+mod validators;
 
 pub use merge_impl::tw_merge_with_options;
 

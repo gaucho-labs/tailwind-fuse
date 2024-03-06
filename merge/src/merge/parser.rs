@@ -1,4 +1,4 @@
-use regex_lite::Regex;
+use super::validators;
 
 pub type Result<T> = std::result::Result<T, &'static str>;
 
@@ -927,23 +927,17 @@ fn is_t_shirt_size(input: &str) -> bool {
         || input.ends_with("xl")
 }
 
-lazy_static::lazy_static! {
-    static ref ARBITRARY_VALUE_REGEX: Regex = Regex::new(r"^(?:([a-z-]+):)?(.+)$").unwrap();
-    static ref LENGTH_REGEX: Regex = Regex::new(r"\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$").unwrap();
-    static ref COLOR_REGEX: Regex = Regex::new(r"^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$").unwrap();
-    static ref IMAGE_REGEX: Regex = Regex::new(r"^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$").unwrap();
-}
-
 fn is_valid_length(input: &str) -> bool {
-    LENGTH_REGEX.is_match(input) && !is_valid_color(input)
+    validators::length::parse(input).is_ok() && !is_valid_color(input)
 }
 
 fn is_valid_color(input: &str) -> bool {
-    COLOR_REGEX.is_match(input)
+    validators::color::parse(input).is_ok()
 }
 
+// TODO: This is a slight hack. 
 fn is_arbitrary_value(input: &str) -> bool {
-    ARBITRARY_VALUE_REGEX.is_match(input)
+    validators::arbitrary::parse(input).is_ok() || (!input.is_empty())
 }
 
 fn is_arbitrary_len(input: &str) -> bool {
@@ -954,7 +948,7 @@ fn is_arbitrary_bg_image(input: &str) -> bool {
     is_valid_arbitrary_value(
         input,
         &|label| label == "image" || label == "url",
-        &|string| IMAGE_REGEX.is_match(string),
+        &|string| validators::image::parse(string).is_ok(),
     )
 }
 
@@ -971,35 +965,15 @@ fn is_valid_arbitrary_value(
     label: &'static impl Fn(&str) -> bool,
     func: &'static impl Fn(&str) -> bool,
 ) -> bool {
-    fn exec(
-        input: &str,
-        label: &'static impl Fn(&str) -> bool,
-        func: &'static impl Fn(&str) -> bool,
-    ) -> Option<()> {
-        let captures = ARBITRARY_VALUE_REGEX.captures(input)?;
-
-        let captured_label = captures.get(1).map(|m| m.as_str());
-        if let Some(actual) = captured_label {
-            if label(actual) {
-                return Some(());
-            } else {
-                return None;
-            }
+    match validators::arbitrary::parse(input).ok() {
+        Some((_, (Some(captured_label), _))) => {
+            label(captured_label)
         }
-
-        // Otherwise test the arbitrary value.
-        let value = captures
-            .get(2)
-            .expect("pattern should have three capture groups")
-            .as_str();
-        if func(value) {
-            Some(())
-        } else {
-            None
+        Some((_, (None, rest))) => {
+            func(rest)
         }
+        None => false 
     }
-
-    exec(input, label, func).is_some()
 }
 
 #[cfg(test)]

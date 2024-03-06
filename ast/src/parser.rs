@@ -130,7 +130,7 @@ fn parse_arbitrary(input: &str) -> IResult<&str, &str> {
 }
 
 // https://stackoverflow.com/questions/70630556/parse-allowing-nested-parentheses-in-nom
-fn take_until_unbalanced(
+pub fn take_until_unbalanced(
     opening_bracket: char,
     closing_bracket: char,
 ) -> impl Fn(&str) -> IResult<&str, &str> {

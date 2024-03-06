@@ -1,6 +1,7 @@
 mod parser;
 
 pub use parser::parse_tailwind;
+pub use parser::take_until_unbalanced;
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct AstStyle<'a> {
