@@ -68,16 +68,12 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         }
 
         // https://tailwindcss.com/docs/float
-        ["float", "start"] | ["float", "end"] | ["float", "right"] | ["float", "none"] => {
+        ["float", "start" | "end" | "right" | "none"] => {
             Ok("float")
         }
 
-        // https:: //tailwindcss.com/docs/clear
-        ["clear", "start"]
-        | ["clear", "end"]
-        | ["clear", "right"]
-        | ["clear", "both"]
-        | ["clear", "none"] => Ok("clear"),
+        // https://tailwindcss.com/docs/clear
+        ["clear", "start" | "end" | "right" | "both" | "none"] => Ok("clear"),
 
         // https://tailwindcss.com/docs/isolation
         ["isolation"] | ["isolation", "auto"] => Ok("isolation"),
@@ -704,11 +700,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["backdrop", "sepia", ..] => Ok("backdrop-sepia"),
 
         // https://tailwindcss.com/docs/table-layout
-        ["table", "auto"] => Ok("table-layout"),
-        ["table", "fixed"] => Ok("table-layout"),
+        ["table", "auto" | "fixed"] => Ok("table-layout"),
 
         // https://tailwindcss.com/docs/caption-side
-        ["caption", "top"] | ["caption", "bottom"] => Ok("caption-side"),
+        ["caption", "top" | "bottom"] => Ok("caption-side"),
 
         // https://tailwindcss.com/docs/transition-property
         ["transition", ..] => Ok("transition-property"),
@@ -779,9 +774,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["scroll", rest, ..] if rest.starts_with('p') => Ok("scroll-padding"),
 
         // https://tailwindcss.com/docs/scroll-snap-align
-        ["snap", "start"] | ["snap", "end"] | ["snap", "center"] | ["snap", "align", "none"] => {
-            Ok("scroll-snap-align")
-        }
+        ["snap", "none" | "start" | "end" | "center" | "align", "none"] => Ok("scroll-snap-align"),
 
         // https://tailwindcss.com/docs/scroll-snap-stop#forcing-snap-position-stops
         ["snap", "normal"] | ["snap", "always"] => Ok("scroll-snap-stop"),
