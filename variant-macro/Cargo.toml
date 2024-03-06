@@ -1,5 +1,5 @@
 [package]
-name = "tw-variant-macro"
+name = "tw_variant_macro"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,5 +12,5 @@ quote = "1.0"
 proc-macro2 = "1.0"
 darling = "0.20.8"
 
-tw-fuse = { path = "../fuse" }
-tw-utils = { path = "../utils" }
+tw_fuse = { path = "../fuse" }
+tw_utils = { path = "../utils" }

@@ -9,13 +9,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8901269c6307e8d93993578286ac0edf7f195079ffff5ebdeea6a59ffb7e36bc"
 
 [[package]]
-name = "ast"
-version = "0.1.0"
-dependencies = [
- "nom",
-]
-
-[[package]]
 name = "bitflags"
 version = "2.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -236,12 +229,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwind_merge"
+name = "tailwind_fuse"
 version = "0.1.0"
 dependencies = [
- "tw-fuse",
- "tw-utils",
- "tw-variant-macro",
+ "tw_fuse",
+ "tw_utils",
+ "tw_variant_macro",
 ]
 
 [[package]]
@@ -255,29 +248,36 @@ dependencies = [
 ]
 
 [[package]]
-name = "tw-fuse"
+name = "tw_ast"
 version = "0.1.0"
 dependencies = [
- "ast",
- "divan",
- "fastrand",
  "nom",
 ]
 
 [[package]]
-name = "tw-utils"
+name = "tw_fuse"
+version = "0.1.0"
+dependencies = [
+ "divan",
+ "fastrand",
+ "nom",
+ "tw_ast",
+]
+
+[[package]]
+name = "tw_utils"
 version = "0.1.0"
 
 [[package]]
-name = "tw-variant-macro"
+name = "tw_variant_macro"
 version = "0.1.0"
 dependencies = [
  "darling",
  "proc-macro2",
  "quote",
  "syn",
- "tw-fuse",
- "tw-utils",
+ "tw_fuse",
+ "tw_utils",
 ]
 
 [[package]]

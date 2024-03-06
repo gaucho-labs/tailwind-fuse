@@ -1,4 +1,3 @@
-use ast::take_until_unbalanced;
 use nom::{
     branch::alt,
     bytes::complete::{tag, take_while1},
@@ -7,6 +6,7 @@ use nom::{
     sequence::{delimited, pair},
     IResult,
 };
+use tw_ast::take_until_unbalanced;
 
 pub mod length {
     use super::*;

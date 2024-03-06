@@ -1,5 +1,5 @@
 [package]
-name = "tailwind_merge"
+name = "tailwind_fuse"
 version = "0.1.0"
 edition = "2021"
 authors = ["Nico Burniske", "Gaucho Labs"]
@@ -10,10 +10,10 @@ readme = "../README.md"
 repository = "https://github.com/gaucho-labs/tailwind-utils"
 
 [dependencies]
-tw-fuse = { path = "../fuse" }
-tw-variant-macro = { path = "../variant-macro", optional = true }
-tw-utils = { path = "../utils", optional = true }
+tw_fuse = { path = "../fuse" }
+tw_variant_macro = { path = "../variant-macro", optional = true }
+tw_utils = { path = "../utils", optional = true }
 
 [features]
-variant = ["tw-variant-macro", "tw-utils"]
-debug = ["tw-fuse/debug"]
+variant = ["tw_variant_macro", "tw_utils"]
+debug = ["tw_fuse/debug"]

@@ -29,7 +29,7 @@ cargo add tailwind-fuse
 You can use `tw_join!` to join tailwind classes, and `tw_merge!` to merge tailwind classes handling conflicts.
 
 ```rust
-use tailwind_merge::*;
+use tailwind_fuse::*;
 
 // No conflict resolution
 // "flex items-center justify-center"
@@ -72,7 +72,7 @@ The merge order is, where the last class takes preferences:
 4. Override class `with_class`
 
 ```rust
-use tailwind_merge::*;
+use tailwind_fuse::*;
 
 // Your Component Type
 #[derive(TwClass)]

@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use ast::AstStyle;
+use tw_ast::AstStyle;
 
 use crate::merge::conflict::get_collisions;
 use crate::{CollisionIdFn, GetCollisionsFn, MergeOptions};
@@ -11,7 +11,7 @@ pub fn tw_merge_with_options(
     collisions_fn: impl GetCollisionsFn,
     class: &str,
 ) -> String {
-    let styles: Vec<Result<AstStyle, &str>> = ast::parse_tailwind(class, options.into());
+    let styles: Vec<Result<AstStyle, &str>> = tw_ast::parse_tailwind(class, options.into());
 
     let mut valid_styles: Vec<Result<AstStyle, &str>> = vec![];
     let mut collision_styles: HashSet<Collision> = HashSet::new();

@@ -62,13 +62,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5ad32ce52e4161730f7098c077cd2ed6229b5804ccf99e5366be1ab72a98b4e1"
 
 [[package]]
-name = "ast"
-version = "0.1.0"
-dependencies = [
- "nom",
-]
-
-[[package]]
 name = "async-recursion"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1929,7 +1922,7 @@ dependencies = [
  "leptos_axum",
  "leptos_meta",
  "leptos_router",
- "tailwind_merge",
+ "tailwind_fuse",
  "thiserror",
  "tokio",
  "tower",
@@ -1985,12 +1978,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2047c6ded9c721764247e62cd3b03c09ffc529b2ba5b10ec482ae507a4a70160"
 
 [[package]]
-name = "tailwind_merge"
+name = "tailwind_fuse"
 version = "0.1.0"
 dependencies = [
- "tw-merge",
- "tw-utils",
- "tw-variant-macro",
+ "tw_fuse",
+ "tw_utils",
+ "tw_variant_macro",
 ]
 
 [[package]]
@@ -2198,27 +2191,34 @@ dependencies = [
 ]
 
 [[package]]
-name = "tw-merge"
+name = "tw_ast"
 version = "0.1.0"
 dependencies = [
- "ast",
  "nom",
 ]
 
 [[package]]
-name = "tw-utils"
+name = "tw_fuse"
+version = "0.1.0"
+dependencies = [
+ "nom",
+ "tw_ast",
+]
+
+[[package]]
+name = "tw_utils"
 version = "0.1.0"
 
 [[package]]
-name = "tw-variant-macro"
+name = "tw_variant_macro"
 version = "0.1.0"
 dependencies = [
  "darling 0.20.8",
  "proc-macro2",
  "quote",
  "syn 2.0.52",
- "tw-merge",
- "tw-utils",
+ "tw_fuse",
+ "tw_utils",
 ]
 
 [[package]]

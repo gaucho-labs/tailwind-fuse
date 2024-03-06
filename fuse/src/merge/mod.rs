@@ -47,9 +47,9 @@ const DEFAULT_OPTIONS: MergeOptions = MergeOptions {
     separator: ":",
 };
 
-impl From<MergeOptions> for ast::AstParseOptions<'static> {
+impl From<MergeOptions> for tw_ast::AstParseOptions<'static> {
     fn from(options: MergeOptions) -> Self {
-        ast::AstParseOptions {
+        tw_ast::AstParseOptions {
             prefix: options.prefix,
             separator: options.separator,
         }
