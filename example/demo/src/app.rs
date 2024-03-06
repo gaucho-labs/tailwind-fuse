@@ -1,12 +1,12 @@
 use leptos::*;
+use leptos_hotkeys::prelude::*;
 use leptos_meta::*;
 use leptos_router::*;
-use leptos_hotkeys::prelude::*;
 
-use crate::{
-    button::*,
-    title::*,
-};
+use crate::component::badge::*;
+use crate::component::button::*;
+use crate::title::*;
+use tailwind_fuse::*;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -32,7 +32,6 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
-
     let toggle_default = create_rw_signal(false);
 
     use_hotkeys!(("s", "home") => move |_| {
@@ -47,71 +46,105 @@ fn HomePage() -> impl IntoView {
     let on_click = move |_| set_count.update(|count| *count += 1);
 
     let buttons = vec![
-        ("Conditionally display Button components using <Show />",
+        (
+            "Conditionally display Button components using <Show />",
             view! {
                  <Show
                         when=move || toggle_default.get()
                         fallback=|| {
-                            view! { <Button size=BtnSize::Lg>Press S to change size</Button> }
+                            view! { <Button size=ButtonSize::Lg>Press S to change size</Button> }
                         }
                     >
-                        <Button size=BtnSize::Sm>Press S to change size</Button>
+                        <Button size=ButtonSize::Sm>Press S to change size</Button>
                     </Show>
-            }
+            },
         ),
-        ("Click on the button to increase the count",
+        (
+            "Click on the button to increase the count",
             view! {
-                 <Button on:click=on_click size=BtnSize::Sm variant=BtnVariant::Secondary>
+                 <Button on:click=on_click size=ButtonSize::Sm variant=ButtonVariant::Secondary>
                 "Click Me: "
                 {count}
             </Button>
+            },
+        ),
+        (
+            "Button sizes",
+            view! {
+                <div class="flex items-center gap-2">
+                    <Button size=ButtonSize::Icon>Icon</Button>
+                    <Button size=ButtonSize::Sm>Small</Button>
+                    <Button>Default</Button>
+                    <Button size=ButtonSize::Lg>Large</Button>
+                </div>
             }
-        )
+            .into_view(),
+        ),
+        (
+            "Button variants",
+            view! {
+                <div class="flex items-center gap-2">
+                    <Button variant=ButtonVariant::Default>Default</Button>
+                    <Button variant=ButtonVariant::Secondary>Secondary</Button>
+                    <Button variant=ButtonVariant::Destructive>Destructive</Button>
+                    <Button variant=ButtonVariant::Outline>Outline</Button>
+                    <Button variant=ButtonVariant::Ghost>Ghost</Button>
+                    <Button variant=ButtonVariant::Link>Link</Button>
+                </div>
+            }
+            .into_view(),
+        ),
+        (
+            "Badge variants",
+            view! {
+                <div class="flex items-center gap-2">
+                    <Badge variant=BadgeVariant::Default>Default</Badge>
+                    <Badge variant=BadgeVariant::Secondary>Secondary</Badge>
+                    <Badge variant=BadgeVariant::Destructive>Destructive</Badge>
+                    <Badge variant=BadgeVariant::Outline>Outline</Badge>
+                </div>
+            }
+            .into_view(),
+        ),
     ];
 
     view! {
         <div class="h-screen bg-white p-8">
             <div class="flex space-x-2">
-                <Button
-                    on:click=move |_| {
-                        window()
-                            .location()
-                            .set_href("https://github.com/gaucho-labs")
-                            .expect("Failed to navigate")
-                    }
-                    variant=BtnVariant::Naked
+                <a
+                    class=ButtonClass::variant()
+                        .size(ButtonSize::Sm)
+                        .variant(ButtonVariant::Link)
+                        .to_class()
+                    href="https://github.com/gaucho-labs"
                 >
                     gaucho-labs
-                </Button>
-                <Button
-                    on:click=move |_| {
-                        window()
-                            .location()
-                            .set_href("https://github.com/gaucho-labs/tailwind-fuse")
-                            .expect("Failed to navigate")
-                    }
-                    variant=BtnVariant::Naked
+                </a>
+                <a
+                    class=ButtonClass::variant()
+                        .size(ButtonSize::Sm)
+                        .variant(ButtonVariant::Link)
+                        .to_class()
+                    href="https://github.com/gaucho-labs"
                 >
                     tailwind-fuse
-                </Button>
+                </a>
             </div>
             <div class="flex flex-col divide-y mt-8">
                 <p class="text-3xl font-semibold p-4">Buttons</p>
                 {
-                    let b = buttons
-                        .into_iter()
-                        .map(|(title, view)| {
-                            view! {
-                                <div class="grid grid-cols-4 w-full divide-x">
-                                    <p class="p-4">{title}</p>
-                                    <div class="p-4 col-span-3">{view}</div>
-                                </div>
-                            }
-                        })
-                        .collect::<Vec<_>>();
-                    b
+                    buttons
+                    .into_iter()
+                    .map(|(title, view)| {
+                        view! {
+                            <div class="grid grid-cols-4 w-full divide-x">
+                                <p class="p-4">{title}</p>
+                                <div class="p-4 col-span-3">{view}</div>
+                            </div>
+                        }
+                    })
+                    .collect::<Vec<_>>()
                 }
-
             </div>
         </div>
     }

@@ -1,0 +1,12 @@
+{
+    "scripts": {
+      "dev": "concurrently \"bun run tailwind\" \"trunk serve --port 3000\"",
+      "tailwind": "bunx tailwindcss -i ./input.css -o ./style/output.css --watch --minify"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "concurrently": "^8.2.2",
+      "tailwindcss": "^3.4.1"
+    }
+}
+  
