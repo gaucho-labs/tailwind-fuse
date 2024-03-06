@@ -42,7 +42,7 @@ let classes = tw_join!(
     "text-sm",
     Some("font-bold"),
     None::<String>,
-    Some("ring").filter(|_| true),
+    Some("ring").filter(|_| false),
     Some(" "),
     "".to_string(),
 );

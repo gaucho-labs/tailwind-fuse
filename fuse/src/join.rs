@@ -36,12 +36,10 @@ fn test_tw() {
 
 #[test]
 fn test_option() {
-    let is_hovered = false;
-
     let classes = tw_join!(
         "text-sm",
         Some("font-bold"),
-        Some("ring").filter(|_| is_hovered),
+        Some("ring").filter(|_| false),
         None::<String>,
         "bg-white",
         Some(" "),
