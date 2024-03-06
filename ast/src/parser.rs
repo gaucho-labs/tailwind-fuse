@@ -11,11 +11,12 @@ use nom::{
 use crate::{ASTVariant, AstElements, AstParseOptions, AstStyle};
 
 pub fn parse_tailwind<'a>(
-    class: &'a str,
+    class: &[&'a str],
     options: AstParseOptions<'a>,
 ) -> Vec<Result<AstStyle<'a>, &'a str>> {
     class
-        .split_whitespace()
+        .iter()
+        .flat_map(|s| s.split_whitespace())
         .map(|c| match parse_style(c, &options) {
             Ok((rest, style)) if rest.is_empty() => Ok(style),
             _ => Err(c),
@@ -184,7 +185,8 @@ mod test {
 
     fn parse_tailwind(class: &str) -> Vec<Result<AstStyle, &str>> {
         let options = AstParseOptions::default();
-        super::parse_tailwind(class, options)
+        let split = class.split_whitespace().collect::<Vec<_>>();
+        super::parse_tailwind(split.as_slice(), options)
     }
 
     #[test]
@@ -224,11 +226,12 @@ mod test {
     #[test]
     fn test_with_options() {
         let class = "dark|hover|tw-flex";
+        let class = [class];
         let options = AstParseOptions {
             prefix: "tw-",
             separator: "|",
         };
-        let result = super::parse_tailwind(class, options);
+        let result = super::parse_tailwind(&class, options);
         let expected = vec![Ok(AstStyle {
             source: "dark|hover|tw-flex",
             important: false,

@@ -5,10 +5,25 @@ mod merge;
 pub use merge::*;
 
 /// Used to Fuse Tailwind Classes together.
-pub trait TailwindClassFuse {
-    fn fuse_classes(&self, class: Vec<&str>) -> String;
+pub trait TailwindFuse {
+    // strings are not guaranteed to be single class or free of whitespace.
+    fn fuse_classes(&self, class: &[&str]) -> String;
+}
 
-    fn concat(class: &[&str]) -> String {
+/// Will merge tailwind classes and handle conflicts using [`tw_merge`]
+pub struct TailwindMerge;
+
+impl TailwindFuse for TailwindMerge {
+    fn fuse_classes(&self, class: &[&str]) -> String {
+        tw_merge_slice(class)
+    }
+}
+
+/// Will simply join tailwind classes together without handling conflicts
+pub struct TaiwindJoin;
+
+impl TailwindFuse for TaiwindJoin {
+    fn fuse_classes(&self, class: &[&str]) -> String {
         class
             .iter()
             .map(|s| s.trim())
@@ -23,27 +38,8 @@ pub trait TailwindClassFuse {
     }
 }
 
-/// Will merge tailwind classes and handle conflicts using [`tw_merge`]
-pub struct DefaultTailwindClassMerge;
-
-impl TailwindClassFuse for DefaultTailwindClassMerge {
-    fn fuse_classes(&self, class: Vec<&str>) -> String {
-        let class = Self::concat(class.as_slice());
-        tw_merge(class.as_str())
-    }
-}
-
-/// Will simply join tailwind classes together without handling conflicts
-pub struct TailwindClassJoin;
-
-impl TailwindClassFuse for TailwindClassJoin {
-    fn fuse_classes(&self, class: Vec<&str>) -> String {
-        Self::concat(class.as_slice())
-    }
-}
-
 /// Used to extract a &str from a type
-/// Implement this trait for your type to use it with the [`tw_join!`] macro
+/// Implement this trait for your type to use it with the [`tw_join!`] and [`tw_merge!`] macros
 pub trait MaybeToTailwindClass<'a> {
     fn to_tailwind_class(&'a self) -> Option<&'a str>;
 }

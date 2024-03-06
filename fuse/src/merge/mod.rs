@@ -6,6 +6,9 @@ mod validators;
 pub use merge_impl::tw_merge_with_options;
 
 /// Merges all the tailwind classes, resolving conflicts.
+/// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+/// If you DON'T want to handle conflicts use [`crate::tw_join!`].
+/// If you want a custom type to be used with this macro, implement the [`crate::MaybeToTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
@@ -15,7 +18,12 @@ macro_rules! tw_merge {
 }
 
 /// Merges all the tailwind classes, resolving conflicts.
-pub fn tw_merge(class: &str) -> String {
+pub fn tw_merge(class: impl AsRef<str>) -> String {
+    tw_merge_slice(&[class.as_ref()])
+}
+
+/// Merges all the tailwind classes, resolving conflicts.
+pub fn tw_merge_slice(class: &[&str]) -> String {
     tw_merge_with_options(
         Default::default(),
         noop_collision_id_fn,

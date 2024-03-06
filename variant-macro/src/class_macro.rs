@@ -29,7 +29,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
             let ident = merger.as_ident();
             quote! {#ident}
         } else {
-            quote! {DefaultTailwindClassMerge}
+            quote! {TailwindMerge}
         }
     };
 
@@ -78,12 +78,12 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
                     #( #optional_builder_field_strings )*
-                    let class_vec = vec![
+                    let classes = [
                         #base_class,
                         #( #optional_builder_field_refs )*
                         class.as_ref(),
                     ];
-                    #merger.fuse_classes(class_vec)
+                    #merger.fuse_classes(&classes)
                 }
             }
         }
@@ -117,12 +117,12 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
                     #( #field_class_strings )*
-                    let class_vec = vec![
+                    let classes = [
                         #base_class,
                         #( #field_class_refs )*
                         class.as_ref(),
                     ];
-                    #merger.fuse_classes(class_vec)
+                    #merger.fuse_classes(&classes)
                 }
             }
         }

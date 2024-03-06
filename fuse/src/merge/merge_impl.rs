@@ -9,7 +9,7 @@ pub fn tw_merge_with_options(
     options: MergeOptions,
     collision_id_fn: impl CollisionIdFn,
     collisions_fn: impl GetCollisionsFn,
-    class: &str,
+    class: &[&str],
 ) -> String {
     let styles: Vec<Result<AstStyle, &str>> = tw_ast::parse_tailwind(class, options.into());
 

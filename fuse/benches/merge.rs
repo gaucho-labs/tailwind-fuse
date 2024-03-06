@@ -1,38 +1,48 @@
 use divan::Bencher;
-use tw_fuse::tw_merge;
+use tw_fuse::{tw_merge, tw_merge_slice};
 
 fn main() {
     divan::main();
 }
 
-const LENS: &[usize] = &[10, 20, 40, 60, 80];
+const LENS: &[usize] = &[10, 20, 40, 60, 80, 100];
+const SAMPLE_COUNT: u32 = 1000;
+const SAMPLE_SIZE: u32 = 100;
 
 #[divan::bench(
     args = LENS,
-    max_time = 1,
-    sample_count = 1000,
-    sample_size = 1000
+    sample_count = SAMPLE_COUNT,
+    sample_size = SAMPLE_SIZE
 )]
 fn tailwind_merge(bencher: Bencher, len: usize) {
     bencher
-        .counter(divan::counter::CharsCount::new(len))
-        .with_inputs(|| generate_random_classes(len))
-        .input_counter(divan::counter::BytesCount::of_str)
+        .with_inputs(|| generate_random_classes(len).join(" "))
         .bench_values(|class| tw_merge(class.as_str()));
 }
 
+#[divan::bench(
+    args = LENS,
+    sample_count = SAMPLE_COUNT,
+    sample_size = SAMPLE_SIZE
+)]
+fn tailwind_merge_slice(bencher: Bencher, len: usize) {
+    bencher
+        .with_inputs(|| generate_random_classes(len))
+        .bench_values(|class| tw_merge_slice(&class));
+}
+
 // create a vec with the a length of len and fill it with random data
-fn generate_random_classes(n: usize) -> String {
+fn generate_random_classes(n: usize) -> Vec<&'static str> {
     let mut classes_vec = Vec::with_capacity(n);
     for _ in 0..n {
         let index = fastrand::usize(..TAILWIND_CLASSES.len());
         let element = TAILWIND_CLASSES[index];
         classes_vec.push(element);
     }
-    classes_vec.join(" ")
+    classes_vec
 }
 
-const TAILWIND_CLASSES: [&str; 90] = [
+const TAILWIND_CLASSES: [&str; 108] = [
     "bg-red-500",
     "text-xl",
     "p-4",
@@ -56,7 +66,6 @@ const TAILWIND_CLASSES: [&str; 90] = [
     "transition-all",
     "duration-300",
     "ease-in-out",
-    "transform",
     "rotate-45",
     "scale-105",
     "translate-x-2",
@@ -107,7 +116,7 @@ const TAILWIND_CLASSES: [&str; 90] = [
     "rotate-12",
     "translate-x-1/4",
     "skew-y-3",
-    "origin-top-right",
+    "xl:origin-top-right",
     "cursor-pointer",
     "select-none",
     "resize-y",
@@ -116,11 +125,38 @@ const TAILWIND_CLASSES: [&str; 90] = [
     "ease-in-out",
     "delay-150",
     "animate-spin",
-    "transform-gpu",
     "hover:bg-pink-700",
     "active:text-white",
     "focus:ring-4",
     "focus:outline-none",
     "disabled:opacity-25",
     "visited:text-purple-600",
+    "dark:touch-pan-x",
+    "hover:touch-pan-x",
+    "touch-manipulation",
+    "touch-pan-x",
+    "touch-pan-y",
+    "touch-pinch-zoom",
+    "border-[color:rgb(var(--color-gray-500-rgb)/50%))]",
+    "border-border",
+    "grid-rows-[repeat(20,minmax(0,1fr))]",
+    "bg-[percentage:30%]",
+    "bg-[percentage:30%]",
+    "bg-[length:200px_100px]",
+    "mt-[calc(theme(fontSize.4xl)/1.125)]",
+    "bg-[linear-gradient(.)]",
+    "content-[attr(data-content)]",
+    "hover:[@media_screen{@media(hover:hover)}]:underline",
+    "[&>*]:[&_div]:underline",
+    "[&[data-foo][data-bar]:not([data-baz])]:line-through",
+    "!-inset-x-px",
+    "hover:m-[length:var(--c)]",
 ];
+
+#[test]
+fn assert_unique() {
+    let mut set = std::collections::HashSet::new();
+    for class in TAILWIND_CLASSES.iter() {
+        assert!(set.insert(class), "duplicate class: {}", class);
+    }
+}

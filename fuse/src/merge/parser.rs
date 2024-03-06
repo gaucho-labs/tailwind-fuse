@@ -929,7 +929,7 @@ fn is_valid_color(input: &str) -> bool {
 }
 
 fn is_arbitrary_value(input: &str) -> bool {
-    validators::arbitrary::parse(input).is_ok() 
+    validators::arbitrary::parse(input).is_ok()
 }
 
 fn is_arbitrary_len(input: &str) -> bool {
@@ -955,16 +955,12 @@ fn is_arbitrary_size(input: &str) -> bool {
 fn is_valid_arbitrary_value(
     input: &str,
     label: impl Fn(&str) -> bool,
-    func:  impl Fn(&str) -> bool,
+    func: impl Fn(&str) -> bool,
 ) -> bool {
     match validators::arbitrary::parse(input).ok() {
-        Some((_, (Some(captured_label), _))) => {
-            label(captured_label)
-        }
-        Some((_, (None, rest))) => {
-            func(rest)
-        }
-        None => false 
+        Some((_, (Some(captured_label), _))) => label(captured_label),
+        Some((_, (None, rest))) => func(rest),
+        None => false,
     }
 }
 

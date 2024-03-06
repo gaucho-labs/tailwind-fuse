@@ -407,3 +407,10 @@ fn multiple_arbitrary_variants() {
 //     );
 //     assert_eq!(tw_merge("[&[data-foo][data-bar]:not([data-baz])]:nod:noa:[color:red] [&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]"), "[&[data-foo][data-bar]:not([data-baz])]:noa:nod:[color:blue]");
 // }
+
+#[test]
+fn invalid_class() {
+    let class = "bg-red-500 bgi123([(]] bg-blue-500 bg::123";
+    let result = tw_merge(class);
+    assert_eq!(result, "bgi123([(]] bg-blue-500 bg::123");
+}
