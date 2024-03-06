@@ -1,4 +1,4 @@
-use tw_merge::tw_merge_with_options;
+use tw_fuse::tw_merge_with_options;
 
 pub fn tw_merge(class: &str) -> String {
     tw_merge_with_options(Default::default(), collision_id_fn, get_collisions, class)

@@ -37,16 +37,15 @@ fn test_tw() {
 #[test]
 fn test_option() {
     let is_hovered = false;
-    let is_hovered_class = Some("ring").filter(|_| is_hovered);
 
     let classes = tw_join!(
         "text-sm",
         Some("font-bold"),
-        is_hovered_class,
-        Some("ring").filter(|_| false),
+        Some("ring").filter(|_| is_hovered),
         None::<String>,
         "bg-white",
         Some(" "),
+        "".to_string(),
         "italic text-green-500"
     );
     assert_eq!(classes, "text-sm font-bold bg-white italic text-green-500");

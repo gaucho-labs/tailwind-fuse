@@ -4,26 +4,41 @@ mod merge;
 
 pub use merge::*;
 
-/// Used to merge tailwind classes
-pub trait TailwindClassMerger {
-    fn merge_classes(&self, class: String) -> String;
+/// Used to Fuse Tailwind Classes together.
+pub trait TailwindClassFuse {
+    fn fuse_classes(&self, class: Vec<&str>) -> String;
+
+    fn concat(class: &[&str]) -> String {
+        class
+            .iter()
+            .map(|s| s.trim())
+            .filter(|s| !s.is_empty())
+            .fold(String::new(), |mut acc, s| {
+                if !acc.is_empty() {
+                    acc.push(' ');
+                }
+                acc.push_str(s);
+                acc
+            })
+    }
 }
 
 /// Will merge tailwind classes and handle conflicts using [`tw_merge`]
 pub struct DefaultTailwindClassMerge;
 
-impl TailwindClassMerger for DefaultTailwindClassMerge {
-    fn merge_classes(&self, class: String) -> String {
+impl TailwindClassFuse for DefaultTailwindClassMerge {
+    fn fuse_classes(&self, class: Vec<&str>) -> String {
+        let class = Self::concat(class.as_slice());
         tw_merge(class.as_str())
     }
 }
 
-/// Will not merge tailwind classes
-pub struct NoopTailwindClassMerge;
+/// Will simply join tailwind classes together without handling conflicts
+pub struct TailwindClassJoin;
 
-impl TailwindClassMerger for NoopTailwindClassMerge {
-    fn merge_classes(&self, class: String) -> String {
-        class
+impl TailwindClassFuse for TailwindClassJoin {
+    fn fuse_classes(&self, class: Vec<&str>) -> String {
+        Self::concat(class.as_slice())
     }
 }
 

@@ -239,7 +239,7 @@ dependencies = [
 name = "tailwind_merge"
 version = "0.1.0"
 dependencies = [
- "tw-merge",
+ "tw-fuse",
  "tw-utils",
  "tw-variant-macro",
 ]
@@ -255,7 +255,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tw-merge"
+name = "tw-fuse"
 version = "0.1.0"
 dependencies = [
  "ast",
@@ -276,7 +276,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
- "tw-merge",
+ "tw-fuse",
  "tw-utils",
 ]
 

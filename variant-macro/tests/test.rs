@@ -1,4 +1,4 @@
-use tw_merge::*;
+use tw_fuse::*;
 use tw_utils::ToTailwindClass;
 use tw_variant_macro::*;
 
@@ -79,7 +79,7 @@ fn test_btn() {
 #[test]
 fn test_btn_no_merge() {
     #[derive(TwClass, Default)]
-    #[tw(merger = NoopTailwindClassMerge)]
+    #[tw(merger = TailwindClassJoin)]
     struct Btn {
         size: BtnSize,
         color: BtnColor,

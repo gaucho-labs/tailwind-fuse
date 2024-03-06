@@ -1,4 +1,4 @@
 [workspace]
 exclude = ["example"]
-members = ["merge", "utils", "variant-macro", "public", "ast"]
+members = ["fuse", "utils", "variant-macro", "public", "ast"]
 resolver = "2"

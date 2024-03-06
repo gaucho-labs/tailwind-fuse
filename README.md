@@ -1,10 +1,10 @@
-# Tailwind Merge (for Rust)
+# Tailwind Fuse 
 
 Two main utils are included in this crate:
 
-1. Tailwind Merge: A utility to merge tailwind classes into a single class.
+1. Tailwind Fuse: Fuse multiple tailwind classes, with optional conflict resolution.
     > Inspired by [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
-2. Tailwind Variants: A utility to compose type-safe variant classes
+2. Tailwind Variants: Compose type-safe variant classes
     > Inspired by [Class Variance Authority](https://github.com/joe-bell/cva)
 
 
@@ -14,17 +14,19 @@ Variants requires the `variants` feature to be enabled.
 
 #### With variants
 ```bash
-cargo add tailwind-merge --features variants
+cargo add tailwind-fuse --features variants
 ```
 
 #### Without variants
 ```bash
-cargo add tailwind-merge
+cargo add tailwind-fuse
 ```
 
 ## Usage
 
 ### Tailwind Merge
+
+You can use `tw_join!` to join tailwind classes, and `tw_merge!` to merge tailwind classes handling conflicts.
 
 ```rust
 use tailwind_merge::*;
@@ -96,7 +98,7 @@ enum BtnSize {
 #[derive(TwVariant)]
 enum BtnColor {
     #[tw(default, class = "bg-blue-500 text-blue-100")]
-    Default,
+    Blue,
     #[tw(class = "bg-red-500 text-red-100")]
     Red,
 }
@@ -109,8 +111,8 @@ You can now use the `Btn` struct to generate tailwind classes, using builder syn
 #### Struct Syntax
 ```rust
 let button = Btn {
-    size: Default::default(),
-    color: Default::default(),
+    size: BtnSize::Default,
+    color: BtnColor::Blue,
 };
 // h-9 px-4 py-2 bg-blue-500 text-blue-100
 button.to_class();

@@ -1,4 +1,4 @@
-pub use tw_merge::*;
+pub use tw_fuse::*;
 
 #[cfg(feature = "variant")]
 pub use tw_variant_macro::*;
