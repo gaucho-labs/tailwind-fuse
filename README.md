@@ -1,4 +1,4 @@
-# Tailwind Utils (for Rust)
+# Tailwind Merge (for Rust)
 
 Two main utils are included in this crate:
 
@@ -10,7 +10,7 @@ Two main utils are included in this crate:
 
 ## Installation
 
-Variants is feature gated and requires the `variants` feature to be enabled.
+Variants requires the `variants` feature to be enabled.
 
 #### With variants
 ```bash
