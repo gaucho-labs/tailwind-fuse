@@ -14,12 +14,12 @@ Variants is feature gated and requires the `variants` feature to be enabled.
 
 #### With variants
 ```bash
-cargo add tailwind-util --features variants
+cargo add tailwind-merge --features variants
 ```
 
 #### Without variants
 ```bash
-cargo add tailwind-util
+cargo add tailwind-merge
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ cargo add tailwind-util
 ### Tailwind Merge
 
 ```rust
-use tailwind_util::*;
+use tailwind_merge::*;
 
 // No conflict resolution
 // "flex items-center justify-center"
@@ -51,7 +51,7 @@ Useful for building component libraries based on tailwind.
 Each `TwClass` represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a `TwVariant` enum. Each `TwVariant` must have a default variant.
 
 ```rust
-use tailwind_util::*;
+use tailwind_merge::*;
 
 // Your Component Type
 #[derive(TwClass)]

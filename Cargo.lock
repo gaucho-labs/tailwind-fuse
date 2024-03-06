@@ -236,7 +236,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tailwind_util"
+name = "tailwind_merge"
 version = "0.1.0"
 dependencies = [
  "tw-merge",

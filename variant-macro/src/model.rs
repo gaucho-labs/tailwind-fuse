@@ -4,7 +4,6 @@ use darling::{
     FromDeriveInput, FromField, FromVariant,
 };
 
-// used to get enum data.
 #[derive(Debug, FromDeriveInput)]
 #[darling(attributes(tw), supports(enum_unit))]
 pub struct TwVariantContainer {
@@ -14,7 +13,6 @@ pub struct TwVariantContainer {
     pub class: Option<String>,
 }
 
-// For each enum option
 #[derive(Debug, FromVariant)]
 #[darling(supports(unit), attributes(tw, default))]
 pub struct TwVariantOption {

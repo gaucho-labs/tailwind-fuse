@@ -1,5 +1,5 @@
 use leptos::*;
-use tailwind_util::*;
+use tailwind_merge::*;
 
 #[component]
 pub fn Button(

@@ -1,9 +1,9 @@
 [package]
-name = "tailwind_util"
+name = "tailwind_merge"
 version = "0.1.0"
 edition = "2021"
 authors = ["Nico Burniske", "Gaucho Labs"]
-description = "Tailwind utilities for Rust"
+description = "Tailwind Merge and Variants"
 keywords = ["tailwind", "variants", "leptos"]
 license = "MIT"
 readme = "../README.md"
