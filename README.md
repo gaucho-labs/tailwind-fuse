@@ -63,7 +63,7 @@ let merged_class = tw_merge!("p-4", "py-2");
 
 ## Usage: Variants
 
-Useful for building components with first class support for tailwind. By default, conflicts are merged using [`tw_merge`].
+Useful for building components with first class support for tailwind. By default, conflicts are merged using [`tw_merge()`].
 
 Each [`TwClass`] represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a [`TwVariant`], which must be an enum with a default case.
 
