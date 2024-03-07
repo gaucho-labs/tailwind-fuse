@@ -10,9 +10,9 @@ readme = "../README.md"
 repository = "https://github.com/gaucho-labs/tailwind-fuse"
 
 [dependencies]
-tw_fuse = { path = "../fuse" }
-tw_variant_macro = { path = "../variant-macro", optional = true }
-tw_utils = { path = "../utils", optional = true }
+tw_fuse = { path = "../fuse", version = "0.1.0" }
+tw_variant_macro = { path = "../variant-macro", version = "0.1.0", optional = true }
+tw_utils = { path = "../utils", version = "0.1.0", optional = true }
 
 [features]
 variant = ["tw_variant_macro", "tw_utils"]
