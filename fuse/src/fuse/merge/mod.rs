@@ -24,7 +24,9 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
 }
 
 /// Merges all the tailwind classes, resolving conflicts, with the provided options.
-/// /// ## Example: With Tailwind Prefix
+///
+/// ## Example: With Tailwind Prefix
+///
 /// ```
 /// # use tailwind_fuse::*;
 /// const OPTIONS: MergeOptions = MergeOptions {

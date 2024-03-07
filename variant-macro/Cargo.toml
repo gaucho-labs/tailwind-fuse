@@ -1,5 +1,5 @@
 [package]
-name = "tw_variant_macro"
+name = "tailwind_fuse_macro"
 version = "0.1.0"
 edition = "2021"
 

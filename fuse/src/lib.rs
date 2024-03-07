@@ -263,7 +263,7 @@
 /// ```
 ///
 #[cfg(feature = "variant")]
-pub use tw_variant_macro::TwClass;
+pub use tailwind_fuse_macro::TwClass;
 
 /// Represents a customizable property (variant) of a UI element.
 /// Each variant must be an enum with a default case.
@@ -292,7 +292,7 @@ pub use tw_variant_macro::TwClass;
 /// ```
 ///
 #[cfg(feature = "variant")]
-pub use tw_variant_macro::TwVariant;
+pub use tailwind_fuse_macro::TwVariant;
 
 pub use crate::fuse::merge::merge_impl::*;
 pub use crate::fuse::merge::*;
