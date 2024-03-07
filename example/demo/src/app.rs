@@ -5,7 +5,9 @@ use leptos_router::*;
 
 use crate::component::badge::*;
 use crate::component::button::*;
+use crate::component::card::*;
 use crate::title::*;
+
 use tailwind_fuse::*;
 
 #[component]
@@ -83,7 +85,7 @@ fn HomePage() -> impl IntoView {
         (
             "Button variants",
             view! {
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
                     <Button variant=ButtonVariant::Default>Default</Button>
                     <Button variant=ButtonVariant::Secondary>Secondary</Button>
                     <Button variant=ButtonVariant::Destructive>Destructive</Button>
@@ -117,6 +119,8 @@ fn HomePage() -> impl IntoView {
                         .variant(ButtonVariant::Link)
                         .to_class()
                     href="https://github.com/gaucho-labs"
+                    target="_blank"
+                    rel="noopener noreferrer"
                 >
                     gaucho-labs
                 </a>
@@ -125,22 +129,31 @@ fn HomePage() -> impl IntoView {
                         .size(ButtonSize::Sm)
                         .variant(ButtonVariant::Link)
                         .to_class()
-                    href="https://github.com/gaucho-labs"
+                    href="https://github.com/gaucho-labs/tailwind-fuse"
+                    target="_blank"
+                    rel="noopener noreferrer"
                 >
                     tailwind-fuse
                 </a>
             </div>
-            <div class="flex flex-col divide-y mt-8">
-                <p class="text-3xl font-semibold p-4">Buttons</p>
+            <div class="flex flex-col items-center py-8 gap-4 w-full">
+                <h4 class="text-3xl font-semibold p-4">Buttons</h4>
                 {
                     buttons
                     .into_iter()
                     .map(|(title, view)| {
                         view! {
-                            <div class="grid grid-cols-4 w-full divide-x">
-                                <p class="p-4">{title}</p>
-                                <div class="p-4 col-span-3">{view}</div>
-                            </div>
+                            <Card class="max-w-lg lg:max-w-2xl w-full overflow-none">
+                                <CardHeader>
+                                    <CardTitle>{title}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    {view}
+                                </CardContent>
+                                <CardFooter>
+                                    <div></div>
+                                </CardFooter>
+                            </Card>
                         }
                     })
                     .collect::<Vec<_>>()
@@ -158,7 +171,7 @@ fn ErrorPage() -> impl IntoView {
     let unknown = p_unknown();
 
     view! {
-        <main class=format!(
+        <main class=tw_join!(
             "h-screen w-full flex flex-col items-center justify-center font-robotomono",
         )>
             <p class="">Unknown command: {unknown}</p>
