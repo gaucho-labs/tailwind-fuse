@@ -232,8 +232,9 @@ dependencies = [
 name = "tailwind_fuse"
 version = "0.1.0"
 dependencies = [
- "tw_fuse",
- "tw_utils",
+ "divan",
+ "fastrand",
+ "nom",
  "tw_variant_macro",
 ]
 
@@ -248,27 +249,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tw_ast"
-version = "0.1.0"
-dependencies = [
- "nom",
-]
-
-[[package]]
-name = "tw_fuse"
-version = "0.1.0"
-dependencies = [
- "divan",
- "fastrand",
- "nom",
- "tw_ast",
-]
-
-[[package]]
-name = "tw_utils"
-version = "0.1.0"
-
-[[package]]
 name = "tw_variant_macro"
 version = "0.1.0"
 dependencies = [
@@ -276,8 +256,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
- "tw_fuse",
- "tw_utils",
 ]
 
 [[package]]

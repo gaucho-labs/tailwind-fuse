@@ -1,6 +1,4 @@
-use tw_fuse::*;
-use tw_utils::IntoTailwindClass;
-use tw_variant_macro::*;
+use tailwind_fuse::*;
 
 #[derive(TwVariant, Debug, PartialEq)]
 enum BtnColor {

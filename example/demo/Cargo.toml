@@ -16,5 +16,5 @@ leptos_router = { version = "0.6.9", features = ["csr"] }
 log = "0.4.20"
 leptos_hotkeys = { git = "https://github.com/gaucho-labs/leptos-hotkeys", features = ["csr"]}
 
-tailwind_fuse = { path = "../../public", features = ["variant"]}
+tailwind_fuse = { path = "../../fuse", features = ["variant"]}
 

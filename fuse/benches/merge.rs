@@ -1,5 +1,5 @@
 use divan::Bencher;
-use tw_fuse::{tw_merge, tw_merge_slice};
+use tailwind_fuse::{tw_merge, tw_merge_slice};
 
 fn main() {
     divan::main();

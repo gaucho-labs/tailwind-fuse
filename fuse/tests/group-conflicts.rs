@@ -1,4 +1,4 @@
-use tw_fuse::*;
+use tailwind_fuse::*;
 
 #[test]
 fn test_tw_merge_mixed_blend() {

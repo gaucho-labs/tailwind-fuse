@@ -12,5 +12,3 @@ quote = "1.0"
 proc-macro2 = "1.0"
 darling = "0.20.8"
 
-tw_fuse = { path = "../fuse" }
-tw_utils = { path = "../utils" }

@@ -1,9 +1,7 @@
-mod conflict;
-mod merge_impl;
+pub(crate) mod get_collisions;
+pub(crate) mod merge_impl;
 mod parser;
 mod validators;
-
-pub use merge_impl::tw_merge_with_options;
 
 /// Merges all the tailwind classes, resolving conflicts.
 ///
@@ -25,14 +23,44 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
     tw_merge_slice(&[class.as_ref()])
 }
 
+/// Merges all the tailwind classes, resolving conflicts, with the provided options.
+/// /// ## Example: With Tailwind Prefix
+/// ```
+/// # use tailwind_fuse::*;
+/// const OPTIONS: MergeOptions = MergeOptions {
+///   prefix: "tw-",
+///   separator: ":",
+/// };
+///
+/// pub fn my_custom_tw_merge(class: impl AsRef<str>) -> String {
+///    tw_merge_with_options(class, OPTIONS)
+/// }
+/// ```
+pub fn tw_merge_with_options(class: impl AsRef<str>, options: MergeOptions) -> String {
+    merge_impl::tw_merge_with_override(
+        options,
+        noop_collision_id_fn,
+        noop_collision_fn,
+        &[class.as_ref()],
+    )
+}
+
 /// Merges all the tailwind classes, resolving conflicts.
 pub fn tw_merge_slice(class: &[&str]) -> String {
-    tw_merge_with_options(
+    merge_impl::tw_merge_with_override(
         Default::default(),
         noop_collision_id_fn,
         noop_collision_fn,
         class,
     )
+}
+
+fn noop_collision_id_fn(_: &[&str], _: Option<&str>) -> Option<&'static str> {
+    None
+}
+
+fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
+    None
 }
 
 /// Configuration for merging tailwind classes.
@@ -63,9 +91,9 @@ const DEFAULT_OPTIONS: MergeOptions = MergeOptions {
     separator: ":",
 };
 
-impl From<MergeOptions> for tw_ast::AstParseOptions<'static> {
+impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
     fn from(options: MergeOptions) -> Self {
-        tw_ast::AstParseOptions {
+        crate::ast::AstParseOptions {
             prefix: options.prefix,
             separator: options.separator,
         }
@@ -86,7 +114,7 @@ pub trait CollisionIdFn {
 
 impl<F> CollisionIdFn for F
 where
-    F: Fn(&[&str], Option<&str>) -> Option<&'static str>,
+    F: Fn(&[&str], Option<&str>) -> Option<&'static str> + 'static,
 {
     fn apply(&self, elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str> {
         self(elements, arbitrary)
@@ -99,6 +127,7 @@ where
 ///
 /// e.g. "flex-row" should probably collide with "flex-col"
 pub trait GetCollisionsFn {
+    /// Return list of CollisionIds that collide with the given CollisionId.
     fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>>;
 }
 
@@ -109,12 +138,4 @@ where
     fn apply(&self, collision_id: &str) -> Option<Vec<&'static str>> {
         self(collision_id)
     }
-}
-
-fn noop_collision_id_fn(_: &[&str], _: Option<&str>) -> Option<&'static str> {
-    None
-}
-
-fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
-    None
 }

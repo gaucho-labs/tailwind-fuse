@@ -8,7 +8,7 @@ use nom::{
     IResult,
 };
 
-use crate::{ASTVariant, AstElements, AstParseOptions, AstStyle};
+use super::{ASTVariant, AstElements, AstParseOptions, AstStyle};
 
 pub fn parse_tailwind<'a>(
     class: &[&'a str],

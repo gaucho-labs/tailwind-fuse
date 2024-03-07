@@ -1,7 +1,7 @@
-use tw_fuse::tw_merge_with_options;
+use tailwind_fuse::tw_merge_with_override;
 
 pub fn tw_merge(class: &str) -> String {
-    tw_merge_with_options(
+    tw_merge_with_override(
         Default::default(),
         collision_id_fn,
         get_collisions,

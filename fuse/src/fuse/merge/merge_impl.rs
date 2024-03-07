@@ -1,17 +1,19 @@
 use std::collections::HashSet;
 
-use tw_ast::AstStyle;
+use crate::ast::AstStyle;
 
-use crate::merge::conflict::get_collisions;
-use crate::{CollisionIdFn, GetCollisionsFn, MergeOptions};
+use super::{CollisionIdFn, GetCollisionsFn, MergeOptions};
+use crate::fuse::merge::get_collisions::get_collisions;
 
-pub fn tw_merge_with_options(
+/// Merges all the tailwind classes, resolving conflicts.
+/// Can supply custom options, collision_id_fn and collisions_fn.
+pub fn tw_merge_with_override(
     options: MergeOptions,
     collision_id_fn: impl CollisionIdFn,
     collisions_fn: impl GetCollisionsFn,
     class: &[&str],
 ) -> String {
-    let styles: Vec<Result<AstStyle, &str>> = tw_ast::parse_tailwind(class, options.into());
+    let styles: Vec<Result<AstStyle, &str>> = crate::ast::parse_tailwind(class, options.into());
 
     let mut valid_styles: Vec<Result<AstStyle, &str>> = vec![];
     let mut collision_styles: HashSet<Collision> = HashSet::new();
@@ -31,7 +33,7 @@ pub fn tw_merge_with_options(
             .map(Ok)
             .unwrap_or_else(|| {
                 let arbitrary = style.arbitrary.unwrap_or_default();
-                crate::merge::parser::parse(elements, arbitrary)
+                super::parser::parse(elements, arbitrary)
             });
 
         match result {
