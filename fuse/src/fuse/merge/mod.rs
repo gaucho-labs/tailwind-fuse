@@ -1,6 +1,6 @@
+mod get_collision_id;
 pub(crate) mod get_collisions;
 pub(crate) mod merge_impl;
-mod parser;
 mod validators;
 
 /// Merges all the tailwind classes, resolving conflicts.
@@ -66,7 +66,7 @@ fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
 }
 
 /// Configuration for merging tailwind classes.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug)]
 pub struct MergeOptions {
     /// Custom prefix for modifiers in Tailwind classes
     ///

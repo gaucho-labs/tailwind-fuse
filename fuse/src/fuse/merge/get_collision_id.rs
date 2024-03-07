@@ -2,7 +2,7 @@ use super::validators;
 
 pub type Result<T> = std::result::Result<T, &'static str>;
 
-pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
+pub fn get_collision_id(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
     match classes {
         // https://tailwindcss.com/docs/aspect-ratio
         ["aspect", "auto" | "square" | "video"] => Ok("aspect"),
@@ -16,7 +16,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["columns", rest] if is_t_shirt_size(rest) || rest.parse::<usize>().is_ok() => {
             Ok("columns")
         }
-        ["columns"] if is_t_shirt_size(arbitrary) || arbitrary.parse::<usize>().is_ok() => {
+        ["columns"] if is_arbitrary_len(arbitrary) => {
             Ok("columns")
         }
         // https://tailwindcss.com/docs/break-after
@@ -191,20 +191,9 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["shrink", ..] => Ok("flex-shrink"),
 
         // https://tailwindcss.com/docs/order
-        ["order", rest] => {
-            if valid_order(rest) {
-                Ok("order")
-            } else {
-                Err("Invalid order")
-            }
-        }
-        ["order"] => {
-            if valid_order(arbitrary) {
-                Ok("order")
-            } else {
-                Err("Invalid order")
-            }
-        }
+        ["order", "first" | "last" | "none"] => Ok("order"),
+        ["order", rest] if rest.parse::<isize>().is_ok() => Ok("order"),
+        ["order"] if arbitrary.parse::<isize>().is_ok() => Ok("order"),
 
         // https://tailwindcss.com/docs/grid-template-columns
         ["grid", "cols", ..] => Ok("grid-template-columns"),
@@ -570,7 +559,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         // https://tailwindcss.com/docs/outline-offset
         ["ring", "inset"] => Ok("ring-width"),
         ["ring", rest] if rest.parse::<usize>().is_ok() => Ok("ring-width"),
-        ["ring"] if arbitrary.parse::<usize>().is_ok() => Ok("ring-color"),
+        ["ring"] if arbitrary.parse::<usize>().is_ok() => Ok("ring-width"),
 
         // https://tailwindcss.com/docs/ring-offset-width
         ["ring", "offset", rest] if rest.parse::<usize>().is_ok() => Ok("ring-offset-width"),
@@ -583,7 +572,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
 
         // https://tailwindcss.com/docs/box-shadow
         // TODO: handle conflict with color + arbitrary
-        ["shadow"] | ["shadow", "inner"] | ["shadow", "none"] if arbitrary.is_empty() => Ok("box-shadow"),
+        ["shadow"] | ["shadow", "inner" | "none"] if arbitrary.is_empty() => Ok("box-shadow"),
         ["shadow", size] if is_t_shirt_size(size) => Ok("box-shadow"),
 
         // https://tailwindcss.com/docs/box-shadow-color
@@ -820,10 +809,6 @@ fn valid_break_after(mode: &str) -> bool {
     )
 }
 
-fn valid_order(mode: &str) -> bool {
-    mode == "first" || mode == "last" || mode == "none" || mode.parse::<isize>().is_ok()
-}
-
 fn valid_text_size(mode: &str) -> bool {
     mode == "base"
         || mode.ends_with("xs")
@@ -930,61 +915,61 @@ mod test {
 
     #[test]
     fn parse_stroke() {
-        let result = parse(&["stroke"], "10px");
+        let result = get_collision_id(&["stroke"], "10px");
         assert_eq!(result, Ok("stroke-width"));
 
-        let result = parse(&["stroke"], "hsl(350_80%_0%)");
+        let result = get_collision_id(&["stroke"], "hsl(350_80%_0%)");
         assert_eq!(result, Ok("stroke"));
     }
 
     #[test]
     fn parse_margin() {
-        let result = parse(&["my", "2"], "");
+        let result = get_collision_id(&["my", "2"], "");
         assert_eq!(result, Ok("margin-y"));
 
-        let result = parse(&["m", "2"], "");
+        let result = get_collision_id(&["m", "2"], "");
         assert_eq!(result, Ok("margin"));
 
-        let result = parse(&["m"], "2px");
+        let result = get_collision_id(&["m"], "2px");
         assert_eq!(result, Ok("margin"));
 
-        let result = parse(&["my"], "10rem");
+        let result = get_collision_id(&["my"], "10rem");
         assert_eq!(result, Ok("margin-y"));
     }
 
     #[test]
     fn parse_inset() {
-        let result = parse(&["inset", "auto"], "");
+        let result = get_collision_id(&["inset", "auto"], "");
         assert_eq!(result, Ok("inset"));
 
-        let result = parse(&["inset", "0"], "");
+        let result = get_collision_id(&["inset", "0"], "");
         assert_eq!(result, Ok("inset"));
 
-        let result = parse(&["inset"], "10px");
+        let result = get_collision_id(&["inset"], "10px");
         assert_eq!(result, Ok("inset"));
     }
 
     #[test]
     fn parse_len() {
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"], "length:theme(someScale.someValue)");
+        let result = get_collision_id(&["text"], "length:theme(someScale.someValue)");
         assert_eq!(result, Ok("font-size"));
 
         assert!(is_valid_length("calc(theme(fontSize.4xl)/1.125)"));
-        let result = parse(&["text"], "calc(theme(fontSize.4xl)/1.125)");
+        let result = get_collision_id(&["text"], "calc(theme(fontSize.4xl)/1.125)");
         assert_eq!(result, Ok("font-size"));
     }
 
     #[test]
     fn parse_text_color() {
         assert!(!is_arbitrary_len("color:0"), "shouldn't be a length");
-        let result = parse(&["text"], "color:0");
+        let result = get_collision_id(&["text"], "color:0");
         assert_eq!(result, Ok("text-color"));
     }
 
     #[test]
     fn parse_margin_arb() {
-        let result = parse(&["m"], "length:var(--c)");
+        let result = get_collision_id(&["m"], "length:var(--c)");
         assert_eq!(result, Ok("margin"));
     }
 
@@ -993,13 +978,13 @@ mod test {
         assert!(!is_arbitrary_len(
             "color:rgb(var(--color-gray-500-rgb)/50%)"
         ));
-        let result = parse(&["border"], "color:rgb(var(--color-gray-500-rgb)/50%)");
+        let result = get_collision_id(&["border"], "color:rgb(var(--color-gray-500-rgb)/50%)");
         assert_eq!(result, Ok("border-color"));
 
-        let result = parse(&["border", "some", "color"], "");
+        let result = get_collision_id(&["border", "some", "color"], "");
         assert_eq!(result, Ok("border-color"));
 
-        let result = parse(&["border", "b"], "");
+        let result = get_collision_id(&["border", "b"], "");
         assert_eq!(result, Ok("border-w-b"));
     }
 }

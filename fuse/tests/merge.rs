@@ -414,3 +414,24 @@ fn invalid_class() {
     let result = tw_merge(class);
     assert_eq!(result, "bgi123([(]] bg-blue-500 bg::123");
 }
+
+#[test]
+fn aspect_ratio() {
+    let class = "aspect-square aspect-16/9";
+    let result = tw_merge(class);
+    assert_eq!(result, "aspect-16/9");
+
+    let class = "aspect-square aspect-[16/9]";
+    assert_eq!(tw_merge(class), "aspect-[16/9]");
+}
+
+#[test]
+fn columns() {
+    let class = "columns-1 columns-2xl";
+    let result = tw_merge(class);
+    assert_eq!(result, "columns-2xl");
+
+    let class = "columns-1 columns-[2rem]";
+    let result = tw_merge(class);
+    assert_eq!(result, "columns-[2rem]");
+}

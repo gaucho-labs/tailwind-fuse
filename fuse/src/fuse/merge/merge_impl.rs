@@ -33,7 +33,7 @@ pub fn tw_merge_with_override(
             .map(Ok)
             .unwrap_or_else(|| {
                 let arbitrary = style.arbitrary.unwrap_or_default();
-                super::parser::parse(elements, arbitrary)
+                super::get_collision_id::get_collision_id(elements, arbitrary)
             });
 
         match result {
