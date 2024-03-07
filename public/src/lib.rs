@@ -8,7 +8,7 @@
 //!
 //! Two main utils are included in this crate:
 //!
-//! 1. Fuse: Fuse multiple tailwind classes, with optional conflict resolution.
+//! 1. Fuse: Fuse multiple Tailwind classes, with optional conflict resolution.
 //!     > Inspired by [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
 //! 2. Variants: Compose type-safe variant classes
 //!     > Inspired by [Class Variance Authority](https://github.com/joe-bell/cva)
@@ -30,7 +30,7 @@
 //!
 //! ## Usage: Fuse
 //!
-//! You can use `tw_join!` to join tailwind classes, and `tw_merge!` to merge tailwind classes handling conflicts.
+//! You can use [`tw_join!`] to join Tailwind classes, and [`tw_merge!`] to merge Tailwind Classes handling conflicts.
 //!
 //! ```
 //! use tailwind_fuse::*;
@@ -106,7 +106,7 @@
 //! }
 //! ```
 //!
-//! You can now use the `Btn` struct to generate tailwind classes, using builder syntax, or using the struct directly
+//! You can now use the `Btn` struct to generate Tailwind classes, using builder syntax, or using the struct directly
 //!
 //! ### Struct Syntax
 //! ```
