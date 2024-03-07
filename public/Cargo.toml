@@ -7,7 +7,7 @@ description = "Tailwind Merge and Variants"
 keywords = ["tailwind", "variants", "leptos"]
 license = "MIT"
 readme = "../README.md"
-repository = "https://github.com/gaucho-labs/tailwind-utils"
+repository = "https://github.com/gaucho-labs/tailwind-fuse"
 
 [dependencies]
 tw_fuse = { path = "../fuse" }
@@ -17,3 +17,6 @@ tw_utils = { path = "../utils", optional = true }
 [features]
 variant = ["tw_variant_macro", "tw_utils"]
 debug = ["tw_fuse/debug"]
+
+[package.metadata.docs.rs]
+all-features = true

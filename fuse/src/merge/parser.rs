@@ -39,7 +39,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
             Ok("box-decoration-break")
         }
         // https://tailwindcss.com/docs/box-sizing
-        ["box", "border"] | ["box", "content"] => Ok("box-sizing"),
+        ["box", "border" | "content"] => Ok("box-sizing"),
 
         // https://tailwindcss.com/docs/display
         ["block"]
@@ -241,77 +241,31 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["gap", ..] => Ok("gap"),
 
         // https://tailwindcss.com/docs/justify-content
-        ["justify", "normal"]
-        | ["justify", "start"]
-        | ["justify", "end"]
-        | ["justify", "center"]
-        | ["justify", "between"]
-        | ["justify", "around"]
-        | ["justify", "evenly"]
-        | ["justify", "stretch"] => Ok("justify-content"),
+        ["justify", "normal" | "start" | "end" | "center" | "between" | "around" | "evenly" | "stretch"] => Ok("justify-content"),
         
         // https://tailwindcss.com/docs/justify-items
-        ["justify", "items", "start"]
-        | ["justify", "items", "end"]
-        | ["justify", "items", "center"]
-        | ["justify", "items", "stretch"] => Ok("justify-items"),
+        ["justify", "items", "start" | "end" | "center" | "stretch"] => Ok("justify-items"),
 
         // https://tailwindcss.com/docs/justify-self
-        ["justify", "self", "auto"]
-        | ["justify", "self", "start"]
-        | ["justify", "self", "end"]
-        | ["justify", "self", "center"]
-        | ["justify", "self", "stretch"] => Ok("justify-self"),
+        ["justify", "self", "start" | "end" | "center" | "stretch"] => Ok("justify-self"),
 
         // https://tailwindcss.com/docs/align-content
-        ["content", "normal"]
-        | ["content", "center"]
-        | ["content", "start"]
-        | ["content", "end"]
-        | ["content", "between"]
-        | ["content", "around"]
-        | ["content", "evenly"]
-        | ["content", "baseline"]
-        | ["content", "stretch"] => Ok("align-content"),
+        ["content", "normal" | "center" | "start" | "end" | "between" | "around" | "evenly" | "baseline" | "stretch"] => Ok("align-content"),
 
         // https://tailwindcss.com/docs/align-items
-        ["items", "start"]
-        | ["items", "end"]
-        | ["items", "center"]
-        | ["items", "baseline"]
-        | ["items", "stretch"] => Ok("align-items"),
+        ["items", "start" | "end" | "center" | "baseline" | "stretch"] => Ok("align-items"),
 
         // https://tailwindcss.com/docs/align-self
-        ["self", "auto"]
-        | ["self", "start"]
-        | ["self", "end"]
-        | ["self", "center"]
-        | ["self", "stretch"]
-        | ["self", "baseline"] => Ok("align-self"),
+        ["self", "auto" | "start" | "end" | "center" | "stretch" | "baseline"] => Ok("align-self"),
         
         // https://tailwindcss.com/docs/place-content
-        ["place", "content", "center"]
-        | ["place", "content", "start"]
-        | ["place", "content", "end"]
-        | ["place", "content", "between"]
-        | ["place", "content", "around"]
-        | ["place", "content", "evenly"]
-        | ["place", "content", "baseline"]
-        | ["place", "content", "stretch"] => Ok("place-content"),
+        ["place", "content", "center" | "start" | "end" | "between" | "around" | "evenly" | "baseline" | "stretch"] => Ok("place-content"),
 
         // https://tailwindcss.com/docs/place-items
-        ["place", "items", "start"]
-        | ["place", "items", "end"]
-        | ["place", "items", "center"]
-        | ["place", "items", "baseline"]
-        | ["place", "items", "stretch"] => Ok("place-items"),
+        ["place", "items", "start" | "end" | "center" | "baseline" | "stretch"] => Ok("place-items"),
 
         // https://tailwindcss.com/docs/place-self
-        ["place", "self", "start"]
-        | ["place", "self", "end"]
-        | ["place", "self", "center"]
-        | ["place", "self", "baseline"]
-        | ["place", "self", "stretch"] => Ok("place-items"),
+        ["place", "self", "start" | "end" | "center" | "baseline" | "stretch"] => Ok("place-self"),
 
         // https://tailwindcss.com/docs/padding
         ["p", ..] => Ok("padding"),
@@ -383,10 +337,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["text", ..] => Ok("text-color"),
 
         // https://tailwindcss.com/docs/font-smoothing
-        ["antialiased"] | ["subpixel-antialiased"] => Ok("font-smoothing"),
+        ["antialiased"] | ["subpixel", "antialiased"] => Ok("font-smoothing"),
 
         // https://tailwindcss.com/docs/font-style
-        ["italic"] | ["not-italic"] => Ok("font-style"),
+        ["italic"] | ["not","italic"] => Ok("font-style"),
 
         // https://tailwindcss.com/docs/font-weight
         ["font", ..] => Ok("font-weight"),
@@ -421,7 +375,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["underline"] | ["overline"] | ["line", "through"] | ["no", "underline"] => Ok("text-decoration"),
 
         // https://tailwindcss.com/docs/text-decoration-style
-        ["solid"] | ["double"] | ["dotted"] | ["dashed"] | ["wavy"] => Ok("text-decoration-style"),
+        ["decoration", "solid" | "double" | "dotted" | "dashed" | "wavy"] => Ok("text-decoration-style"),
 
         // https://tailwindcss.com/docs/text-decoration-thickness
         ["decoration", "auto"] | ["decoration", "from-font"] => Ok("text-decoration-thickness"),
@@ -466,14 +420,14 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         }
 
         // https://tailwindcss.com/docs/hyphens
-        ["hyphens", "none"] | ["hyphens", "manual"] | ["hyphens", "auto"] => Ok("hyphens"),
+        ["hyphens", "none" | "manual" | "auto"] => Ok("hyphens"),
 
         // https://tailwindcss.com/docs/content
         ["content", "none"] => Ok("content"),
         ["content"] if is_arbitrary_value(arbitrary) => Ok("content"),
 
         // https://tailwindcss.com/docs/background-attachment
-        ["bg", "fixed"] | ["bg", "local"] | ["bg", "scroll"] => Ok("background-attachment"),
+        ["bg", "fixed" | "local" | "scroll"] => Ok("background-attachment"),
 
         // https://tailwindcss.com/docs/background-clip
         ["bg", "clip", "border" | "padding" | "content" | "text"] => Ok("background-clip"),
@@ -501,7 +455,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         | ["bg", "top"] => Ok("background-position"),
 
         // https://tailwindcss.com/docs/background-size
-        ["bg", "auto"] | ["bg", "cover"] | ["bg", "contain"] => Ok("background-size"),
+        ["bg", "auto" | "cover" | "contain"] => Ok("background-size"),
         ["bg"] if is_arbitrary_size(arbitrary) => Ok("background-size"),
 
         // https://tailwindcss.com/docs/background-image
@@ -583,11 +537,7 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["border", ..] => Ok("border-color"),
 
         // https://tailwindcss.com/docs/divide-style
-        ["divide", "solid"]
-        | ["divide", "dashed"]
-        | ["divide", "dotted"]
-        | ["divide", "double"]
-        | ["divide", "none"] => Ok("divide-style"),
+        ["divide", "solid" | "dashed" | "dotted" | "double" | "none"] => Ok("divide-style"),
 
         // https://tailwindcss.com/docs/divide-width
         ["divide", "x", "reverse"] => Ok("divide-x-reverse"),
@@ -762,10 +712,10 @@ pub fn parse(classes: &[&str], arbitrary: &str) -> Result<&'static str> {
         ["pointer", "events",  "none" | "auto"] => Ok("pointer-events"),
 
         // https://tailwindcss.com/docs/resize
-        ["resize", "none"] | ["resize", "y"] | ["resize", "x"] | ["resize"] => Ok("resize"),
+        ["resize"] | ["resize", "none" | "y" |"x"]   => Ok("resize"),
 
         // https://tailwindcss.com/docs/scroll-behavior
-        ["scroll", "auto"] | ["scroll", "smooth"] => Ok("scroll-behavior"),
+        ["scroll", "auto" | "smooth"] => Ok("scroll-behavior"),
 
         // https://tailwindcss.com/docs/scroll-margin
         ["scroll", rest, ..] if rest.starts_with('m') => Ok("scroll-margin"),
