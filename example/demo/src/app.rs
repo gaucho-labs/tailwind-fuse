@@ -36,7 +36,7 @@ pub fn App() -> impl IntoView {
 fn HomePage() -> impl IntoView {
     let toggle_default = create_rw_signal(false);
 
-    use_hotkeys!(("s", "home") => move |_| {
+    use_hotkeys!(("b", "home") => move |_| {
         if toggle_default.get() {
             toggle_default.set(false);
         } else {
@@ -49,7 +49,7 @@ fn HomePage() -> impl IntoView {
             "Conditionally change the button variant",
             view! {
                 <Button variant= Signal::derive(move || if toggle_default.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})>
-                    Press S to change variant
+                    Press B to change variant
                 </Button>
             },
         ),
@@ -57,10 +57,10 @@ fn HomePage() -> impl IntoView {
             "Button sizes",
             view! {
                 <div class="flex items-center gap-2">
-                    <Button size=ButtonSize::Icon>Icon</Button>
                     <Button size=ButtonSize::Sm>Small</Button>
                     <Button>Default</Button>
                     <Button size=ButtonSize::Lg>Large</Button>
+                    <Button size=ButtonSize::Icon>Icon</Button>
                 </div>
             }
             .into_view(),
