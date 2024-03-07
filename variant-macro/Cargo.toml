@@ -2,6 +2,12 @@
 name = "tailwind_fuse_macro"
 version = "0.1.0"
 edition = "2021"
+authors = ["Nico Burniske", "Gaucho Labs"]
+description = "Macros for tailwind-fuse"
+keywords = ["tailwind", "variants", "leptos"]
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/gaucho-labs/tailwind-fuse"
 
 [lib]
 proc-macro = true
