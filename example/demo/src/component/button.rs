@@ -3,7 +3,8 @@ use tailwind_fuse::*;
 
 #[derive(TwClass, Clone, Copy)]
 #[tw(
-    class = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+    class = r#"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors 
+               focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"#
 )]
 pub struct ButtonClass {
     pub variant: ButtonVariant,
@@ -52,6 +53,7 @@ pub fn Button(
     children: Children,
 ) -> impl IntoView {
     let class = class.unwrap_or_default();
+
     let class = Signal::derive(move || {
         let variant = variant.unwrap_or_default()();
         let size = size.unwrap_or_default()();

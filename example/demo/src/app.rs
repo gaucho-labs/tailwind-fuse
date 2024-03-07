@@ -6,7 +6,6 @@ use leptos_router::*;
 use crate::component::badge::*;
 use crate::component::button::*;
 use crate::component::card::*;
-use crate::title::*;
 
 use tailwind_fuse::*;
 
@@ -21,6 +20,7 @@ pub fn App() -> impl IntoView {
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
+        <script>{include_str!("prism.js")}</script>
         <main _ref=h_ref>
             <Router>
                 <Routes>
@@ -44,30 +44,13 @@ fn HomePage() -> impl IntoView {
         }
     });
 
-    let (count, set_count) = create_signal(0);
-    let on_click = move |_| set_count.update(|count| *count += 1);
-
     let buttons = vec![
         (
-            "Conditionally display Button components using <Show />",
+            "Conditionally change the button variant",
             view! {
-                 <Show
-                        when=move || toggle_default.get()
-                        fallback=|| {
-                            view! { <Button size=ButtonSize::Lg>Press S to change size</Button> }
-                        }
-                    >
-                        <Button size=ButtonSize::Sm>Press S to change size</Button>
-                    </Show>
-            },
-        ),
-        (
-            "Click on the button to increase the count",
-            view! {
-                 <Button on:click=on_click size=ButtonSize::Sm variant=ButtonVariant::Secondary>
-                "Click Me: "
-                {count}
-            </Button>
+                <Button variant= Signal::derive(move || if toggle_default.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})>
+                    Press S to change variant
+                </Button>
             },
         ),
         (
@@ -158,6 +141,13 @@ fn HomePage() -> impl IntoView {
                     })
                     .collect::<Vec<_>>()
                 }
+            </div>
+            <div class="p-8 flex-col items-center">
+                <pre class="whitespace-pre-wrap !rounded-md">
+                    <code class="language-rust !text-sm">
+                        {include_str!("component/button.rs")}
+                    </code>
+                </pre>
             </div>
         </div>
     }
