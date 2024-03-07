@@ -18,7 +18,7 @@ pub fn parse_tailwind<'a>(
         .iter()
         .flat_map(|s| s.split_whitespace())
         .map(|c| match parse_style(c, &options) {
-            Ok((rest, style)) if rest.is_empty() => Ok(style),
+            Ok(("", style)) => Ok(style),
             _ => Err(c),
         })
         .collect()
