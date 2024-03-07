@@ -1,6 +1,30 @@
 use leptos::*;
 use tailwind_fuse::*;
 
+#[component]
+pub fn Button(
+    #[prop(into, optional)] variant: Option<MaybeSignal<ButtonVariant>>,
+    #[prop(into, optional)] size: Option<MaybeSignal<ButtonSize>>,
+    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
+    children: Children,
+) -> impl IntoView {
+    let class = class.unwrap_or_default();
+
+    let class = Signal::derive(move || {
+        let variant = variant.unwrap_or_default()();
+        let size = size.unwrap_or_default()();
+        let button = ButtonClass { variant, size };
+        button.with_class(class())
+    });
+
+    view! {
+        <button {..attributes} class=class>
+            {children()}
+        </button>
+    }
+}
+
 #[derive(TwClass, Clone, Copy)]
 #[tw(
     class = r#"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors 
@@ -42,28 +66,4 @@ pub enum ButtonSize {
     Lg,
     #[tw(class = "h-9 w-9")]
     Icon,
-}
-
-#[component]
-pub fn Button(
-    #[prop(into, optional)] variant: Option<MaybeSignal<ButtonVariant>>,
-    #[prop(into, optional)] size: Option<MaybeSignal<ButtonSize>>,
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
-    #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
-    children: Children,
-) -> impl IntoView {
-    let class = class.unwrap_or_default();
-
-    let class = Signal::derive(move || {
-        let variant = variant.unwrap_or_default()();
-        let size = size.unwrap_or_default()();
-        let button = ButtonClass { variant, size };
-        button.with_class(class())
-    });
-
-    view! {
-        <button {..attributes} class=class>
-            {children()}
-        </button>
-    }
 }

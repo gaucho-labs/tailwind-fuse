@@ -2,7 +2,6 @@ use app::*;
 use leptos::*;
 mod app;
 mod component;
-mod title;
 
 pub fn main() {
     _ = console_log::init_with_level(log::Level::Debug);
