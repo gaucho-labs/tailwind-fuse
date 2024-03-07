@@ -3,15 +3,15 @@ use std::collections::HashSet;
 use crate::ast::AstStyle;
 
 use super::{CollisionIdFn, GetCollisionsFn, MergeOptions};
-use crate::fuse::merge::get_collisions::get_collisions;
+use crate::core::merge::get_collisions::get_collisions;
 
-/// Merges all the tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes, resolving conflicts.
 /// Can supply custom options, collision_id_fn and collisions_fn.
 pub fn tw_merge_with_override(
+    class: &[&str],
     options: MergeOptions,
     collision_id_fn: impl CollisionIdFn,
     collisions_fn: impl GetCollisionsFn,
-    class: &[&str],
 ) -> String {
     let styles: Vec<Result<AstStyle, &str>> = crate::ast::parse_tailwind(class, options.into());
 

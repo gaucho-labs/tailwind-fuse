@@ -751,7 +751,7 @@ pub fn get_collision_id(classes: &[&str], arbitrary: &str) -> Result<&'static st
         // https://tailwindcss.com/docs/forced-color-adjust
         ["forced", "color", "adjust", "auto" | "none"] => Ok("forced-color-adjust"),
 
-        _ => Err("Invalid tailwind class"),
+        _ => Err("Invalid Tailwind class"),
     }
 }
 

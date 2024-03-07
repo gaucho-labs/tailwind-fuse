@@ -1,13 +1,13 @@
-use tailwind_fuse::{tw_merge_with_options, tw_merge_with_override, MergeOptions};
+use tailwind_fuse::merge::{tw_merge_with_options, tw_merge_with_override, MergeOptions};
 
 #[test]
 fn test_collisions() {
     pub fn tw_merge(class: &str) -> String {
         tw_merge_with_override(
+            &[class],
             Default::default(),
             collision_id_fn,
             get_collisions,
-            &[class],
         )
     }
 

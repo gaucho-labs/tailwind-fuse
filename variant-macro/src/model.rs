@@ -9,7 +9,7 @@ use darling::{
 pub struct TwVariantContainer {
     pub ident: syn::Ident,
     pub data: ast::Data<TwVariantOption, ()>,
-    /// The base tailwind class for the variant.
+    /// The base Tailwind class for the variant.
     pub class: Option<String>,
 }
 

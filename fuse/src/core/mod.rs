@@ -1,6 +1,7 @@
 pub(crate) mod join;
 
-pub(crate) mod merge;
+/// Merges all the Tailwind classes, resolving conflicts.
+pub mod merge;
 
 /// Used to extract a &str from a type
 ///

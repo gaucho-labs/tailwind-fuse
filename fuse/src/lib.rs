@@ -294,12 +294,11 @@ pub use tailwind_fuse_macro::TwClass;
 #[cfg(feature = "variant")]
 pub use tailwind_fuse_macro::TwVariant;
 
-pub use crate::fuse::merge::merge_impl::*;
-pub use crate::fuse::merge::*;
-pub use crate::fuse::*;
+pub use crate::core::merge;
+pub use crate::core::*;
 
 mod ast;
-mod fuse;
+mod core;
 
 /// Used to Fuse Tailwind Classes together.
 pub trait TailwindFuse {
@@ -307,22 +306,23 @@ pub trait TailwindFuse {
     fn fuse_classes(&self, class: &[&str]) -> String;
 }
 
-/// Will merge tailwind classes and handle conflicts using [`tw_merge()`]
+/// Will merge Tailwind classes and handle conflicts using [`tw_merge()`]
 pub struct TailwindMerge;
 
 impl TailwindFuse for TailwindMerge {
     fn fuse_classes(&self, class: &[&str]) -> String {
-        crate::fuse::merge::tw_merge_slice(class)
+        crate::core::merge::tw_merge_slice(class)
     }
 }
 
-/// Will simply join tailwind classes together without handling conflicts
+/// Will simply join Tailwind classes together without handling conflicts
 pub struct TaiwindJoin;
 
 impl TailwindFuse for TaiwindJoin {
     fn fuse_classes(&self, class: &[&str]) -> String {
         class
             .iter()
+            .flat_map(|s| s.split_whitespace())
             .map(|s| s.trim())
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, s| {

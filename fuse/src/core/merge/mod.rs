@@ -3,7 +3,9 @@ pub(crate) mod get_collisions;
 pub(crate) mod merge_impl;
 mod validators;
 
-/// Merges all the tailwind classes, resolving conflicts.
+pub use merge_impl::tw_merge_with_override;
+
+/// Merges all the Tailwind classes, resolving conflicts.
 ///
 /// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
 ///
@@ -14,21 +16,21 @@ mod validators;
 macro_rules! tw_merge {
     ($($item:expr),+ $(,)?) => {{
         let joined = $crate::tw_join!($($item),+);
-        $crate::tw_merge(joined.as_str())
+        $crate::merge::tw_merge(joined.as_str())
     }};
 }
 
-/// Merges all the tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes, resolving conflicts.
 pub fn tw_merge(class: impl AsRef<str>) -> String {
     tw_merge_slice(&[class.as_ref()])
 }
 
-/// Merges all the tailwind classes, resolving conflicts, with the provided options.
+/// Merges all the Tailwind classes, resolving conflicts, with the provided options.
 ///
 /// ## Example: With Tailwind Prefix
 ///
 /// ```
-/// # use tailwind_fuse::*;
+/// # use tailwind_fuse::merge::*;
 /// const OPTIONS: MergeOptions = MergeOptions {
 ///   prefix: "tw-",
 ///   separator: ":",
@@ -40,20 +42,20 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
 /// ```
 pub fn tw_merge_with_options(class: impl AsRef<str>, options: MergeOptions) -> String {
     merge_impl::tw_merge_with_override(
+        &[class.as_ref()],
         options,
         noop_collision_id_fn,
         noop_collision_fn,
-        &[class.as_ref()],
     )
 }
 
-/// Merges all the tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes, resolving conflicts.
 pub fn tw_merge_slice(class: &[&str]) -> String {
     merge_impl::tw_merge_with_override(
+        class,
         Default::default(),
         noop_collision_id_fn,
         noop_collision_fn,
-        class,
     )
 }
 
@@ -65,7 +67,7 @@ fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
     None
 }
 
-/// Configuration for merging tailwind classes.
+/// Configuration for merging Tailwind classes.
 #[derive(Clone, Copy, Debug)]
 pub struct MergeOptions {
     /// Custom prefix for modifiers in Tailwind classes
@@ -104,11 +106,11 @@ impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
 
 /// Return a ConflictId for a given Tailwind Class.
 pub trait CollisionIdFn {
-    /// elements: parts of the tailwind class separated by `-`.
+    /// elements: parts of the Tailwind class separated by `-`.
     ///
     /// (e.g. `bg-red-500` would be `["bg", "red", "500"]`)
     ///
-    /// arbitrary: the arbitrary value at the end of the tailwind class
+    /// arbitrary: the arbitrary value at the end of the Tailwind class
     ///
     /// <https://tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values>
     fn apply(&self, elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str>;
