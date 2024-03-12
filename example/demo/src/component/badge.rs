@@ -30,19 +30,18 @@ pub enum BadgeVariant {
 
 #[component]
 pub fn Badge(
-    #[prop(into, optional)] variant: Option<MaybeSignal<BadgeVariant>>,
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] variant: MaybeSignal<BadgeVariant>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     /// Arbitrary additional attributes.
     #[prop(attrs)]
     attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = Signal::derive(move || {
+    let class = create_memo(move |_| {
         let badge = BadgeClass {
-            variant: variant.unwrap_or_default().get(),
+            variant: variant.get(),
         };
-        badge.with_class(class())
+        badge.with_class(class.get())
     });
 
     view! {

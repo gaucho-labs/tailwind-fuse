@@ -3,19 +3,17 @@ use tailwind_fuse::*;
 
 #[component]
 pub fn Button(
-    #[prop(into, optional)] variant: Option<MaybeSignal<ButtonVariant>>,
-    #[prop(into, optional)] size: Option<MaybeSignal<ButtonSize>>,
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] variant: MaybeSignal<ButtonVariant>,
+    #[prop(into, optional)] size: MaybeSignal<ButtonSize>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-
-    let class = Signal::derive(move || {
-        let variant = variant.unwrap_or_default()();
-        let size = size.unwrap_or_default()();
+    let class = create_memo(move |_| {
+        let variant = variant.get();
+        let size = size.get();
         let button = ButtonClass { variant, size };
-        button.with_class(class())
+        button.with_class(class.get())
     });
 
     view! {
