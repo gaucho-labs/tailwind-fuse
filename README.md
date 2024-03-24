@@ -20,7 +20,7 @@ Variants requires the `variants` feature to be enabled.
 
 #### With variants
 ```bash
-cargo add tailwind-fuse --features variants
+cargo add tailwind-fuse --features variant
 ```
 
 #### Without variants
