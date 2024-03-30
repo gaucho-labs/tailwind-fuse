@@ -1,15 +1,12 @@
 # Why Tailwind Fuse?
 
-When working with Tailwind CSS, it's common to apply multiple utility classes to an element to achieve the desired styling. However, as the number of classes grows, or when building reusable components, managing and resolving conflicts can become a challenge. 
+When working with Tailwind CSS, it's common to apply multiple utility classes to an element to achieve the desired styling. However, as the number of classes grows, or when building reusable components, resolving conflicts can become a challenge. 
 
 Tailwind Fuse is the missing piece for seamless class composition and conflict resolution when using Tailwind CSS with Rust.
 
-In traditional CSS, conflicts between styles are resolved based on the order in which they are defined in the stylesheet. Let's consider an example:
+In traditional CSS, conflicts between styles are resolved based on the order in which they are defined in the stylesheet, NOT the order in the html
 
-```html
-<div class="text-blue text-red">Hello, world!</div>
-```
-
+### styles.css
 ```css
 .text-red {
   color: red;
@@ -20,9 +17,14 @@ In traditional CSS, conflicts between styles are resolved based on the order in 
 }
 ```
 
-In this case, the text color of the `<div>` element will be blue, even though both `text-red` and `text-blue` classes are applied. This is because the `text-blue` class is defined later in the stylesheet, NOT in the html element, and CSS follows the "last rule wins" principle.
+### index.html
+```html
+<div class="text-blue text-red">Hello, world!</div>
+```
 
-This behavior can lead to challenges when working with utility-first frameworks like Tailwind CSS. With Tailwind, it's common to apply multiple utility classes to an element, and the order of those classes in the HTML can affect the final styling.
+In this case, the text color of the `<div>` element will be blue, even though both `text-red` and `text-blue` classes are applied.
+
+With Tailwind, it's common to apply multiple utility classes to an element, and the order of those classes in the HTML can affect the final styling.
 
 This is where Tailwind Fuse shines. It introduces the Fuse utility, which intelligently merges multiple Tailwind classes while automatically resolving conflicts. 
 
