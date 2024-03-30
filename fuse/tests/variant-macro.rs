@@ -77,7 +77,7 @@ fn test_btn() {
 #[test]
 fn test_btn_no_merge() {
     #[derive(TwClass, Default)]
-    #[tw(merger = TaiwindJoin)]
+    #[tw(merger = TailwindJoin)]
     struct Btn {
         size: BtnSize,
         color: BtnColor,

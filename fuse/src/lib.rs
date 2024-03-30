@@ -316,9 +316,9 @@ impl TailwindFuse for TailwindMerge {
 }
 
 /// Will simply join Tailwind classes together without handling conflicts
-pub struct TaiwindJoin;
+pub struct TailwindJoin;
 
-impl TailwindFuse for TaiwindJoin {
+impl TailwindFuse for TailwindJoin {
     fn fuse_classes(&self, class: &[&str]) -> String {
         class
             .iter()
