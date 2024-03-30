@@ -1,6 +1,4 @@
-Introduction:
-
-"Why Tailwind Fuse?"
+# Why Tailwind Fuse?
 
 When working with Tailwind CSS, it's common to apply multiple utility classes to an element to achieve the desired styling. However, as the number of classes grows, managing and resolving conflicts between them can become a challenge. This is where Tailwind Fuse comes in as the missing piece for seamless class composition and conflict resolution in Tailwind CSS.
 
@@ -42,5 +40,11 @@ assert_eq!(
     "stroke-black stroke-1",
     tw_merge!("stroke-black", "stroke-1")
 );
+
+// Classes are unique per prefix
+assert_eq!(
+  "flex-col lg:flex-row",
+  tw_merge!("flex-col", "lg:flex-row")
+)
 
 ```
