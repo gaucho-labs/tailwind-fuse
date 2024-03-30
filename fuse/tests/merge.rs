@@ -436,3 +436,29 @@ fn columns() {
     let result = tw_merge(class);
     assert_eq!(result, "columns-[2rem]");
 }
+
+#[test]
+fn arbitrary_property_conflicts() {
+    let class = "[&>*]:[color:red] [&>*]:[color:blue]";
+    let result = tw_merge(class);
+    assert_eq!(result, "[&>*]:[color:blue]");
+
+    let class = "![some:prop] [some:other] [some:one] ![some:another]";
+    let result = tw_merge(class);
+    assert_eq!(result, "[some:one] ![some:another]");
+
+    let class = "hover:[paint-order:markers] hover:[paint-order:normal]";
+    let result = tw_merge(class);
+    assert_eq!(result, "hover:[paint-order:normal]");
+}
+
+#[test]
+fn test_negative_values() {
+    let class = "top-12 -top-69";
+    let result = tw_merge(class);
+    assert_eq!(result, "-top-69");
+
+    let class = "-top-12 -top-2000";
+    let result = tw_merge(class);
+    assert_eq!(result, "-top-2000");
+}

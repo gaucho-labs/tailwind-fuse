@@ -37,12 +37,19 @@ pub fn tw_merge_with_override(
             });
 
         match result {
-            Err(error) => {
-                #[cfg(debug)]
-                println!("No Instance found: {style:?} {error:?}");
-                let _ = error;
-                valid_styles.push(Ok(style));
-            }
+            Err(error) => match Collision::check_arbitrary(style.clone()) {
+                Some(collision) => {
+                    if collision_styles.contains(&collision) {
+                        continue;
+                    }
+                    collision_styles.insert(collision);
+                }
+                None => {
+                    #[cfg(debug)]
+                    println!("No Instance found: {style:?} {error:?}");
+                    let _ = error;
+                }
+            },
             Ok(collision_id) => {
                 // hover:md:focus
                 let all_variants: Vec<&str> = style.variants.clone();
@@ -75,10 +82,9 @@ pub fn tw_merge_with_override(
                         collision_styles.insert(collision);
                     });
                 }
-
-                valid_styles.push(Ok(style));
             }
         }
+        valid_styles.push(Ok(style));
     }
 
     valid_styles.reverse();
@@ -98,4 +104,40 @@ struct Collision<'a> {
     important: bool,
     variants: Vec<&'a str>,
     collision_id: &'a str,
+}
+
+// For [color:blue] => label = "color"
+impl<'a> Collision<'a> {
+    fn check_arbitrary(style: AstStyle<'a>) -> Option<Self> {
+        let arbitrary = style.arbitrary?;
+        if arbitrary.contains(':') {
+            let mut parts = arbitrary.split(':');
+            let collision_id = parts.next()?;
+            Some(Self {
+                collision_id,
+                important: style.important,
+                variants: style.variants,
+            })
+        } else {
+            None
+        }
+    }
+}
+
+#[test]
+fn check_arbitrary() {
+    let style = crate::ast::parse_tailwind(&["[color:blue]"], Default::default())
+        .into_iter()
+        .next()
+        .unwrap()
+        .unwrap();
+
+    assert_eq!(
+        Collision::check_arbitrary(style),
+        Some(Collision {
+            important: false,
+            variants: vec![],
+            collision_id: "color"
+        })
+    );
 }

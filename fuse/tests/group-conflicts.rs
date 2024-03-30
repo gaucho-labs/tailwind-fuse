@@ -179,3 +179,34 @@ fn line_clamp_classes_do_create_conflicts_correctly() {
         "line-clamp-1 overflow-auto inline"
     );
 }
+
+#[test]
+fn test_line_height_font_size() {
+    assert_eq!(tw_merge("leading-9 text-lg"), "text-lg");
+}
+
+#[test]
+fn text_color_font_size() {
+    assert_eq!(tw_merge("text-red-500 text-lg"), "text-red-500 text-lg");
+
+    // https://tailwindcss.com/docs/font-size#setting-the-line-height
+    assert_eq!(
+        tw_merge("text-red-500/10 text-lg/9"),
+        "text-red-500/10 text-lg/9"
+    );
+}
+
+#[test]
+fn stroke_width() {
+    assert_eq!(tw_merge("stroke-2 stroke-[3]"), "stroke-[3]");
+}
+
+#[test]
+fn handles_negative_value_conflicts_correctly() {
+    assert_eq!(tw_merge("-top-12 -top-2000"), "-top-2000");
+}
+
+#[test]
+fn tailwind_3_4() {
+    assert_eq!(tw_merge("text-red text-lg/8"), "text-red text-lg/8");
+}

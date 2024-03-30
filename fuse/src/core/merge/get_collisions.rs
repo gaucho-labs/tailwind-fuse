@@ -34,7 +34,7 @@ pub(crate) fn get_collisions(collision_id: &str) -> Option<Vec<&'static str>> {
         "margin-x" => Some(vec!["margin-right", "margin-left"]),
         "margin-y" => Some(vec!["margin-top", "margin-bottom"]),
         "size" => Some(vec!["width", "height"]),
-        "font-size" => Some(vec!["leading"]),
+        "font-size" => Some(vec!["line-height"]),
         "fvn-normal" => Some(vec![
             "fvn-ordinal",
             "fvn-slashed-zero",
