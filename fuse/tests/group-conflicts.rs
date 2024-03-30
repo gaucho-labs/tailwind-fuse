@@ -205,3 +205,8 @@ fn stroke_width() {
 fn handles_negative_value_conflicts_correctly() {
     assert_eq!(tw_merge("-top-12 -top-2000"), "-top-2000");
 }
+
+#[test]
+fn tailwind_3_4() {
+    assert_eq!(tw_merge("text-red text-lg/8"), "text-red text-lg/8");
+}

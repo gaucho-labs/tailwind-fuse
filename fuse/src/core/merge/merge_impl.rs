@@ -37,7 +37,7 @@ pub fn tw_merge_with_override(
             });
 
         match result {
-            Err(error) => match style.arbitrary.and_then(Collision::from_arbitrary) {
+            Err(error) => match Collision::check_arbitrary(style.clone()) {
                 Some(collision) => {
                     if collision_styles.contains(&collision) {
                         continue;
@@ -54,7 +54,7 @@ pub fn tw_merge_with_override(
                 // hover:md:focus
                 let all_variants: Vec<&str> = style.variants.clone();
 
-                let collision = Collision::Default {
+                let collision = Collision {
                     important: style.important,
                     variants: all_variants.clone(),
                     collision_id,
@@ -73,7 +73,7 @@ pub fn tw_merge_with_override(
 
                 if let Some(collisions) = collisions {
                     collisions.into_iter().for_each(|collision_id| {
-                        let collision = Collision::Default {
+                        let collision = Collision {
                             important: style.important,
                             variants: all_variants.clone(),
                             collision_id,
@@ -100,24 +100,24 @@ pub fn tw_merge_with_override(
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum Collision<'a> {
-    Default {
-        important: bool,
-        variants: Vec<&'a str>,
-        collision_id: &'a str,
-    },
-    // For [color:blue] => label = "color"
-    Arbitrary {
-        label: &'a str,
-    },
+struct Collision<'a> {
+    important: bool,
+    variants: Vec<&'a str>,
+    collision_id: &'a str,
 }
 
+// For [color:blue] => label = "color"
 impl<'a> Collision<'a> {
-    fn from_arbitrary(arbitrary: &'a str) -> Option<Self> {
+    fn check_arbitrary(style: AstStyle<'a>) -> Option<Self> {
+        let arbitrary = style.arbitrary?;
         if arbitrary.contains(':') {
             let mut parts = arbitrary.split(':');
-            let label = parts.next()?;
-            Some(Self::Arbitrary { label })
+            let collision_id = parts.next()?;
+            Some(Self {
+                collision_id,
+                important: style.important,
+                variants: style.variants,
+            })
         } else {
             None
         }
@@ -125,10 +125,19 @@ impl<'a> Collision<'a> {
 }
 
 #[test]
-fn from_arb() {
+fn check_arbitrary() {
+    let style = crate::ast::parse_tailwind(&["[color:blue]"], Default::default())
+        .into_iter()
+        .next()
+        .unwrap()
+        .unwrap();
+
     assert_eq!(
-        Collision::from_arbitrary("color:blue"),
-        Some(Collision::Arbitrary { label: "color" })
+        Collision::check_arbitrary(style),
+        Some(Collision {
+            important: false,
+            variants: vec![],
+            collision_id: "color"
+        })
     );
-    assert_eq!(Collision::from_arbitrary("blue"), None);
 }
