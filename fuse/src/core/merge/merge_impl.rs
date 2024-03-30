@@ -37,17 +37,24 @@ pub fn tw_merge_with_override(
             });
 
         match result {
-            Err(error) => {
-                #[cfg(debug)]
-                println!("No Instance found: {style:?} {error:?}");
-                let _ = error;
-                valid_styles.push(Ok(style));
-            }
+            Err(error) => match style.arbitrary.and_then(Collision::from_arbitrary) {
+                Some(collision) => {
+                    if collision_styles.contains(&collision) {
+                        continue;
+                    }
+                    collision_styles.insert(collision);
+                }
+                None => {
+                    #[cfg(debug)]
+                    println!("No Instance found: {style:?} {error:?}");
+                    let _ = error;
+                }
+            },
             Ok(collision_id) => {
                 // hover:md:focus
                 let all_variants: Vec<&str> = style.variants.clone();
 
-                let collision = Collision {
+                let collision = Collision::Default {
                     important: style.important,
                     variants: all_variants.clone(),
                     collision_id,
@@ -66,7 +73,7 @@ pub fn tw_merge_with_override(
 
                 if let Some(collisions) = collisions {
                     collisions.into_iter().for_each(|collision_id| {
-                        let collision = Collision {
+                        let collision = Collision::Default {
                             important: style.important,
                             variants: all_variants.clone(),
                             collision_id,
@@ -75,10 +82,9 @@ pub fn tw_merge_with_override(
                         collision_styles.insert(collision);
                     });
                 }
-
-                valid_styles.push(Ok(style));
             }
         }
+        valid_styles.push(Ok(style));
     }
 
     valid_styles.reverse();
@@ -94,8 +100,35 @@ pub fn tw_merge_with_override(
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct Collision<'a> {
-    important: bool,
-    variants: Vec<&'a str>,
-    collision_id: &'a str,
+enum Collision<'a> {
+    Default {
+        important: bool,
+        variants: Vec<&'a str>,
+        collision_id: &'a str,
+    },
+    // For [color:blue] => label = "color"
+    Arbitrary {
+        label: &'a str,
+    },
+}
+
+impl<'a> Collision<'a> {
+    fn from_arbitrary(arbitrary: &'a str) -> Option<Self> {
+        if arbitrary.contains(':') {
+            let mut parts = arbitrary.split(':');
+            let label = parts.next()?;
+            Some(Self::Arbitrary { label })
+        } else {
+            None
+        }
+    }
+}
+
+#[test]
+fn from_arb() {
+    assert_eq!(
+        Collision::from_arbitrary("color:blue"),
+        Some(Collision::Arbitrary { label: "color" })
+    );
+    assert_eq!(Collision::from_arbitrary("blue"), None);
 }

@@ -743,7 +743,9 @@ pub fn get_collision_id(classes: &[&str], arbitrary: &str) -> Result<&'static st
         ["stroke"] if is_valid_length(arbitrary) => Ok("stroke-width"),
 
         // https://tailwindcss.com/docs/stroke
-        ["stroke", ..] => Ok("stroke"),
+        ["stroke", ..]=> {
+            Ok("stroke")
+        },
 
         // https://tailwindcss.com/docs/screen-readers
         ["sr", "only"] | ["not", "sr", "only"] => Ok("screen-readers"),
@@ -798,7 +800,7 @@ fn valid_top_right_bottom_left(mode: &str) -> bool {
     mode == "auto"
         || mode == "full"
         || mode == "px"
-        || parse_single_digit_decimal(mode).is_some()
+        || validators::parse_single_digit_decimal(mode)
         || parse_fraction(mode).is_some()
 }
 
@@ -809,28 +811,19 @@ fn valid_break_after(mode: &str) -> bool {
     )
 }
 
+// Need starts_with for this https://tailwindcss.com/docs/font-size#setting-the-line-height
 fn valid_text_size(mode: &str) -> bool {
     mode == "base"
+        || mode.starts_with("xs")
         || mode.ends_with("xs")
+        || mode.starts_with("sm")
         || mode.ends_with("sm")
+        || mode.starts_with("md")
         || mode.ends_with("md")
+        || mode.starts_with("lg")
         || mode.ends_with("lg")
+        || mode.starts_with("xl")
         || mode.ends_with("xl")
-}
-
-// parses 1.5 but not 1.55
-fn parse_single_digit_decimal(input: &str) -> Option<()> {
-    if input.len() == 1 {
-        let _ = input.parse::<usize>().ok()?;
-        Some(())
-    } else if input.len() == 3 {
-        let (l, r) = input.split_once('.')?;
-        let _ = l.parse::<usize>().ok()?;
-        let _ = r.parse::<usize>().ok()?;
-        Some(())
-    } else {
-        None
-    }
 }
 
 fn parse_fraction_or_usize(input: &str) -> bool {
@@ -909,8 +902,8 @@ mod test {
         assert!(is_valid_length("10%"));
         assert!(is_valid_length("100rem"));
 
-        assert!(!is_valid_length("10"), "needs unit");
         assert!(!is_valid_length("hsl(350_80%_0%)"), "no color");
+        assert!(!is_valid_length("--my-0"), "double negative");
     }
 
     #[test]

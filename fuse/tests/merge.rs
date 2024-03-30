@@ -436,3 +436,10 @@ fn columns() {
     let result = tw_merge(class);
     assert_eq!(result, "columns-[2rem]");
 }
+
+#[test]
+fn something() {
+    let class = "[&>*]:[color:red] [&>*]:[color:blue]";
+    let result = tw_merge(class);
+    assert_eq!(result, "[&>*]:[color:blue]");
+}
