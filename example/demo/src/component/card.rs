@@ -3,17 +3,16 @@ use tailwind_fuse::*;
 
 #[component]
 pub fn Card(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || {
+    let class = create_memo(move |_| {
         tw_merge!(
             "rounded-xl border bg-card text-card-foreground shadow",
-            class()
+            class.get()
         )
-    };
+    });
 
     view! {
         <div {..attributes} class=class>
@@ -24,12 +23,11 @@ pub fn Card(
 
 #[component]
 pub fn CardHeader(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || tw_merge!("flex flex-col space-y-1.5 p-6", class());
+    let class = create_memo(move |_| tw_merge!("flex flex-col space-y-1.5 p-6", class.get()));
 
     view! {
         <div {..attributes} class=class>
@@ -40,12 +38,12 @@ pub fn CardHeader(
 
 #[component]
 pub fn CardTitle(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || tw_merge!("font-semibold leading-none tracking-tight", class());
+    let class =
+        create_memo(move |_| tw_merge!("font-semibold leading-none tracking-tight", class.get()));
 
     view! {
         <h3 {..attributes} class=class>
@@ -56,12 +54,11 @@ pub fn CardTitle(
 
 #[component]
 pub fn CardDescription(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || tw_merge!("text-sm text-muted-foreground", class());
+    let class = create_memo(move |_| tw_merge!("text-sm text-muted-foreground", class.get()));
 
     view! {
         <p {..attributes} class=class>
@@ -72,12 +69,11 @@ pub fn CardDescription(
 
 #[component]
 pub fn CardContent(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || tw_merge!("p-6 pt-0", class());
+    let class = create_memo(move |_| tw_merge!("p-6 pt-0", class.get()));
 
     view! {
         <div {..attributes} class=class>
@@ -88,12 +84,11 @@ pub fn CardContent(
 
 #[component]
 pub fn CardFooter(
-    #[prop(into, optional)] class: Option<MaybeSignal<String>>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
     #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let class = class.unwrap_or_default();
-    let class = move || tw_merge!("flex items-center p-6 pt-0", class());
+    let class = create_memo(move |_| tw_merge!("flex items-center p-6 pt-0", class.get()));
 
     view! {
         <div {..attributes} class=class>
