@@ -1,6 +1,6 @@
 [package]
 name = "tailwind_fuse_macro"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Nico Burniske", "Gaucho Labs"]
 description = "Macros for tailwind-fuse"
@@ -13,8 +13,8 @@ repository = "https://github.com/gaucho-labs/tailwind-fuse"
 proc-macro = true
 
 [dependencies]
-syn = { version = "2.0", features = ["full"] }
-quote = "1.0"
-proc-macro2 = "1.0"
-darling = "0.20.8"
+syn = { version = "2", features = ["full"] }
+quote = "1"
+proc-macro2 = "1"
+darling = "0.20"
 
