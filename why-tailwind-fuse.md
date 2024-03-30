@@ -59,7 +59,7 @@ assert_eq!(
 use leptos::*;
 
 #[component]
-fn SomeComponent(#prop[optional, into] class: String) -> impl IntoView {
+fn SomeComponent(#[prop(into, optional)] class: String) -> impl IntoView {
     view!{
         <div class={format!("flex text-red {class}")}>
           super steezy
