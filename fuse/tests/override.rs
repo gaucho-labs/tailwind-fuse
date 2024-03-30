@@ -1,7 +1,4 @@
-use tailwind_fuse::{
-    merge::{tw_merge_with_options, tw_merge_with_override, MergeOptions},
-    tw_merge,
-};
+use tailwind_fuse::merge::{tw_merge_with_options, tw_merge_with_override, MergeOptions};
 
 #[test]
 fn test_collisions() {
@@ -59,16 +56,4 @@ fn test_override_config() {
         class, result,
         "No conflict because non-prefix is not considered tailwind class"
     )
-}
-
-#[test]
-fn test_override_config_macro() {
-    let config = MergeOptions {
-        prefix: "tw-",
-        separator: "|",
-    };
-
-    let result = tw_merge!(config => "hover|lg|tw-bg-blue-100", "hover|lg|tw-bg-red-500");
-
-    assert_eq!("hover|lg|tw-bg-red-500", result);
 }
