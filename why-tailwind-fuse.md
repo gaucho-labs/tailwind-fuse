@@ -1,6 +1,8 @@
 # Why Tailwind Fuse?
 
-When working with Tailwind CSS, it's common to apply multiple utility classes to an element to achieve the desired styling. However, as the number of classes grows, managing and resolving conflicts between them can become a challenge. This is where Tailwind Fuse comes in as the missing piece for seamless class composition and conflict resolution in Tailwind CSS.
+When working with Tailwind CSS, it's common to apply multiple utility classes to an element to achieve the desired styling. However, as the number of classes grows, or when building reusable components, managing and resolving conflicts can become a challenge. 
+
+Tailwind Fuse is the missing piece for seamless class composition and conflict resolution when using Tailwind CSS with Rust.
 
 In traditional CSS, conflicts between styles are resolved based on the order in which they are defined in the stylesheet. Let's consider an example:
 
@@ -47,4 +49,19 @@ assert_eq!(
   tw_merge!("flex-col", "lg:flex-row")
 )
 
+```
+
+## We've also seen this before 🤮
+
+```rust
+use leptos::*;
+
+#[component]
+fn SomeComponent(#prop[optional, into] class: String) -> impl IntoView {
+    view!{
+        <div class={format!("flex text-red {class}")}>
+          super steezy
+        </div>
+    }
+}
 ```
