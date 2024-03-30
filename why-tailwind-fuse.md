@@ -33,11 +33,23 @@ Here's an example of how Tailwind Fuse handles conflicts:
 ```rust
 use tailwind_fuse::*;
 
+// No conflict resolution
+assert_eq!(
+   "text-blue-500 text-red-500",
+   tw_join!("text-blue-500", "text-red-500")
+);
+
 // Rightmost class takes precedence
-assert_eq!("p-4", tw_merge!("p-2", "p-4"));
+assert_eq!(
+   "p-4",
+   tw_merge!("p-2", "p-4")
+);
 
 // Refinements are permitted!
-assert_eq!("p-4 py-2", tw_merge!("p-4", "py-2"));
+assert_eq!(
+   "p-4 py-2",
+   tw_merge!("p-4", "py-2")
+);
 
 // Collisions can be complex
 assert_eq!(
