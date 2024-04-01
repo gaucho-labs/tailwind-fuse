@@ -91,13 +91,13 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
     let builder_to_tailwind = {
         let builder_variables = field_class_strings.iter().map(|(field_name, var_name)| {
             quote! {
-                let #var_name = self.#field_name.as_ref().unwrap_or(&Default::default()).to_class();
+                let #var_name = self.#field_name.unwrap_or_default();
             }
         });
 
         let builder_refs = field_class_strings.iter().map(|(_, var_name)| {
             quote! {
-                #var_name.as_str(),
+                #var_name.as_tailwind_class(),
             }
         });
 
@@ -123,16 +123,15 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
     // First need to save the String to a local variable.
 
     let struct_to_tailwind = {
-        let field_variables = field_class_strings.iter().map(|(field_name, var_name)| {
+        let field_vars = field_class_strings.iter().map(|(field_name, var_name)| {
             quote! {
-                let #var_name = self.#field_name.to_class();
+                let #var_name = self.#field_name.as_tailwind_class();
             }
         });
 
-        // Then we borrow the local variable to get the reference.
         let field_refs = field_class_strings.iter().map(|(_, var_name)| {
             quote! {
-                #var_name.as_str(),
+                #var_name,
             }
         });
 
@@ -143,7 +142,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    #( #field_variables )*
+                    #( #field_vars )*
                     let classes = [
                         #base_class,
                         #( #field_refs )*

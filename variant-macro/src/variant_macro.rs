@@ -20,15 +20,6 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
 
     let base_class = container.class.unwrap_or_default();
 
-    let to_class_cases = variants.iter().map(|variant| {
-        let variant_ident = &variant.ident;
-        let variant_class = &variant.class;
-
-        quote! {
-            #enum_ident::#variant_ident =>  #variant_class,
-        }
-    });
-
     let defaults = variants
         .iter()
         .filter(|v| v.default.is_present())
@@ -67,24 +58,57 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
         }
     });
 
+    // Make a constant for each field and the base class
+    let base_class_ident = enum_ident.to_string().to_ascii_uppercase();
+    let constants = variants
+        .iter()
+        .map(|variant| {
+            (
+                variant,
+                syn::Ident::new(
+                    &format!(
+                        "{}_{}",
+                        variant.ident.to_string().to_ascii_uppercase(),
+                        base_class_ident
+                    ),
+                    proc_macro2::Span::call_site(),
+                ),
+            )
+        })
+        .collect::<Vec<_>>();
+
+    let to_class_cases = constants.iter().map(|(variant, constant)| {
+        let variant_ident = &variant.ident;
+
+        quote! {
+            #enum_ident::#variant_ident =>  #constant,
+        }
+    });
+
     let into_tailwind = quote! {
-        impl IntoTailwindClass for #enum_ident {
-            fn to_class(&self) -> String {
-                self.with_class("")
-            }
-            fn with_class(&self, class: impl AsRef<str>) -> String {
-                let variant_class = match self {
+        impl AsTailwindClass for #enum_ident {
+            fn as_tailwind_class(&self) -> &str {
+                match self {
                     #( #to_class_cases )*
-                };
-                tw_join!(#base_class, variant_class, class.as_ref())
+                }
             }
         }
     };
+
+    let constant_variables = constants.iter().map(|(variant, constant)| {
+        let class = &variant.class;
+
+        quote! {
+            const #constant: &'static str = concat!(#base_class, " ", #class);
+        }
+    });
 
     let gen = quote! {
         #default_variant
 
         #into_tailwind
+
+        #( #constant_variables )*
 
         impl Copy for #enum_ident {}
         impl Clone for #enum_ident {
