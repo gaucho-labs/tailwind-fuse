@@ -1,16 +1,54 @@
 /// Joins the given classes into a single string.
 ///
-/// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+/// Items can be of type &[`str`] or [`String`].
 ///
 /// If you want to handle conflicts use [`crate::tw_merge!`].
 ///
-/// If you want a custom type to be used with this macro, implement the [`crate::MaybeIntoTailwindClass`] trait.
+/// If you want a custom type to be used with this macro, implement the [`crate::AsTailwindClass`] trait.
 #[macro_export]
 macro_rules! tw_join {
      ($item:expr) => {{
         use $crate::AsTailwindClass;
         let tailwind_class = $item.as_tailwind_class();
         tailwind_class.trim().to_string()
+    }};
+    ($a:expr, $b:expr) => {{
+        use $crate::AsTailwindClass;
+        format!(
+            "{} {}",
+            $a.as_tailwind_class().trim(),
+            $b.as_tailwind_class().trim()
+        )
+    }};
+    ($a:expr, $b:expr, $c:expr) => {{
+        use $crate::AsTailwindClass;
+        format!(
+            "{} {} {}",
+            $a.as_tailwind_class().trim(),
+            $b.as_tailwind_class().trim(),
+            $c.as_tailwind_class().trim()
+        )
+    }};
+    ($a:expr, $b:expr, $c:expr, $d:expr) => {{
+        use $crate::AsTailwindClass;
+        format!(
+            "{} {} {} {}",
+            $a.as_tailwind_class().trim(),
+            $b.as_tailwind_class().trim(),
+            $c.as_tailwind_class().trim(),
+            $d.as_tailwind_class().trim()
+        )
+    }};
+    ($a:expr, $b:expr, $c:expr, $d:expr, $e:expr) => {{
+        use $crate::AsTailwindClass;
+        format!(
+            "{} {} {} {} {}",
+            $a.as_tailwind_class().trim(),
+            $b.as_tailwind_class().trim(),
+            $c.as_tailwind_class().trim(),
+            $d.as_tailwind_class().trim(),
+            $e.as_tailwind_class().trim()
+        )
     }};
     ($($item:expr),+ $(,)?) => {{
         use $crate::AsTailwindClass;
@@ -31,8 +69,13 @@ macro_rules! tw_join {
 
 #[test]
 fn test_tw() {
-    assert_eq!(tw_join!("one"), "one");
-    assert_eq!(tw_join!("one", "two"), "one two");
+    assert_eq!(tw_join!("a"), "a");
+    assert_eq!(tw_join!("a", "b"), "a b");
+    assert_eq!(tw_join!("a", "b", "c"), "a b c");
+    assert_eq!(tw_join!("a", "b", "c", "d"), "a b c d");
+    assert_eq!(tw_join!("a", "b", "c", "d", "e"), "a b c d e");
+    assert_eq!(tw_join!("a", "b", "c", "d", "e", "f"), "a b c d e f");
+
     assert_eq!(
         tw_join!(" one", "two ", " three".to_string()),
         "one two three"
