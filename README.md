@@ -122,18 +122,18 @@ button.with_class("bg-green-500");
 ```
 
 ### Builder Syntax
-You access the builder using the `variants` method. Every variant that is not provided will be replaced with the default variant.
+You access the builder using the `builder` method. Every variant that is not provided will be replaced with the default variant.
 
 ```rust
 
 // h-8 px-3 bg-red-500 text-red-100
-let class = Btn::variant()
+let class = Btn::builder()
     .size(BtnSize::Sm)
     .color(BtnColor::Red)
     .to_class();
 
 // h-8 px-3 text-red-100 bg-green-500
-let class = Btn::variant()
+let class = Btn::builder()
     .size(BtnSize::Sm)
     .color(BtnColor::Red)
     .with_class("bg-green-500");

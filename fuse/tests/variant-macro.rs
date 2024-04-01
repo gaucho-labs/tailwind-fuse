@@ -95,7 +95,7 @@ fn test_btn_no_merge() {
 #[test]
 fn test_class_builder() {
     assert_eq!(
-        Btn::variant()
+        Btn::builder()
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .to_class(),
@@ -103,7 +103,7 @@ fn test_class_builder() {
     );
 
     assert_eq!(
-        Btn::variant()
+        Btn::builder()
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .with_class("flex"),
@@ -111,17 +111,17 @@ fn test_class_builder() {
     );
 
     assert_eq!(
-        Btn::variant().size(BtnSize::Lg).to_class(),
+        Btn::builder().size(BtnSize::Lg).to_class(),
         "h-10 rounded-lg px-8 bg-blue-500 text-blue-100"
     );
 
     assert_eq!(
-        Btn::variant().to_class(),
+        Btn::builder().to_class(),
         "h-9 px-4 py-2 bg-blue-500 text-blue-100"
     );
 
     assert_eq!(
-        Btn::variant().with_class("grid"),
+        Btn::builder().with_class("grid"),
         "h-9 px-4 py-2 bg-blue-500 text-blue-100 grid"
     );
 }

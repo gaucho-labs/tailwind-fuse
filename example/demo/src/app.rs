@@ -143,7 +143,7 @@ fn Header() -> impl IntoView {
         <div class="flex items-center justify-between w-full py-4 px-8">
             <div class="flex items-center">
                 <a
-                    class=ButtonClass::variant()
+                    class=ButtonClass::builder()
                         .size(ButtonSize::Sm)
                         .variant(ButtonVariant::Link)
                         .to_class()
@@ -155,7 +155,7 @@ fn Header() -> impl IntoView {
                 </a>
                 <span> / </span>
                 <a
-                    class=ButtonClass::variant()
+                    class=ButtonClass::builder()
                         .size(ButtonSize::Sm)
                         .variant(ButtonVariant::Link)
                         .to_class()
