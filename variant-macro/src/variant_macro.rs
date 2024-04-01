@@ -67,7 +67,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
         }
     });
 
-    let gen = quote! {
+    let into_tailwind = quote! {
         impl IntoTailwindClass for #enum_ident {
             fn to_class(&self) -> String {
                 self.with_class("")
@@ -79,8 +79,19 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
                 tw_join!(#base_class, variant_class, class.as_ref())
             }
         }
+    };
 
+    let gen = quote! {
         #default_variant
+
+        #into_tailwind
+
+        impl Copy for #enum_ident {}
+        impl Clone for #enum_ident {
+            fn clone(&self) -> Self {
+                *self
+            }
+        }
     };
 
     gen.into()

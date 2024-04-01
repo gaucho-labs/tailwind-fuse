@@ -29,6 +29,8 @@ pub struct TwClassContainer {
     pub class: Option<String>,
     /// Defaults to using `tw_merge`.
     pub merger: Option<IdentString>,
+    /// If true, the builder will implement `Clone`.
+    pub clone: Flag,
 }
 
 #[derive(Debug, FromField)]
