@@ -8,14 +8,14 @@ pub mod merge;
 /// Implement this trait for your type to use it with the [`tw_join!`] and [`tw_merge!`] macros
 pub trait AsTailwindClass {
     /// Extract a Tailwind class
-    fn as_tailwind_class(&self) -> &str;
+    fn as_class(&self) -> &str;
 }
 
 impl<T> AsTailwindClass for T
 where
     T: AsRef<str>,
 {
-    fn as_tailwind_class(&self) -> &str {
+    fn as_class(&self) -> &str {
         self.as_ref()
     }
 }

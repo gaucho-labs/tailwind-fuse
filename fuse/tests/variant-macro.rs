@@ -10,11 +10,8 @@ enum BtnColor {
 
 #[test]
 fn btn_color() {
-    assert_eq!(
-        BtnColor::Default.as_tailwind_class(),
-        "bg-blue-500 text-blue-100"
-    );
-    assert_eq!(BtnColor::Red.as_tailwind_class(), "bg-red-500 text-red-100");
+    assert_eq!(BtnColor::Default.as_class(), "bg-blue-500 text-blue-100");
+    assert_eq!(BtnColor::Red.as_class(), "bg-red-500 text-red-100");
 
     assert_eq!(BtnColor::default(), BtnColor::Default);
 }
@@ -29,11 +26,8 @@ fn btn_color_with_default() {
         #[tw(class = "bg-red-500")]
         Red,
     }
-    assert_eq!(
-        BtnColor::Default.as_tailwind_class(),
-        "text-white bg-blue-500"
-    );
-    assert_eq!(BtnColor::Red.as_tailwind_class(), "text-white bg-red-500");
+    assert_eq!(BtnColor::Default.as_class(), "text-white bg-blue-500");
+    assert_eq!(BtnColor::Red.as_class(), "text-white bg-red-500");
 }
 
 #[derive(TwVariant)]

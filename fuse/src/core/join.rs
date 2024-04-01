@@ -9,45 +9,45 @@
 macro_rules! tw_join {
      ($item:expr) => {{
         use $crate::AsTailwindClass;
-        let tailwind_class = $item.as_tailwind_class();
+        let tailwind_class = $item.as_class();
         tailwind_class.trim().to_string()
     }};
     ($a:expr, $b:expr) => {{
         use $crate::AsTailwindClass;
         format!(
             "{} {}",
-            $a.as_tailwind_class().trim(),
-            $b.as_tailwind_class().trim()
+            $a.as_class().trim(),
+            $b.as_class().trim()
         )
     }};
     ($a:expr, $b:expr, $c:expr) => {{
         use $crate::AsTailwindClass;
         format!(
             "{} {} {}",
-            $a.as_tailwind_class().trim(),
-            $b.as_tailwind_class().trim(),
-            $c.as_tailwind_class().trim()
+            $a.as_class().trim(),
+            $b.as_class().trim(),
+            $c.as_class().trim()
         )
     }};
     ($a:expr, $b:expr, $c:expr, $d:expr) => {{
         use $crate::AsTailwindClass;
         format!(
             "{} {} {} {}",
-            $a.as_tailwind_class().trim(),
-            $b.as_tailwind_class().trim(),
-            $c.as_tailwind_class().trim(),
-            $d.as_tailwind_class().trim()
+            $a.as_class().trim(),
+            $b.as_class().trim(),
+            $c.as_class().trim(),
+            $d.as_class().trim()
         )
     }};
     ($a:expr, $b:expr, $c:expr, $d:expr, $e:expr) => {{
         use $crate::AsTailwindClass;
         format!(
             "{} {} {} {} {}",
-            $a.as_tailwind_class().trim(),
-            $b.as_tailwind_class().trim(),
-            $c.as_tailwind_class().trim(),
-            $d.as_tailwind_class().trim(),
-            $e.as_tailwind_class().trim()
+            $a.as_class().trim(),
+            $b.as_class().trim(),
+            $c.as_class().trim(),
+            $d.as_class().trim(),
+            $e.as_class().trim()
         )
     }};
     ($($item:expr),+ $(,)?) => {{
@@ -56,7 +56,7 @@ macro_rules! tw_join {
         $(
             // Long lived expressions.
             let class = $item;
-            let class = class.as_tailwind_class();
+            let class = class.as_class();
             let class = class.trim();
             if !class.is_empty() {
                 if !result.is_empty() { result.push(' '); }

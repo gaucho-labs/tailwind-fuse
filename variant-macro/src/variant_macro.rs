@@ -18,7 +18,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
 
     let variants = container.data.take_enum().unwrap_or_else(Vec::new);
 
-    let base_class = container.class.unwrap_or_default();
+    let base_class = container.class;
 
     let defaults = variants
         .iter()
@@ -59,7 +59,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
     });
 
     // Make a constant for each field and the base class
-    let base_class_ident = enum_ident.to_string().to_ascii_uppercase();
+    let enum_ident_string = enum_ident.to_string().to_ascii_uppercase();
     let constants = variants
         .iter()
         .map(|variant| {
@@ -69,7 +69,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
                     &format!(
                         "{}_{}",
                         variant.ident.to_string().to_ascii_uppercase(),
-                        base_class_ident
+                        enum_ident_string
                     ),
                     proc_macro2::Span::call_site(),
                 ),
@@ -87,7 +87,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
 
     let into_tailwind = quote! {
         impl AsTailwindClass for #enum_ident {
-            fn as_tailwind_class(&self) -> &str {
+            fn as_class(&self) -> &str {
                 match self {
                     #( #to_class_cases )*
                 }
@@ -97,9 +97,14 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
 
     let constant_variables = constants.iter().map(|(variant, constant)| {
         let class = &variant.class;
-
-        quote! {
-            const #constant: &'static str = concat!(#base_class, " ", #class);
+        if let Some(base_class) = &base_class {
+            quote! {
+                const #constant: &'static str = concat!(#base_class, " ", #class);
+            }
+        } else {
+            quote! {
+                const #constant: &'static str = #class;
+            }
         }
     });
 
