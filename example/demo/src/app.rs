@@ -37,15 +37,7 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
-    let toggle_default = create_rw_signal(false);
-
-    use_hotkeys!(("b", "home") => move |_| {
-        if toggle_default.get() {
-            toggle_default.set(false);
-        } else {
-            toggle_default.set(true);
-        }
-    });
+    let toggle_state = create_rw_signal(false);
 
     let buttons = vec![
         (
@@ -56,6 +48,7 @@ fn HomePage() -> impl IntoView {
                     <Button>Default</Button>
                     <Button size=ButtonSize::Lg>Large</Button>
                     <Button size=ButtonSize::Icon>Icon</Button>
+                    <Button class="h-16 w-16">Custom</Button>
                 </div>
             }
             .into_view(),
@@ -75,6 +68,19 @@ fn HomePage() -> impl IntoView {
             .into_view(),
         ),
         (
+            "Conditionally change the button variant",
+            view! {
+                <Button
+                    on:click=move |_| {
+                        toggle_state.update(|v| *v = !*v);
+                    }
+                    variant= Signal::derive(move || if toggle_state.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})
+                >
+                    Click to change variant
+                </Button>
+            },
+        ),
+        (
             "Badge variants",
             view! {
                 <div class="flex items-center gap-2">
@@ -85,14 +91,6 @@ fn HomePage() -> impl IntoView {
                 </div>
             }
             .into_view(),
-        ),
-        (
-            "Conditionally change the button variant",
-            view! {
-                <Button variant= Signal::derive(move || if toggle_default.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})>
-                    Press B to change variant
-                </Button>
-            },
         ),
     ];
 
