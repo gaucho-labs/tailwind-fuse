@@ -14,40 +14,78 @@ macro_rules! tw_join {
     }};
     ($a:expr, $b:expr) => {{
         use $crate::AsTailwindClass;
+        let a = $a;
+        let a_class = a.as_class().trim();
+        let b = $b;
+        let b_class = b.as_class().trim();
         format!(
-            "{} {}",
-            $a.as_class().trim(),
-            $b.as_class().trim()
+            "{}{}{}",
+            a_class,
+            if b_class.is_empty() { "" } else { " " },
+            b_class
         )
     }};
     ($a:expr, $b:expr, $c:expr) => {{
         use $crate::AsTailwindClass;
+        let a = $a;
+        let a_class = a.as_class().trim();
+        let b = $b;
+        let b_class = b.as_class().trim();
+        let c = $c;
+        let c_class = c.as_class().trim();
         format!(
-            "{} {} {}",
-            $a.as_class().trim(),
-            $b.as_class().trim(),
-            $c.as_class().trim()
+            "{}{}{}{}{}",
+            a_class,
+            if b_class.is_empty() { "" } else { " " },
+            b_class,
+            if c_class.is_empty() { "" } else { " " },
+            c_class
         )
     }};
     ($a:expr, $b:expr, $c:expr, $d:expr) => {{
         use $crate::AsTailwindClass;
+        let a = $a;
+        let a_class = a.as_class().trim();
+        let b = $b;
+        let b_class = b.as_class().trim();
+        let c = $c;
+        let c_class = c.as_class().trim();
+        let d = $d;
+        let d_class = d.as_class().trim();
         format!(
-            "{} {} {} {}",
-            $a.as_class().trim(),
-            $b.as_class().trim(),
-            $c.as_class().trim(),
-            $d.as_class().trim()
+            "{}{}{}{}{}{}{}",
+            a_class,
+            if b_class.is_empty() { "" } else { " " },
+            b_class,
+            if c_class.is_empty() { "" } else { " " },
+            c_class,
+            if d_class.is_empty() { "" } else { " " },
+            d_class
         )
     }};
     ($a:expr, $b:expr, $c:expr, $d:expr, $e:expr) => {{
         use $crate::AsTailwindClass;
+        let a = $a;
+        let a_class = a.as_class().trim();
+        let b = $b;
+        let b_class = b.as_class().trim();
+        let c = $c;
+        let c_class = c.as_class().trim();
+        let d = $d;
+        let d_class = d.as_class().trim();
+        let e = $e;
+        let e_class = e.as_class().trim();
         format!(
-            "{} {} {} {} {}",
-            $a.as_class().trim(),
-            $b.as_class().trim(),
-            $c.as_class().trim(),
-            $d.as_class().trim(),
-            $e.as_class().trim()
+            "{}{}{}{}{}{}{}{}{}",
+            a_class,
+            if b_class.is_empty() { "" } else { " " },
+            b_class,
+            if c_class.is_empty() { "" } else { " " },
+            c_class,
+            if d_class.is_empty() { "" } else { " " },
+            d_class,
+            if e_class.is_empty() { "" } else { " " },
+            e_class
         )
     }};
     ($($item:expr),+ $(,)?) => {{
@@ -80,4 +118,5 @@ fn test_tw() {
         tw_join!(" one", "two ", " three".to_string()),
         "one two three"
     );
+    assert_eq!(tw_join!("a", "    ", "b", "c", " "), "a b c");
 }
