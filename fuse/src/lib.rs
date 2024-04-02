@@ -32,6 +32,9 @@
 //!
 //! You can use [`tw_join!`] to join Tailwind classes, and [`tw_merge!`] to merge Tailwind Classes handling conflicts.
 //!
+//!
+//! You can use anything that implements [`AsRef<str>`] or [`AsTailwindClass`]
+//!
 //! ```
 //! use tailwind_fuse::*;
 //!
@@ -39,26 +42,13 @@
 //! // "flex items-center justify-center"
 //! let joined_class = tw_join!("flex items-center", "justify-center");
 //!
-//! // You can use Option to handle conditional rendering
-//! // You can pass in &str, String, Option<String>, or Option<&str>
-//! // "text-sm font-bold"
-//! let classes = tw_join!(
-//!     "text-sm",
-//!     Some("font-bold"),
-//!     None::<String>,
-//!     Some("ring").filter(|_| false),
-//!     Some(" "),
-//!     "".to_string(),
-//! );
 //!
 //! // Conflict resolution
 //! // Right most class takes precedence
-//! // p-4
-//! let merged_class = tw_merge!("py-2 px-4", "p-4");
+//! assert_eq!("p-4", tw_merge!("py-2 px-4", "p-4"));
 //!
 //! // Refinements are permitted
-//! // p-4 py-2
-//! let merged_class = tw_merge!("p-4", "py-2");
+//! assert_eq!("p-4 py-2", tw_merge!("p-4", "py-2"));
 //! ```
 //!
 //! ## Usage: Variants
@@ -331,10 +321,8 @@ mod variant {
     ///     Red,
     /// }
     ///
-    /// assert_eq!(BtnColor::Default.to_class(), "hover:brightness-50 bg-blue-500 text-blue-100");
-    ///
-    /// let red_with_class = BtnColor::Red.with_class("flex");
-    /// assert_eq!(red_with_class, "hover:brightness-50 bg-red-500 text-red-100 flex");
+    /// assert_eq!("hover:brightness-50 bg-blue-500 text-blue-100", BtnColor::Default.as_class());
+    /// assert_eq!("hover:brightness-50 bg-red-500 text-red-100", BtnColor::Red.as_class());
     /// ```
     ///
     pub use tailwind_fuse_macro::TwVariant;
