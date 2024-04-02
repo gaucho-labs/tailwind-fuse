@@ -58,11 +58,11 @@ Useful for building components with first class support for tailwind. By default
 
 Each [`TwClass`] represents a UI element with customizable properties (property is a "variant"). Each variant is represented by a [`TwVariant`], which must be an enum with a default case.
 
-The merge order is, where the last class takes preferences:
-1. [`TwClass`] base class
-2. [`TwVariant`] base class
-3. [`TwVariant`] enum variant class
-4. Override class [`IntoTailwindClass::with_class`] on the struct or builder
+The classes are merged in the following order, with the last class takes precedence:
+1. Base class from [`TwClass`]
+2. Base class from [`TwVariant`]
+3. Enum variant class from [`TwVariant`]
+4. Override class using [`IntoTailwindClass::with_class`] on the struct or builder
 
 ```rust
 use tailwind_fuse::*;
