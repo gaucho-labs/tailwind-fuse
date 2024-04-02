@@ -1,6 +1,6 @@
 [package]
 name = "tailwind_fuse_macro"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 authors = ["Nico Burniske", "Gaucho Labs"]
 description = "Macros for tailwind-fuse"
