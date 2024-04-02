@@ -118,6 +118,10 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
     };
 
     let gen = quote! {
+        #builder_struct
+
+        #builder_impl
+
         impl IntoBuilder for #struct_ident {
             type Builder = #builder_ident;
 
@@ -142,10 +146,6 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
                 value.build()
             }
         }
-
-        #builder_struct
-
-        #builder_impl
 
         #builder_to_tailwind
 
