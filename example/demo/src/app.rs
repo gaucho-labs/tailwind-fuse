@@ -1,5 +1,4 @@
 use leptos::*;
-use leptos_hotkeys::prelude::*;
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_theme::*;
@@ -13,16 +12,11 @@ use tailwind_fuse::*;
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-    let h_ref = provide_hotkeys_context(false, scopes!("home"));
-
-    use_hotkeys!(("ctrl+r") => move |_| {
-        window().location().set_href("https://github.com/gaucho-labs").expect("Failed to navigate");
-    });
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
         <script>{include_str!("prism.js")}</script>
-        <main _ref=h_ref>
+        <main>
             <ThemeProvider>
                 <Router>
                     <Routes>
@@ -38,14 +32,6 @@ pub fn App() -> impl IntoView {
 #[component]
 fn HomePage() -> impl IntoView {
     let toggle_default = create_rw_signal(false);
-
-    use_hotkeys!(("b", "home") => move |_| {
-        if toggle_default.get() {
-            toggle_default.set(false);
-        } else {
-            toggle_default.set(true);
-        }
-    });
 
     let buttons = vec![
         (
@@ -75,6 +61,19 @@ fn HomePage() -> impl IntoView {
             .into_view(),
         ),
         (
+            "Conditionally change the button variant",
+            view! {
+                <Button
+                    variant= Signal::derive(move || if toggle_default.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})
+                    on:click=move |_| {
+                        toggle_default.set(!toggle_default.get());
+                    }
+                >
+                    Click to change variant
+                </Button>
+            },
+        ),
+        (
             "Badge variants",
             view! {
                 <div class="flex items-center gap-2">
@@ -85,14 +84,6 @@ fn HomePage() -> impl IntoView {
                 </div>
             }
             .into_view(),
-        ),
-        (
-            "Conditionally change the button variant",
-            view! {
-                <Button variant= Signal::derive(move || if toggle_default.get()  { ButtonVariant::Default} else { ButtonVariant::Secondary})>
-                    Press B to change variant
-                </Button>
-            },
         ),
     ];
 

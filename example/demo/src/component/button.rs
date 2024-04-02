@@ -33,7 +33,7 @@ pub struct ButtonClass {
     pub size: ButtonSize,
 }
 
-#[derive(TwVariant, Clone, Copy)]
+#[derive(TwVariant)]
 pub enum ButtonVariant {
     #[tw(
         default,
@@ -54,7 +54,7 @@ pub enum ButtonVariant {
     Link,
 }
 
-#[derive(TwVariant, Clone, Copy)]
+#[derive(TwVariant)]
 pub enum ButtonSize {
     #[tw(default, class = "h-9 px-4 py-2")]
     Default,

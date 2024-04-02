@@ -9,7 +9,7 @@ pub struct BadgeClass {
     pub variant: BadgeVariant,
 }
 
-#[derive(TwVariant, Clone, Copy)]
+#[derive(TwVariant)]
 pub enum BadgeVariant {
     #[tw(
         default,
