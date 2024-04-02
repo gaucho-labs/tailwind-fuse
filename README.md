@@ -39,9 +39,10 @@ You can use anything that implements [`AsRef<str>`] or [`AsTailwindClass`]
 use tailwind_fuse::*;
 
 // No conflict resolution
-// "flex items-center justify-center"
-let joined_class = tw_join!("flex items-center", "justify-center");
-
+assert_eq!(
+   "flex items-center justify-center",
+   tw_join!("flex", "items-center", "justify-center")
+);
 
 // Conflict resolution
 // Right most class takes precedence
