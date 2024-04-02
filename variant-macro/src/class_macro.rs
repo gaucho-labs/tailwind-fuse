@@ -85,7 +85,7 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    self.clone().build().with_class(class)
+                    (*self).build().with_class(class)
                 }
             }
         }
