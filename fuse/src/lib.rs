@@ -16,14 +16,14 @@
 //!
 //! ## Installation
 //!
-//! Variants requires the `variants` feature to be enabled.
+//! Variants requires the `variant` feature to be enabled.
 //!
-//! #### With variants
+//! #### With variant
 //! ```bash
-//! cargo add tailwind-fuse --features variants
+//! cargo add tailwind-fuse --features variant
 //! ```
 //!
-//! #### Without variants
+//! #### Without variant
 //! ```bash
 //! cargo add tailwind-fuse
 //! ```
@@ -131,11 +131,17 @@
 //!     size: BtnSize::Default,
 //!     color: BtnColor::Blue,
 //! };
-//! // h-9 px-4 py-2 bg-blue-500 text-blue-100
-//! button.to_class();
-//! // Conflicts are resolved.
-//! // h-9 px-4 py-2 text-blue-100 bg-green-500
-//! button.with_class("bg-green-500");
+//!
+//! assert_eq!(
+//!    "flex h-9 px-4 py-2 bg-blue-500 text-blue-100",
+//!    button.to_class()
+//! );
+//!
+//! // Conflicts are resolved (bg-blue-500 is knocked out in favor of override)
+//! assert_eq!(
+//!    "flex h-9 px-4 py-2 text-blue-100 bg-green-500",
+//!    button.with_class("bg-green-500")
+//! );
 //! ```
 //!
 //! ### Builder Syntax
@@ -172,17 +178,22 @@
 //! #     Red,
 //! # }
 //!
-//! // h-8 px-3 bg-red-500 text-red-100
-//! let class = Btn::builder()
-//!     .size(BtnSize::Sm)
-//!     .color(BtnColor::Red)
-//!     .to_class();
+//! assert_eq!(
+//!    "flex h-8 px-3 bg-red-500 text-red-100",
+//!    Btn::builder()
+//!       .size(BtnSize::Sm)
+//!       .color(BtnColor::Red)
+//!       .to_class()
+//! );
 //!
-//! // h-8 px-3 text-red-100 bg-green-500
-//! let class = Btn::builder()
-//!     .size(BtnSize::Sm)
-//!     .color(BtnColor::Red)
-//!     .with_class("bg-green-500");
+//! assert_eq!(
+//!    "flex h-8 px-3 text-red-100 bg-green-500",
+//!    Btn::builder()
+//!       .size(BtnSize::Sm)
+//!       .color(BtnColor::Red)
+//!       .with_class("bg-green-500")
+//! );
+//!
 //! ```
 //!
 //! #### VSCode Intellisense
@@ -208,46 +219,45 @@ pub use crate::core::*;
 mod ast;
 mod core;
 
-/// Used to Fuse Tailwind Classes together.
-pub trait TailwindFuse {
-    /// Strings are not guaranteed to be single class nor free of whitespace.
-    fn fuse_classes(&self, class: &[&str]) -> String;
-}
-
-/// Will merge Tailwind classes and handle conflicts using [`tw_merge()`]
-pub struct TailwindMerge;
-
-impl TailwindFuse for TailwindMerge {
-    fn fuse_classes(&self, class: &[&str]) -> String {
-        crate::core::merge::tw_merge_slice(class)
-    }
-}
-
-/// Will simply join Tailwind classes together without handling conflicts
-pub struct TailwindJoin;
-
-impl TailwindFuse for TailwindJoin {
-    fn fuse_classes(&self, class: &[&str]) -> String {
-        class
-            .iter()
-            .flat_map(|s| s.split_whitespace())
-            .map(|s| s.trim())
-            .filter(|s| !s.is_empty())
-            .fold(String::new(), |mut acc, s| {
-                if !acc.is_empty() {
-                    acc.push(' ');
-                }
-                acc.push_str(s);
-                acc
-            })
-    }
-}
-
 #[cfg(feature = "variant")]
 pub use variant::*;
 
 #[cfg(feature = "variant")]
 mod variant {
+    /// Used to Fuse Tailwind Classes together.
+    pub trait TailwindFuse {
+        /// Strings are not guaranteed to be single class nor free of whitespace.
+        fn fuse_classes(&self, class: &[&str]) -> String;
+    }
+
+    /// Will merge Tailwind classes and handle conflicts using [`tw_merge()`]
+    pub struct TailwindMerge;
+
+    impl TailwindFuse for TailwindMerge {
+        fn fuse_classes(&self, class: &[&str]) -> String {
+            crate::core::merge::tw_merge_slice(class)
+        }
+    }
+
+    /// Will simply join Tailwind classes together without handling conflicts
+    pub struct TailwindJoin;
+
+    impl TailwindFuse for TailwindJoin {
+        fn fuse_classes(&self, class: &[&str]) -> String {
+            class
+                .iter()
+                .flat_map(|s| s.split_whitespace())
+                .map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+                .fold(String::new(), |mut acc, s| {
+                    if !acc.is_empty() {
+                        acc.push(' ');
+                    }
+                    acc.push_str(s);
+                    acc
+                })
+        }
+    }
 
     /// Derives a class for use with Tailwind CSS in Rust components.
     ///
