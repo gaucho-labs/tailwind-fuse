@@ -110,17 +110,13 @@ struct Collision<'a> {
 impl<'a> Collision<'a> {
     fn check_arbitrary(style: AstStyle<'a>) -> Option<Self> {
         let arbitrary = style.arbitrary?;
-        if arbitrary.contains(':') {
-            let mut parts = arbitrary.split(':');
-            let collision_id = parts.next()?;
-            Some(Self {
-                collision_id,
-                important: style.important,
-                variants: style.variants,
-            })
-        } else {
-            None
-        }
+        let index = arbitrary.find(':')?;
+        let (collision_id, _) = arbitrary.split_at(index);
+        Some(Self {
+            collision_id,
+            important: style.important,
+            variants: style.variants,
+        })
     }
 }
 
