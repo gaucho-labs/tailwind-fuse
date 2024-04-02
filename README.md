@@ -16,14 +16,14 @@ Two main utils are included in this crate:
 
 ## Installation
 
-Variants requires the `variants` feature to be enabled.
+Variants requires the `variant` feature to be enabled.
 
-#### With variants
+#### With variant
 ```bash
 cargo add tailwind-fuse --features variant
 ```
 
-#### Without variants
+#### Without variant
 ```bash
 cargo add tailwind-fuse
 ```
@@ -32,6 +32,9 @@ cargo add tailwind-fuse
 
 You can use [`tw_join!`] to join Tailwind classes, and [`tw_merge!`] to merge Tailwind Classes handling conflicts.
 
+
+You can use anything that implements [`AsRef<str>`] or [`AsTailwindClass`]
+
 ```rust
 use tailwind_fuse::*;
 
@@ -39,26 +42,13 @@ use tailwind_fuse::*;
 // "flex items-center justify-center"
 let joined_class = tw_join!("flex items-center", "justify-center");
 
-// You can use Option to handle conditional rendering
-// You can pass in &str, String, Option<String>, or Option<&str>
-// "text-sm font-bold"
-let classes = tw_join!(
-    "text-sm",
-    Some("font-bold"),
-    None::<String>,
-    Some("ring").filter(|_| false),
-    Some(" "),
-    "".to_string(),
-);
 
 // Conflict resolution
 // Right most class takes precedence
-// p-4
-let merged_class = tw_merge!("py-2 px-4", "p-4");
+assert_eq!("p-4", tw_merge!("py-2 px-4", "p-4"));
 
 // Refinements are permitted
-// p-4 py-2
-let merged_class = tw_merge!("p-4", "py-2");
+assert_eq!("p-4 py-2", tw_merge!("p-4", "py-2"));
 ```
 
 ## Usage: Variants
@@ -114,11 +104,17 @@ let button = Btn {
     size: BtnSize::Default,
     color: BtnColor::Blue,
 };
-// h-9 px-4 py-2 bg-blue-500 text-blue-100
-button.to_class();
-// Conflicts are resolved.
-// h-9 px-4 py-2 text-blue-100 bg-green-500
-button.with_class("bg-green-500");
+
+assert_eq!(
+   "flex h-9 px-4 py-2 bg-blue-500 text-blue-100",
+   button.to_class()
+);
+
+// Conflicts are resolved (bg-blue-500 is knocked out in favor of override)
+assert_eq!(
+   "flex h-9 px-4 py-2 text-blue-100 bg-green-500",
+   button.with_class("bg-green-500")
+);
 ```
 
 ### Builder Syntax
@@ -126,17 +122,22 @@ You access the builder using the `variants` method. Every variant that is not pr
 
 ```rust
 
-// h-8 px-3 bg-red-500 text-red-100
-let class = Btn::variant()
-    .size(BtnSize::Sm)
-    .color(BtnColor::Red)
-    .to_class();
+assert_eq!(
+   "flex h-8 px-3 bg-red-500 text-red-100",
+   Btn::builder()
+      .size(BtnSize::Sm)
+      .color(BtnColor::Red)
+      .to_class()
+);
 
-// h-8 px-3 text-red-100 bg-green-500
-let class = Btn::variant()
-    .size(BtnSize::Sm)
-    .color(BtnColor::Red)
-    .with_class("bg-green-500");
+assert_eq!(
+   "flex h-8 px-3 text-red-100 bg-green-500",
+   Btn::builder()
+      .size(BtnSize::Sm)
+      .color(BtnColor::Red)
+      .with_class("bg-green-500")
+);
+
 ```
 
 #### VSCode Intellisense

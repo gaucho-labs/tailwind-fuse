@@ -3,21 +3,17 @@ use tailwind_fuse::*;
 #[derive(TwVariant, Debug, PartialEq)]
 enum BtnColor {
     #[tw(default, class = "bg-blue-500 text-blue-100")]
-    Default,
+    Blue,
     #[tw(class = "bg-red-500 text-red-100")]
     Red,
 }
 
 #[test]
 fn btn_color() {
-    assert_eq!(BtnColor::Default.to_class(), "bg-blue-500 text-blue-100");
-    assert_eq!(BtnColor::Red.to_class(), "bg-red-500 text-red-100");
-    assert_eq!(
-        BtnColor::Default.with_class("text-lg"),
-        "bg-blue-500 text-blue-100 text-lg"
-    );
+    assert_eq!(BtnColor::Blue.as_class(), "bg-blue-500 text-blue-100");
+    assert_eq!(BtnColor::Red.as_class(), "bg-red-500 text-red-100");
 
-    assert_eq!(BtnColor::default(), BtnColor::Default);
+    assert_eq!(BtnColor::default(), BtnColor::Blue);
 }
 
 #[test]
@@ -26,16 +22,12 @@ fn btn_color_with_default() {
     #[tw(class = "text-white")]
     enum BtnColor {
         #[tw(default, class = "bg-blue-500")]
-        Default,
+        Blue,
         #[tw(class = "bg-red-500")]
         Red,
     }
-    assert_eq!(BtnColor::Default.to_class(), "text-white bg-blue-500");
-    assert_eq!(BtnColor::Red.to_class(), "text-white bg-red-500");
-    assert_eq!(
-        BtnColor::Default.with_class("text-lg"),
-        "text-white bg-blue-500 text-lg"
-    );
+    assert_eq!(BtnColor::Blue.as_class(), "text-white bg-blue-500");
+    assert_eq!(BtnColor::Red.as_class(), "text-white bg-red-500");
 }
 
 #[derive(TwVariant)]
@@ -95,7 +87,7 @@ fn test_btn_no_merge() {
 #[test]
 fn test_class_builder() {
     assert_eq!(
-        Btn::variant()
+        Btn::builder()
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .to_class(),
@@ -103,7 +95,7 @@ fn test_class_builder() {
     );
 
     assert_eq!(
-        Btn::variant()
+        Btn::builder()
             .size(BtnSize::Sm)
             .color(BtnColor::Red)
             .with_class("flex"),
@@ -111,17 +103,25 @@ fn test_class_builder() {
     );
 
     assert_eq!(
-        Btn::variant().size(BtnSize::Lg).to_class(),
+        Btn::builder().size(BtnSize::Lg).to_class(),
         "h-10 rounded-lg px-8 bg-blue-500 text-blue-100"
     );
 
     assert_eq!(
-        Btn::variant().to_class(),
+        Btn::builder().to_class(),
         "h-9 px-4 py-2 bg-blue-500 text-blue-100"
     );
 
     assert_eq!(
-        Btn::variant().with_class("grid"),
+        Btn::builder().with_class("grid"),
         "h-9 px-4 py-2 bg-blue-500 text-blue-100 grid"
+    );
+}
+
+#[test]
+fn variant_join() {
+    assert_eq!(
+        tw_merge!(BtnColor::Blue, "text-lg",),
+        "bg-blue-500 text-blue-100 text-lg"
     );
 }

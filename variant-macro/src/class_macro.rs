@@ -33,43 +33,51 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         }
     };
 
+    let builder_struct = {
+        let builder_fields = fields.iter().map(|field| {
+            let TwClassField { ident, ty, .. } = field;
+            quote! { #ident: Option<#ty> }
+        });
+
+        quote! {
+            #[derive(Copy, Clone, Default)]
+            pub struct #builder_ident {
+                #(#builder_fields,)*
+            }
+        }
+    };
+
     let field_idents = fields
         .iter()
         .map(|field| field.ident.as_ref().unwrap().clone());
 
-    let builder_fields = fields.iter().map(|field| {
-        let TwClassField { ident, ty, .. } = field;
-        quote! { #ident: Option<#ty> }
-    });
+    let builder_impl = {
+        let field_idents = field_idents.clone();
 
-    let builder_set_methods = fields.iter().map(|field| {
-        let TwClassField { ident, ty, .. } = field;
+        let builder_set_methods = fields.iter().map(|field| {
+            let TwClassField { ident, ty, .. } = field;
+            quote! {
+                pub fn #ident(mut self, value: #ty) -> Self {
+                    self.#ident = Some(value);
+                    self
+                }
+            }
+        });
+
         quote! {
-            pub fn #ident(mut self, value: #ty) -> Self {
-                self.#ident = Some(value);
-                self
+            impl #builder_ident {
+                #(#builder_set_methods)*
+
+                pub fn build(self) -> #struct_ident {
+                    #struct_ident {
+                        #(#field_idents: self.#field_idents.unwrap_or_default(),)*
+                    }
+                }
             }
         }
-    });
+    };
 
     let builder_to_tailwind = {
-        let optional_builder_field_strings = fields.iter().enumerate().map(|(i, field)| {
-            let field_name = &field.ident;
-            let var_name =
-                syn::Ident::new(&format!("class_str_{}", i), proc_macro2::Span::call_site());
-            quote! {
-                let #var_name = self.#field_name.as_ref().unwrap_or(&Default::default()).to_class();
-            }
-        });
-
-        let optional_builder_field_refs = fields.iter().enumerate().map(|(i, _)| {
-            let var_name =
-                syn::Ident::new(&format!("class_str_{}", i), proc_macro2::Span::call_site());
-            quote! {
-                #var_name.as_str(),
-            }
-        });
-
         quote! {
             impl IntoTailwindClass for #builder_ident {
                 fn to_class(&self) -> String {
@@ -77,35 +85,17 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    #( #optional_builder_field_strings )*
-                    let classes = [
-                        #base_class,
-                        #( #optional_builder_field_refs )*
-                        class.as_ref(),
-                    ];
-                    #merger.fuse_classes(&classes)
+                    (*self).build().with_class(class)
                 }
             }
         }
     };
 
     let struct_to_tailwind = {
-        // Need to save the String to a local variable.
-        let field_class_strings = fields.iter().enumerate().map(|(i, field)| {
+        let field_refs = fields.iter().map(|field| {
             let field_name = &field.ident;
-            let var_name =
-                syn::Ident::new(&format!("class_str_{}", i), proc_macro2::Span::call_site());
             quote! {
-                let #var_name = self.#field_name.to_class();
-            }
-        });
-
-        // Then we borrow the local variable to get the reference.
-        let field_class_refs = fields.iter().enumerate().map(|(i, _)| {
-            let var_name =
-                syn::Ident::new(&format!("class_str_{}", i), proc_macro2::Span::call_site());
-            quote! {
-                #var_name.as_str(),
+                self.#field_name.as_class(),
             }
         });
 
@@ -116,10 +106,9 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
                 }
 
                 fn with_class(&self, class: impl AsRef<str>) -> String {
-                    #( #field_class_strings )*
                     let classes = [
                         #base_class,
-                        #( #field_class_refs )*
+                        #( #field_refs )*
                         class.as_ref(),
                     ];
                     #merger.fuse_classes(&classes)
@@ -129,22 +118,35 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
     };
 
     let gen = quote! {
-        impl #struct_ident {
-            pub fn variant() -> #builder_ident {
+        #builder_struct
+
+        #builder_impl
+
+        impl IntoBuilder for #struct_ident {
+            type Builder = #builder_ident;
+
+            fn builder() -> Self::Builder {
+                Default::default()
+            }
+            fn into_builder(self) -> Self::Builder {
+                self.into()
+            }
+        }
+
+        impl From<#struct_ident> for #builder_ident {
+            fn from(value: #struct_ident) -> Self {
                 #builder_ident {
-                    #(#field_idents: None,)*
+                    #(#field_idents: Some(value.#field_idents),)*
                 }
             }
         }
 
-        pub struct #builder_ident {
-            #(#builder_fields,)*
+        impl From<#builder_ident> for #struct_ident {
+            fn from(value: #builder_ident) -> Self {
+                value.build()
+            }
         }
 
-        impl #builder_ident {
-            #(#builder_set_methods)*
-
-        }
         #builder_to_tailwind
 
         #struct_to_tailwind

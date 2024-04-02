@@ -18,16 +18,7 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
 
     let variants = container.data.take_enum().unwrap_or_else(Vec::new);
 
-    let base_class = container.class.unwrap_or_default();
-
-    let to_class_cases = variants.iter().map(|variant| {
-        let variant_ident = &variant.ident;
-        let variant_class = &variant.class;
-
-        quote! {
-            #enum_ident::#variant_ident =>  #variant_class,
-        }
-    });
+    let base_class = container.class;
 
     let defaults = variants
         .iter()
@@ -67,20 +58,69 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
         }
     });
 
-    let gen = quote! {
-        impl IntoTailwindClass for #enum_ident {
-            fn to_class(&self) -> String {
-                self.with_class("")
-            }
-            fn with_class(&self, class: impl AsRef<str>) -> String {
-                let variant_class = match self {
+    // Make a constant for each field and the base class
+    let enum_ident_string = enum_ident.to_string().to_ascii_uppercase();
+    let constants = variants
+        .iter()
+        .map(|variant| {
+            (
+                variant,
+                syn::Ident::new(
+                    &format!(
+                        "{}_{}",
+                        variant.ident.to_string().to_ascii_uppercase(),
+                        enum_ident_string
+                    ),
+                    proc_macro2::Span::call_site(),
+                ),
+            )
+        })
+        .collect::<Vec<_>>();
+
+    let to_class_cases = constants.iter().map(|(variant, constant)| {
+        let variant_ident = &variant.ident;
+
+        quote! {
+            #enum_ident::#variant_ident =>  #constant,
+        }
+    });
+
+    let into_tailwind = quote! {
+        impl AsTailwindClass for #enum_ident {
+            fn as_class(&self) -> &str {
+                match self {
                     #( #to_class_cases )*
-                };
-                tw_join!(#base_class, variant_class, class.as_ref())
+                }
             }
         }
+    };
 
+    let constant_variables = constants.iter().map(|(variant, constant)| {
+        let class = &variant.class;
+        if let Some(base_class) = &base_class {
+            quote! {
+                const #constant: &'static str = concat!(#base_class, " ", #class);
+            }
+        } else {
+            quote! {
+                const #constant: &'static str = #class;
+            }
+        }
+    });
+
+    let gen = quote! {
         #default_variant
+
+        #into_tailwind
+
+        #( #constant_variables )*
+
+        impl Copy for #enum_ident {}
+        impl Clone for #enum_ident {
+            fn clone(&self) -> Self {
+                *self
+            }
+        }
     };
 
     gen.into()
