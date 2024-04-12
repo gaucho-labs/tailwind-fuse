@@ -278,12 +278,12 @@ mod variant {
         fn fuse_classes(&self, class: &[&str]) -> String;
     }
 
-    /// Will merge Tailwind classes and handle conflicts using [`tw_merge()`]
+    /// Will merge Tailwind classes and handle conflicts using [`crate::merge::tw_merge_slice`]
     pub struct TailwindMerge;
 
     impl TailwindFuse for TailwindMerge {
         fn fuse_classes(&self, class: &[&str]) -> String {
-            crate::merge::tw_merge_slice_options(class, Default::default())
+            crate::merge::tw_merge_slice(class)
         }
     }
 
