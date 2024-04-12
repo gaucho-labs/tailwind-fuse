@@ -12,11 +12,6 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    tailwind_fuse::merge::set_merge_options(MergeOptions {
-        prefix: "tw-",
-        separator: ":",
-    });
-
     view! {
         <Stylesheet id="leptos" href="/pkg/start-axum.css"/>
 
@@ -45,12 +40,9 @@ fn HomePage() -> impl IntoView {
     let (count, set_count) = create_signal(0);
     let on_click = move |_| set_count.update(|count| *count += 1);
 
-    let options = MergeOptions::default();
-    log!("MergeOptions {options:?}");
-
     view! {
         // flex-row should be removed.
-        <div class=tw_merge!("tw-flex tw-items-center tw-gap-4 tw-p-10 tw-flex-row", "tw-flex-col")>
+        <div class="flex items-center gap-4 p-10 flex-row">
             <Button on:click=on_click size=BtnSize::Lg>
                 "Click Me: "
                 {count}
