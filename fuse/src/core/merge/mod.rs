@@ -3,7 +3,7 @@ pub(crate) mod get_collisions;
 pub(crate) mod merge_impl;
 mod validators;
 
-pub use merge_impl::tw_merge_with_override;
+pub use merge_impl::tw_merge_override;
 
 /// Merges all the Tailwind classes, resolving conflicts.
 ///
@@ -21,8 +21,9 @@ macro_rules! tw_merge {
 }
 
 /// Merges all the Tailwind classes, resolving conflicts.
+#[inline]
 pub fn tw_merge(class: impl AsRef<str>) -> String {
-    tw_merge_slice(&[class.as_ref()])
+    tw_merge_slice_options(&[class.as_ref()], Default::default())
 }
 
 /// Merges all the Tailwind classes, resolving conflicts, with the provided options.
@@ -40,31 +41,25 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
 ///    tw_merge_with_options(class, OPTIONS)
 /// }
 /// ```
-pub fn tw_merge_with_options(class: impl AsRef<str>, options: MergeOptions) -> String {
-    merge_impl::tw_merge_with_override(
+#[inline]
+pub fn tw_merge_options(class: impl AsRef<str>, options: MergeOptions) -> String {
+    merge_impl::tw_merge_override(
         &[class.as_ref()],
         options,
-        noop_collision_id_fn,
-        noop_collision_fn,
+        |_: &[&str], _: Option<&str>| None,
+        |_: &str| None,
     )
 }
 
 /// Merges all the Tailwind classes, resolving conflicts.
-pub fn tw_merge_slice(class: &[&str]) -> String {
-    merge_impl::tw_merge_with_override(
+#[inline]
+pub fn tw_merge_slice_options(class: &[&str], options: MergeOptions) -> String {
+    merge_impl::tw_merge_override(
         class,
-        Default::default(),
-        noop_collision_id_fn,
-        noop_collision_fn,
+        options,
+        |_: &[&str], _: Option<&str>| None,
+        |_: &str| None,
     )
-}
-
-fn noop_collision_id_fn(_: &[&str], _: Option<&str>) -> Option<&'static str> {
-    None
-}
-
-fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
-    None
 }
 
 /// Configuration for merging Tailwind classes.
@@ -86,14 +81,11 @@ pub struct MergeOptions {
 
 impl Default for MergeOptions {
     fn default() -> Self {
-        DEFAULT_OPTIONS
+        let prefix = option_env!("TW_PREFIX").unwrap_or("");
+        let separator = option_env!("TW_SEPARATOR").unwrap_or(":");
+        MergeOptions { prefix, separator }
     }
 }
-
-const DEFAULT_OPTIONS: MergeOptions = MergeOptions {
-    prefix: "",
-    separator: ":",
-};
 
 impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
     fn from(options: MergeOptions) -> Self {

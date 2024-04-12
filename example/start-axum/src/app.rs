@@ -2,9 +2,10 @@ use crate::{
     button::{BtnSize, BtnVariant, Button},
     error_template::{AppError, ErrorTemplate},
 };
-use leptos::*;
+use leptos::{logging::log, *};
 use leptos_meta::*;
 use leptos_router::*;
+use tailwind_fuse::{merge::MergeOptions, *};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -39,8 +40,12 @@ fn HomePage() -> impl IntoView {
     let (count, set_count) = create_signal(0);
     let on_click = move |_| set_count.update(|count| *count += 1);
 
+    let options = MergeOptions::default();
+    log!("MergeOptions {options:?}");
+
     view! {
-        <div class="flex items-center gap-4 p-10">
+        // flex-row should be removed.
+        <div class=tw_merge!("tw-flex tw-items-center tw-gap-4 tw-p-10 tw-flex-row", "tw-flex-col")>
             <Button on:click=on_click size=BtnSize::Lg>
                 "Click Me: "
                 {count}

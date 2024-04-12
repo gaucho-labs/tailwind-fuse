@@ -16,11 +16,11 @@ leptos_router = { version = "0.6", features = ["nightly"] }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.4", optional = true }
 tower-http = { version = "0.5", features = ["fs"], optional = true }
-wasm-bindgen = "=0.2.89"
+wasm-bindgen = "=0.2.92"
 thiserror = "1"
 tracing = { version = "0.1", optional = true }
 http = "1"
-tailwind_fuse = { path = "../../public", features = ["variant"]}
+tailwind_fuse = { path = "../../fuse", features = ["variant", "debug"]}
 
 [features]
 hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]

@@ -254,7 +254,7 @@ mod variant {
 
     impl TailwindFuse for TailwindMerge {
         fn fuse_classes(&self, class: &[&str]) -> String {
-            crate::merge::tw_merge_slice(class)
+            crate::merge::tw_merge_slice_options(class, Default::default())
         }
     }
 
