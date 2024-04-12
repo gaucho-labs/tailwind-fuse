@@ -1,4 +1,4 @@
-pub(crate) mod join;
+mod join;
 
 /// Merges all the Tailwind classes, resolving conflicts.
 pub mod merge;

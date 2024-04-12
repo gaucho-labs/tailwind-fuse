@@ -1,15 +1,19 @@
-mod get_collision_id;
+pub(crate) mod config;
+pub(crate) mod get_collision_id;
 pub(crate) mod get_collisions;
 pub(crate) mod merge_impl;
-mod validators;
+pub(crate) mod validators;
 
-pub use merge_impl::tw_merge_with_override;
+pub use config::*;
+pub use merge_impl::tw_merge_override;
 
 /// Merges all the Tailwind classes, resolving conflicts.
 ///
-/// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+/// Items can be anything that implements [`crate::AsTailwindClass`].
 ///
 /// If you DON'T want to handle conflicts use [`crate::tw_join!`].
+///
+/// If you want to set global options use [`crate::merge::set_merge_options`].
 ///
 /// If you want a custom type to be used with this macro, implement the [`crate::MaybeIntoTailwindClass`] trait.
 #[macro_export]
@@ -20,9 +24,21 @@ macro_rules! tw_merge {
     }};
 }
 
-/// Merges all the Tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes in the string, resolving conflicts.
+///
+/// If you need custom options use [`tw_merge_options`].
+#[inline]
 pub fn tw_merge(class: impl AsRef<str>) -> String {
-    tw_merge_slice(&[class.as_ref()])
+    tw_merge_slice_options(&[class.as_ref()], Default::default())
+}
+
+/// Merges all the Tailwind classes in the provided strings, resolving conflicts.
+/// Useful to avoid collecting all the strings into a single string.
+///
+/// If you need custom options use [`tw_merge_slice_options`].
+#[inline]
+pub fn tw_merge_slice(class: &[&str]) -> String {
+    tw_merge_slice_options(class, Default::default())
 }
 
 /// Merges all the Tailwind classes, resolving conflicts, with the provided options.
@@ -37,71 +53,45 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
 /// };
 ///
 /// pub fn my_custom_tw_merge(class: impl AsRef<str>) -> String {
-///    tw_merge_with_options(class, OPTIONS)
+///    tw_merge_options(class, OPTIONS)
 /// }
 /// ```
-pub fn tw_merge_with_options(class: impl AsRef<str>, options: MergeOptions) -> String {
-    merge_impl::tw_merge_with_override(
+#[inline]
+pub fn tw_merge_options(class: impl AsRef<str>, options: MergeOptions) -> String {
+    merge_impl::tw_merge_override(
         &[class.as_ref()],
         options,
-        noop_collision_id_fn,
-        noop_collision_fn,
+        |_: &[&str], _: Option<&str>| None,
+        |_: &str| None,
     )
 }
 
-/// Merges all the Tailwind classes, resolving conflicts.
-pub fn tw_merge_slice(class: &[&str]) -> String {
-    merge_impl::tw_merge_with_override(
+/// Merges all the Tailwind classes in the provided strings, resolving conflicts.
+/// Useful to avoid collecting all the strings into a single string.
+///
+/// If you don't need custom options use [`tw_merge_slice`].
+///
+/// ## Example: With Tailwind Prefix
+///
+/// ```
+/// # use tailwind_fuse::merge::*;
+/// const OPTIONS: MergeOptions = MergeOptions {
+///   prefix: "tw-",
+///   separator: ":",
+/// };
+///
+/// pub fn my_custom_tw_merge(class: &[&str]) -> String {
+///    tw_merge_slice_options(class, OPTIONS)
+/// }
+/// ```
+#[inline]
+pub fn tw_merge_slice_options(class: &[&str], options: MergeOptions) -> String {
+    merge_impl::tw_merge_override(
         class,
-        Default::default(),
-        noop_collision_id_fn,
-        noop_collision_fn,
+        options,
+        |_: &[&str], _: Option<&str>| None,
+        |_: &str| None,
     )
-}
-
-fn noop_collision_id_fn(_: &[&str], _: Option<&str>) -> Option<&'static str> {
-    None
-}
-
-fn noop_collision_fn(_: &str) -> Option<Vec<&'static str>> {
-    None
-}
-
-/// Configuration for merging Tailwind classes.
-#[derive(Clone, Copy, Debug)]
-pub struct MergeOptions {
-    /// Custom prefix for modifiers in Tailwind classes
-    ///
-    /// Default is empty string
-    ///
-    /// <https://tailwindcss.com/docs/configuration#prefix>
-    pub prefix: &'static str,
-    /// Custom separator for modifiers in Tailwind classes
-    ///
-    /// Default is `:`
-    ///
-    /// <https://tailwindcss.com/docs/configuration#separator>
-    pub separator: &'static str,
-}
-
-impl Default for MergeOptions {
-    fn default() -> Self {
-        DEFAULT_OPTIONS
-    }
-}
-
-const DEFAULT_OPTIONS: MergeOptions = MergeOptions {
-    prefix: "",
-    separator: ":",
-};
-
-impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
-    fn from(options: MergeOptions) -> Self {
-        crate::ast::AstParseOptions {
-            prefix: options.prefix,
-            separator: options.separator,
-        }
-    }
 }
 
 /// Return a ConflictId for a given Tailwind Class.

@@ -69,6 +69,35 @@
 //! )
 //! ```
 //!
+//! ### Custom Tailwind Prefix/Separator
+//!
+//! Use [`merge::set_merge_options`] to set global options for [`tw_merge!`] and variant macros.
+//!
+//! This can only be set once. Subsequent calls will be ignored.
+//!
+//! ```
+//! use tailwind_fuse::{*, merge::*};
+//!
+//! const OPTIONS: MergeOptions = MergeOptions {
+//!     prefix: "tw-",
+//!     separator: ":",
+//! };
+//!
+//! // Before setting options, the default (no prefix) is used
+//! assert_eq!(
+//!   "tw-bg-black tw-bg-white",
+//!   tw_merge!("tw-bg-black", "tw-bg-white"),
+//! );
+//!
+//! set_merge_options(OPTIONS);
+//!
+//! assert_eq!(
+//!   "tw-bg-white",
+//!   tw_merge!("tw-bg-black", "tw-bg-white"),
+//! );
+//!
+//! ```
+//!
 //!
 //! ## Usage: Variants
 //!
@@ -249,7 +278,7 @@ mod variant {
         fn fuse_classes(&self, class: &[&str]) -> String;
     }
 
-    /// Will merge Tailwind classes and handle conflicts using [`tw_merge()`]
+    /// Will merge Tailwind classes and handle conflicts using [`crate::merge::tw_merge_slice`]
     pub struct TailwindMerge;
 
     impl TailwindFuse for TailwindMerge {

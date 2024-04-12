@@ -1,9 +1,9 @@
-use tailwind_fuse::merge::{tw_merge_with_options, tw_merge_with_override, MergeOptions};
+use tailwind_fuse::merge::{tw_merge_options, tw_merge_override, MergeOptions};
 
 #[test]
 fn test_collisions() {
     pub fn tw_merge(class: &str) -> String {
-        tw_merge_with_override(
+        tw_merge_override(
             &[class],
             Default::default(),
             collision_id_fn,
@@ -47,11 +47,11 @@ fn test_override_config() {
     };
 
     let class = "hover|lg|tw-bg-blue-100 hover|lg|tw-bg-red-500";
-    let result = tw_merge_with_options(class, config);
+    let result = tw_merge_options(class, config);
     assert_eq!("hover|lg|tw-bg-red-500", result);
 
     let class = "tw-bg-blue-100 bg-red-500";
-    let result = tw_merge_with_options(class, config);
+    let result = tw_merge_options(class, config);
     assert_eq!(
         class, result,
         "No conflict because non-prefix is not considered tailwind class"

@@ -40,7 +40,7 @@ fn HomePage() -> impl IntoView {
     let on_click = move |_| set_count.update(|count| *count += 1);
 
     view! {
-        <div class="flex items-center gap-4 p-10">
+        <div class="flex items-center gap-4 p-10 flex-row">
             <Button on:click=on_click size=BtnSize::Lg>
                 "Click Me: "
                 {count}

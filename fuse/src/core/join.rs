@@ -1,6 +1,6 @@
 /// Joins the given classes into a single string.
 ///
-/// Items can be of type &[`str`] or [`String`].
+/// Items can be anything that implements [`crate::AsTailwindClass`].
 ///
 /// If you want to handle conflicts use [`crate::tw_merge!`].
 ///

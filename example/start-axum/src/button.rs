@@ -3,20 +3,18 @@ use tailwind_fuse::*;
 
 #[component]
 pub fn Button(
-    #[prop(into, optional)] size: Option<BtnSize>,
-    #[prop(into, optional)] variant: Option<BtnVariant>,
-    #[prop(into, optional)] class: Option<String>,
-    /// Arbitrary additional attributes.
-    #[prop(attrs)]
-    attributes: Vec<(&'static str, Attribute)>,
+    #[prop(into, optional)] variant: MaybeSignal<BtnVariant>,
+    #[prop(into, optional)] size: MaybeSignal<BtnSize>,
+    #[prop(into, optional)] class: MaybeSignal<String>,
+    #[prop(attrs)] attributes: Vec<(&'static str, Attribute)>,
     children: Children,
 ) -> impl IntoView {
-    let btn = Btn {
-        size: size.unwrap_or_default(),
-        variant: variant.unwrap_or_default(),
-    };
-
-    let class = class.map_or(btn.to_class(), |c| btn.with_class(c));
+    let class = create_memo(move |_| {
+        let variant = variant.get();
+        let size = size.get();
+        let button = Btn { variant, size };
+        button.with_class(class.get())
+    });
 
     view! {
         <button {..attributes} class=class>
