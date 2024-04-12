@@ -19,7 +19,7 @@ impl AsTailwindClass for String {
 
 impl AsTailwindClass for &str {
     fn as_class(&self) -> &str {
-        *self
+        self
     }
 }
 
