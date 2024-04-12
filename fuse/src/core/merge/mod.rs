@@ -1,8 +1,10 @@
-mod get_collision_id;
+pub(crate) mod config;
+pub(crate) mod get_collision_id;
 pub(crate) mod get_collisions;
 pub(crate) mod merge_impl;
-mod validators;
+pub(crate) mod validators;
 
+pub use config::*;
 pub use merge_impl::tw_merge_override;
 
 /// Merges all the Tailwind classes, resolving conflicts.
@@ -60,40 +62,6 @@ pub fn tw_merge_slice_options(class: &[&str], options: MergeOptions) -> String {
         |_: &[&str], _: Option<&str>| None,
         |_: &str| None,
     )
-}
-
-/// Configuration for merging Tailwind classes.
-#[derive(Clone, Copy, Debug)]
-pub struct MergeOptions {
-    /// Custom prefix for modifiers in Tailwind classes
-    ///
-    /// Default is empty string
-    ///
-    /// <https://tailwindcss.com/docs/configuration#prefix>
-    pub prefix: &'static str,
-    /// Custom separator for modifiers in Tailwind classes
-    ///
-    /// Default is `:`
-    ///
-    /// <https://tailwindcss.com/docs/configuration#separator>
-    pub separator: &'static str,
-}
-
-impl Default for MergeOptions {
-    fn default() -> Self {
-        let prefix = option_env!("TW_PREFIX").unwrap_or("");
-        let separator = option_env!("TW_SEPARATOR").unwrap_or(":");
-        MergeOptions { prefix, separator }
-    }
-}
-
-impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
-    fn from(options: MergeOptions) -> Self {
-        crate::ast::AstParseOptions {
-            prefix: options.prefix,
-            separator: options.separator,
-        }
-    }
 }
 
 /// Return a ConflictId for a given Tailwind Class.
