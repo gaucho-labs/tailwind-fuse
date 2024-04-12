@@ -21,7 +21,7 @@ impl Default for MergeOptions {
     fn default() -> Self {
         MERGE_OVERRIDE
             .get()
-            .map(|options| *options)
+            .copied()
             .unwrap_or(DEFAULT_MERGE_OPTIONS)
     }
 }
