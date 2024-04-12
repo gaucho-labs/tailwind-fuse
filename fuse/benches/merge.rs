@@ -1,5 +1,5 @@
 use divan::Bencher;
-use tailwind_fuse::merge::{tw_merge, tw_merge_slice_options};
+use tailwind_fuse::merge::{tw_merge, tw_merge_slice};
 
 fn main() {
     divan::main();
@@ -28,7 +28,7 @@ fn tailwind_merge(bencher: Bencher, len: usize) {
 fn tailwind_merge_slice(bencher: Bencher, len: usize) {
     bencher
         .with_inputs(|| generate_random_classes(len))
-        .bench_values(|class| tw_merge_slice_options(&class, Default::default()));
+        .bench_values(|class| tw_merge_slice(&class));
 }
 
 // create a vec with the a length of len and fill it with random data

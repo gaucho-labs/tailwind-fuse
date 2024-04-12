@@ -1,6 +1,7 @@
 use std::sync::OnceLock;
 
 /// Configuration for merging Tailwind classes.
+/// If you want to set global options use [`set_merge_options`].
 #[derive(Clone, Copy, Debug)]
 pub struct MergeOptions {
     /// Custom prefix for modifiers in Tailwind classes
@@ -43,6 +44,7 @@ impl From<MergeOptions> for crate::ast::AstParseOptions<'static> {
 pub(crate) static MERGE_OVERRIDE: OnceLock<MergeOptions> = OnceLock::new();
 
 /// Set global options for merging Tailwind classes.
-pub fn set_tw_options(options: MergeOptions) {
+/// Useful for getting all the macros to work with custom options.
+pub fn set_merge_options(options: MergeOptions) {
     let _ = MERGE_OVERRIDE.set(options);
 }

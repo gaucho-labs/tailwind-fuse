@@ -9,9 +9,11 @@ pub use merge_impl::tw_merge_override;
 
 /// Merges all the Tailwind classes, resolving conflicts.
 ///
-/// Items can be of type &[`str`], [`String`], [`Option<&str>`] or [`Option<String>`].
+/// Items can be anything that implements [`crate::AsTailwindClass`].
 ///
 /// If you DON'T want to handle conflicts use [`crate::tw_join!`].
+///
+/// If you want to set global options use [`crate::merge::set_merge_options`].
 ///
 /// If you want a custom type to be used with this macro, implement the [`crate::MaybeIntoTailwindClass`] trait.
 #[macro_export]
@@ -22,10 +24,21 @@ macro_rules! tw_merge {
     }};
 }
 
-/// Merges all the Tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes in the string, resolving conflicts.
+///
+/// If you need custom options use [`tw_merge_options`].
 #[inline]
 pub fn tw_merge(class: impl AsRef<str>) -> String {
     tw_merge_slice_options(&[class.as_ref()], Default::default())
+}
+
+/// Merges all the Tailwind classes in the provided strings, resolving conflicts.
+/// Useful to avoid collecting all the strings into a single string.
+///
+/// If you need custom options use [`tw_merge_slice_options`].
+#[inline]
+pub fn tw_merge_slice(class: &[&str]) -> String {
+    tw_merge_slice_options(class, Default::default())
 }
 
 /// Merges all the Tailwind classes, resolving conflicts, with the provided options.
@@ -53,7 +66,24 @@ pub fn tw_merge_options(class: impl AsRef<str>, options: MergeOptions) -> String
     )
 }
 
-/// Merges all the Tailwind classes, resolving conflicts.
+/// Merges all the Tailwind classes in the provided strings, resolving conflicts.
+/// Useful to avoid collecting all the strings into a single string.
+///
+/// If you don't need custom options use [`tw_merge_slice`].
+///
+/// ## Example: With Tailwind Prefix
+///
+/// ```
+/// # use tailwind_fuse::merge::*;
+/// const OPTIONS: MergeOptions = MergeOptions {
+///   prefix: "tw-",
+///   separator: ":",
+/// };
+///
+/// pub fn my_custom_tw_merge(class: &[&str]) -> String {
+///    tw_merge_slice_options(class, OPTIONS)
+/// }
+/// ```
 #[inline]
 pub fn tw_merge_slice_options(class: &[&str], options: MergeOptions) -> String {
     merge_impl::tw_merge_override(
