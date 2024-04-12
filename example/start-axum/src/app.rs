@@ -2,10 +2,9 @@ use crate::{
     button::{BtnSize, BtnVariant, Button},
     error_template::{AppError, ErrorTemplate},
 };
-use leptos::{logging::log, *};
+use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use tailwind_fuse::{merge::MergeOptions, *};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -41,7 +40,6 @@ fn HomePage() -> impl IntoView {
     let on_click = move |_| set_count.update(|count| *count += 1);
 
     view! {
-        // flex-row should be removed.
         <div class="flex items-center gap-4 p-10 flex-row">
             <Button on:click=on_click size=BtnSize::Lg>
                 "Click Me: "
