@@ -11,11 +11,77 @@ pub trait AsTailwindClass {
     fn as_class(&self) -> &str;
 }
 
-impl<T> AsTailwindClass for T
+impl AsTailwindClass for String {
+    fn as_class(&self) -> &str {
+        self.as_str()
+    }
+}
+
+impl AsTailwindClass for &str {
+    fn as_class(&self) -> &str {
+        *self
+    }
+}
+
+impl<T> AsTailwindClass for &T
 where
-    T: AsRef<str>,
+    T: AsTailwindClass,
 {
     fn as_class(&self) -> &str {
+        (*self).as_class()
+    }
+}
+
+impl<T> AsTailwindClass for &mut T
+where
+    T: AsTailwindClass,
+{
+    fn as_class(&self) -> &str {
+        (**self).as_class()
+    }
+}
+
+impl<T> AsTailwindClass for std::rc::Rc<T>
+where
+    T: AsTailwindClass,
+{
+    fn as_class(&self) -> &str {
+        self.as_ref().as_class()
+    }
+}
+
+impl<T> AsTailwindClass for std::sync::Arc<T>
+where
+    T: AsTailwindClass,
+{
+    fn as_class(&self) -> &str {
+        self.as_ref().as_class()
+    }
+}
+
+impl AsTailwindClass for std::borrow::Cow<'_, str> {
+    fn as_class(&self) -> &str {
         self.as_ref()
+    }
+}
+
+impl<T> AsTailwindClass for Box<T>
+where
+    T: AsTailwindClass,
+{
+    fn as_class(&self) -> &str {
+        (**self).as_class()
+    }
+}
+
+impl<T> AsTailwindClass for Option<T>
+where
+    T: AsTailwindClass,
+{
+    fn as_class(&self) -> &str {
+        match self {
+            Some(t) => t.as_class(),
+            None => "",
+        }
     }
 }
