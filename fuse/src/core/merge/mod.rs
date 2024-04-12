@@ -40,7 +40,7 @@ pub fn tw_merge(class: impl AsRef<str>) -> String {
 /// };
 ///
 /// pub fn my_custom_tw_merge(class: impl AsRef<str>) -> String {
-///    tw_merge_with_options(class, OPTIONS)
+///    tw_merge_options(class, OPTIONS)
 /// }
 /// ```
 #[inline]
