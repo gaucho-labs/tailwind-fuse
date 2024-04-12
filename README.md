@@ -33,7 +33,7 @@ cargo add tailwind-fuse
 You can use [`tw_join!`] to join Tailwind classes, and [`tw_merge!`] to merge Tailwind Classes handling conflicts.
 
 
-You can use anything that implements [`AsRef<str>`] or [`AsTailwindClass`]
+You can use anything that implements [`AsTailwindClass`]
 
 ```rust
 use tailwind_fuse::*;
@@ -46,11 +46,29 @@ assert_eq!(
 
 // Conflict resolution
 // Right most class takes precedence
-assert_eq!("p-4", tw_merge!("py-2 px-4", "p-4"));
+assert_eq!(
+   "p-4",
+   tw_merge!("py-2 px-4", "p-4")
+);
 
 // Refinements are permitted
-assert_eq!("p-4 py-2", tw_merge!("p-4", "py-2"));
+assert_eq!(
+   "p-4 py-2",
+   tw_merge!("p-4", "py-2")
+);
 ```
+
+You can use Options to exclude certain classes from being merged
+
+```rust
+use tailwind_fuse::*;
+
+assert_eq!(
+  "flex justify-center",
+  tw_join!("flex", (false).then_some("items-center"), (true).then_some("justify-center"))
+)
+```
+
 
 ## Usage: Variants
 

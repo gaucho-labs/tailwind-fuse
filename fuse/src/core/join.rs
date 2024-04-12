@@ -106,7 +106,7 @@ macro_rules! tw_join {
 }
 
 #[test]
-fn test_tw() {
+fn join() {
     assert_eq!(tw_join!("a"), "a");
     assert_eq!(tw_join!("a", "b"), "a b");
     assert_eq!(tw_join!("a", "b", "c"), "a b c");
@@ -119,4 +119,9 @@ fn test_tw() {
         "one two three"
     );
     assert_eq!(tw_join!("a", "    ", "b", "c", " "), "a b c");
+
+    assert_eq!(
+        tw_join!("a", (false).then_some("b"), (true).then_some("c")),
+        "a c"
+    )
 }
