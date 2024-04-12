@@ -73,7 +73,7 @@
 //!
 //! Use [`merge::set_merge_options`] to set global options for [`tw_merge!`] and variant macros.
 //!
-//! This can only be set once.
+//! This can only be set once. Subsequent calls will be ignored.
 //!
 //! ```
 //! use tailwind_fuse::{*, merge::*};
