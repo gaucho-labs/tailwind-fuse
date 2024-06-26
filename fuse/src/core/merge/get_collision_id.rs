@@ -500,7 +500,8 @@ pub fn get_collision_id(classes: &[&str], arbitrary: &str) -> Result<&'static st
         ["border", "l"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-l"),
         ["border", "s", rest] if is_valid_length(rest) => Ok("border-w-s"),
         ["border", "s"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w-s"),
-        ["border"] if arbitrary.is_empty() => Ok("border-w"),
+        ["border", rest] if is_valid_length(rest) => Ok("border-w"),
+        ["border"] if arbitrary.is_empty() || is_arbitrary_len(arbitrary) => Ok("border-w"),
 
         // https://tailwindcss.com/docs/border-style
         ["border", "solid" | "dashed" | "dotted" | "double" | "hidden" | "none"] => {

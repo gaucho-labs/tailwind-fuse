@@ -2,6 +2,15 @@ use tailwind_fuse::merge::tw_merge;
 use tailwind_fuse::tw_merge;
 
 #[test]
+fn test_tw_merge_border_width_color() {
+    let all_sides = tw_merge!("border-2", "border-blue-500");
+    assert_eq!(all_sides, "border-2 border-blue-500");
+
+    let arbitrary = tw_merge!("border-[100px]", "border-blue-500");
+    assert_eq!(arbitrary, "border-[100px] border-blue-500");
+}
+
+#[test]
 fn test_tw_merge_mixed_blend() {
     let classes = tw_merge!("mix-blend-normal", "mix-blend-multiply");
     assert_eq!(classes, "mix-blend-multiply");
