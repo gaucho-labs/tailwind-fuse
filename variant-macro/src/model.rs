@@ -10,7 +10,7 @@ pub struct TwVariantContainer {
     pub ident: syn::Ident,
     pub data: ast::Data<TwVariantOption, ()>,
     /// The base Tailwind class for the variant.
-    pub class: Option<String>,
+    pub class: Option<syn::LitStr>,
 }
 
 #[derive(Debug, FromVariant)]
@@ -26,7 +26,7 @@ pub struct TwVariantOption {
 pub struct TwClassContainer {
     pub ident: syn::Ident,
     pub data: ast::Data<(), TwClassField>,
-    pub class: Option<String>,
+    pub class: Option<syn::LitStr>,
     /// Defaults to using `tw_merge`.
     pub merger: Option<IdentString>,
 }

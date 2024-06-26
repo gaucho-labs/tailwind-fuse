@@ -22,7 +22,11 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
         .take_struct()
         .expect("Expected struct fields");
 
-    let base_class = container.class.unwrap_or_default();
+    let base_class = container
+        .class
+        .as_ref()
+        .map(syn::LitStr::value)
+        .unwrap_or_default();
 
     let merger = {
         if let Some(merger) = container.merger {
@@ -49,11 +53,10 @@ pub fn class_impl(input: TokenStream) -> TokenStream {
 
     let field_idents = fields
         .iter()
-        .map(|field| field.ident.as_ref().unwrap().clone());
+        .map(|field| field.ident.as_ref().expect("struct field has ident"))
+        .collect::<Vec<_>>();
 
     let builder_impl = {
-        let field_idents = field_idents.clone();
-
         let builder_set_methods = fields.iter().map(|field| {
             let TwClassField { ident, ty, .. } = field;
             quote! {

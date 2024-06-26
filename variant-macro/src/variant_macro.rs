@@ -26,8 +26,8 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
         .collect::<Vec<_>>();
 
     if defaults.is_empty() {
-        return syn::Error::new_spanned(
-            input,
+        return syn::Error::new(
+            enum_ident.span(),
             "No default variant specified. Please mark one variant with `#[tw(default)]`",
         )
         .to_compile_error()
@@ -42,9 +42,8 @@ pub fn variant_impl(input: TokenStream) -> TokenStream {
                 .map(|v| v.ident.to_string())
                 .collect::<Vec<_>>()
         );
-        return syn::Error::new_spanned(input, error)
-            .to_compile_error()
-            .into();
+        let span = defaults[1].default.span();
+        return syn::Error::new(span, error).to_compile_error().into();
     }
 
     let default_variant = defaults.into_iter().next().map(|v| {
