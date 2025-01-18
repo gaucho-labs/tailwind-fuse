@@ -219,3 +219,23 @@ fn handles_negative_value_conflicts_correctly() {
 fn tailwind_3_4() {
     assert_eq!(tw_merge("text-red text-lg/8"), "text-red text-lg/8");
 }
+
+#[test]
+fn test_group_data_important_modifiers() {
+    let classes = tw_merge!("group-data-[collapsible=icon]:!p-2", "group-data-[collapsible=icon]:!p-0");
+    assert_eq!(classes, "group-data-[collapsible=icon]:!p-0");
+
+    let classes = tw_merge!(
+        "group-data-[collapsible=icon]:!size-8",
+        "group-data-[collapsible=icon]:!p-2",
+        "group-data-[collapsible=icon]:!p-0"
+    );
+    assert_eq!(classes, "group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-0");
+
+    let classes = tw_merge!(
+        "group-data-[collapsible=icon]:!p-2",
+        "group-data-[collapsible=icon]:!size-8",
+        "group-data-[collapsible=icon]:!p-0"
+    );
+    assert_eq!(classes, "group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-0");
+}
