@@ -107,7 +107,7 @@ fn parse_normal_variant(input: &str) -> IResult<&str, ASTVariant> {
 // https://tailwindcss.com/docs/hover-focus-and-other-states#supports-rules
 #[inline]
 fn parse_data_attribute_variant(input: &str) -> IResult<&str, ASTVariant> {
-    let tag_prefix = alt((tag("data-"), tag("supports-")));
+    let tag_prefix = alt((tag("data-"), tag("supports-"), tag("group-data-")));
     let mut parser = delimited(tag_prefix, take_till1(|c| c == ']'), tag("]"));
     let (rest, _) = parser(input)?;
     let entire_variant = &input[..input.len() - rest.len()];
