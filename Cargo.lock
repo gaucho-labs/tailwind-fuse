@@ -230,7 +230,7 @@ dependencies = [
 
 [[package]]
 name = "tailwind_fuse"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "divan",
  "fastrand",
@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "tailwind_fuse_macro"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "darling",
  "proc-macro2",

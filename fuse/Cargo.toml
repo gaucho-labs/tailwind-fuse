@@ -1,6 +1,6 @@
 [package]
 name = "tailwind_fuse"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = ["Nico Burniske", "Gaucho Labs"]
 description = "Tailwind Merge and Variants"
