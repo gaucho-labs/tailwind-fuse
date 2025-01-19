@@ -45,7 +45,7 @@ pub fn tw_merge_override(
                     collision_styles.insert(collision);
                 }
                 None => {
-                    #[cfg(debug)]
+                    #[cfg(feature = "debug")]
                     println!("No Instance found: {style:?} {error:?}");
                     let _ = error;
                 }
