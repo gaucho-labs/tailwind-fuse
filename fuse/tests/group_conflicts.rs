@@ -239,3 +239,37 @@ fn test_group_data_important_modifiers() {
     );
     assert_eq!(classes, "group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-0");
 }
+
+#[test]
+fn test_ring() {
+    assert_eq!(
+        tw_merge!("ring-[3px] ring-primary"),
+        "ring-[3px] ring-primary"
+    );
+    assert_eq!(tw_merge!("ring-1 ring-2"), "ring-2");
+    assert_eq!(tw_merge!("ring-offset-0 ring-offset-1"), "ring-offset-1");
+    assert_eq!(
+        tw_merge!("ring-black ring-white ring-red-500"),
+        "ring-red-500"
+    );
+
+    assert_eq!(tw_merge!("ring ring-2"), "ring-2");
+    assert_eq!(tw_merge!("ring-2 ring"), "ring");
+    assert_eq!(tw_merge!("ring ring-[10px]"), "ring-[10px]");
+    assert_eq!(tw_merge!("ring-[10px] ring"), "ring");
+
+    // Ring Color
+    assert_eq!(tw_merge!("ring-red-500 ring-blue-500"), "ring-blue-500");
+    assert_eq!(tw_merge!("ring-inherit ring-current"), "ring-current");
+    assert_eq!(tw_merge!("ring-transparent ring-inherit"), "ring-inherit");
+    assert_eq!(tw_merge!("ring-red-500 ring-inherit"), "ring-inherit");
+
+    // No conflict between Width and Color
+    assert_eq!(tw_merge!("ring ring-red-500"), "ring ring-red-500");
+    assert_eq!(tw_merge!("ring-2 ring-blue-500"), "ring-2 ring-blue-500");
+    assert_eq!(tw_merge!("ring-inherit ring"), "ring-inherit ring");
+    assert_eq!(
+        tw_merge!("ring-transparent ring-[10px]"),
+        "ring-transparent ring-[10px]"
+    );
+}
